@@ -1,0 +1,89 @@
+<div class="error-container">
+    <div class="error-content">
+        <h1 class="error-code">404</h1>
+        <h2 class="error-title">Страница не найдена</h2>
+        <p class="error-message">Извините, запрашиваемая страница не существует или была перемещена.</p>
+        <div class="error-actions">
+            <a href="/" class="error-button">Вернуться на главную</a>
+        </div>
+    </div>
+</div>
+
+<style>
+    .error-container {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        font-family: 'Montserrat', sans-serif;
+    }
+    
+    .error-content {
+        text-align: center;
+        color: white;
+        padding: 40px;
+        animation: fadeInUp 0.6s ease-out;
+    }
+    
+    .error-code {
+        font-size: 120px;
+        margin: 0;
+        font-weight: 700;
+        text-shadow: 4px 4px 8px rgba(0, 0, 0, 0.2);
+        animation: pulse 2s infinite;
+    }
+    
+    .error-title {
+        font-size: 36px;
+        margin: 20px 0 15px;
+        font-weight: 600;
+    }
+    
+    .error-message {
+        font-size: 18px;
+        margin-bottom: 30px;
+        opacity: 0.9;
+    }
+    
+    .error-button {
+        display: inline-block;
+        padding: 12px 30px;
+        background: white;
+        color: #667eea;
+        text-decoration: none;
+        border-radius: 25px;
+        font-weight: bold;
+        transition: all 0.3s ease;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    }
+    
+    .error-button:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+    }
+    
+    @keyframes fadeInUp {
+        from {
+            opacity: 0;
+            transform: translateY(30px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+    
+    @keyframes pulse {
+        0%, 100% {
+            transform: scale(1);
+        }
+        50% {
+            transform: scale(1.05);
+        }
+    }
+</style>

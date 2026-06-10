@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{title}} | Админ-панель</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/css/admin.css">
+</head>
+<body>
+    <div class="admin-container">
+        <nav class="admin-nav">
+            <div class="nav-brand">
+                <h2>Виртуальный музей</h2>
+                <span>Админ-панель</span>
+            </div>
+            <div class="nav-links">
+                <a href="/admin">Персоналии</a>
+                <a href="/admin/logout">Выход</a>
+            </div>
+        </nav>
+        
+        <main class="admin-main">
+            {{{body}}}
+        </main>
+    </div>
+    
+    <script src="/js/admin.js"></script>
+</body>
+</html>

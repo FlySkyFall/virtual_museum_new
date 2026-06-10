@@ -1,0 +1,404 @@
+<div class="form-container">
+    <h1>{{title}}</h1>
+    
+    <form id="personForm" action="{{action}}" method="POST" enctype="multipart/form-data">
+        <input type="hidden" name="personData" id="personData">
+        
+        <div class="form-section">
+            <h2>Основная информация</h2>
+            
+            <div class="form-row">
+                <div class="form-group">
+                    <label>ФИО полностью</label>
+                    <input type="text" id="fullName" value="{{person.fullName}}" required>
+                </div>
+            </div>
+            
+            <div class="form-row">
+                <div class="form-group">
+                    <label>Фамилия</label>
+                    <input type="text" id="lastName" value="{{person.lastName}}" required>
+                </div>
+                <div class="form-group">
+                    <label>Имя</label>
+                    <input type="text" id="firstName" value="{{person.firstName}}" required>
+                </div>
+                <div class="form-group">
+                    <label>Отчество</label>
+                    <input type="text" id="patronymic" value="{{person.patronymic}}">
+                </div>
+            </div>
+            
+            <div class="form-row">
+                <div class="form-group">
+                    <label>Год рождения</label>
+                    <input type="number" id="birthYear" value="{{person.birthYear}}" required>
+                </div>
+                <div class="form-group">
+                    <label>Год смерти (если жив - оставить пустым)</label>
+                    <input type="number" id="deathYear" value="{{person.deathYear}}">
+                </div>
+            </div>
+            
+            <div class="form-row">
+                <div class="form-group">
+                    <label>Порядок отображения</label>
+                    <input type="number" id="order" value="{{person.order}}" required>
+                </div>
+                <div class="form-group">
+                    <label>Активен</label>
+                    <select id="isActive">
+                        <option value="true" {{#if person.isActive}}selected{{/if}}>Да</option>
+                        <option value="false" {{#unless person.isActive}}selected{{/unless}}>Нет</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+        
+        <div class="form-section">
+            <h2>Изображения</h2>
+            
+            <div class="form-row">
+                <div class="form-group">
+                    <label>Фото человека</label>
+                    {{#if person.photoPath}}
+                    <div class="current-image">
+                        <img src="{{person.photoPath}}" style="max-width: 200px;">
+                    </div>
+                    {{/if}}
+                    <input type="file" name="photo" accept="image/*">
+                </div>
+                
+                <div class="form-group">
+                    <label>Изображение для кнопки (с ФИО)</label>
+                    {{#if person.buttonImagePath}}
+                    <div class="current-image">
+                        <img src="{{person.buttonImagePath}}" style="max-width: 200px;">
+                    </div>
+                    {{/if}}
+                    <input type="file" name="buttonImage" accept="image/*">
+                </div>
+            </div>
+        </div>
+        
+        <div class="form-section">
+            <h2>Биография</h2>
+            
+            <div class="form-group">
+                <label>Краткая биография (для страницы персоналии)</label>
+                <textarea id="shortBio" rows="4">{{person.shortBio}}</textarea>
+            </div>
+            
+            <div class="form-group">
+                <label>Полная биография (HTML поддерживается)</label>
+                <textarea id="biography" rows="10">{{person.biography}}</textarea>
+            </div>
+        </div>
+        
+        <div class="form-section">
+            <h2>Артефакты</h2>
+            
+            <div id="artifacts-list">
+                {{#each person.artifacts}}
+                <div class="artifact-item" data-id="{{_id}}">
+                    <h3>{{name}}</h3>
+                    <p>{{description}}</p>
+                    <button type="button" class="btn-edit-artifact" data-id="{{_id}}">Редактировать</button>
+                    <button type="button" class="btn-delete-artifact" data-id="{{_id}}">Удалить</button>
+                </div>
+                {{/each}}
+            </div>
+            
+            <button type="button" class="btn-add-artifact">+ Добавить артефакт</button>
+        </div>
+        
+        <div class="form-actions">
+            <button type="submit" class="btn-save">Сохранить</button>
+            <a href="/admin" class="btn-cancel">Отмена</a>
+        </div>
+    </form>
+</div>
+
+<!-- Модальное окно для артефакта -->
+<div id="artifactModal" class="modal" style="display: none;">
+    <div class="modal-content">
+        <span class="modal-close">&times;</span>
+        <h2 id="modalTitle">Добавить артефакт</h2>
+        <form id="artifactForm">
+            <input type="hidden" id="artifactId">
+            <div class="form-group">
+                <label>Название</label>
+                <input type="text" id="artifactName" required>
+            </div>
+            <div class="form-group">
+                <label>Описание</label>
+                <textarea id="artifactDescription" rows="3" required></textarea>
+            </div>
+            <div class="form-group">
+                <label>Год</label>
+                <input type="number" id="artifactYear">
+            </div>
+            <div class="form-group">
+                <label>Материал</label>
+                <input type="text" id="artifactMaterial">
+            </div>
+            <div class="form-group">
+                <label>Размеры</label>
+                <input type="text" id="artifactDimensions">
+            </div>
+            <div class="form-group">
+                <label>Видео URL</label>
+                <input type="text" id="artifactVideoUrl">
+            </div>
+            <div class="form-group">
+                <label>Изображение</label>
+                <input type="file" id="artifactImage" accept="image/*">
+            </div>
+            <button type="submit" class="btn-save">Сохранить артефакт</button>
+        </form>
+    </div>
+</div>
+
+<style>
+    .form-container {
+        max-width: 1200px;
+        margin: 0 auto;
+        background: white;
+        border-radius: 20px;
+        padding: 30px;
+    }
+    
+    .form-section {
+        margin-bottom: 30px;
+        padding-bottom: 20px;
+        border-bottom: 1px solid #eee;
+    }
+    
+    .form-section h2 {
+        margin-bottom: 20px;
+        color: #667eea;
+    }
+    
+    .form-row {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 20px;
+        margin-bottom: 20px;
+    }
+    
+    .form-group {
+        margin-bottom: 15px;
+    }
+    
+    .form-group label {
+        display: block;
+        margin-bottom: 8px;
+        font-weight: 500;
+        color: #555;
+    }
+    
+    .form-group input, .form-group textarea, .form-group select {
+        width: 100%;
+        padding: 10px;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        font-size: 14px;
+    }
+    
+    .artifact-item {
+        background: #f5f5f5;
+        padding: 15px;
+        margin-bottom: 10px;
+        border-radius: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+    
+    .btn-add-artifact {
+        background: #667eea;
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 8px;
+        cursor: pointer;
+        margin-top: 10px;
+    }
+    
+    .btn-edit-artifact, .btn-delete-artifact {
+        padding: 5px 15px;
+        margin-left: 10px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+    }
+    
+    .btn-edit-artifact {
+        background: #4CAF50;
+        color: white;
+    }
+    
+    .btn-delete-artifact {
+        background: #f44336;
+        color: white;
+    }
+    
+    .form-actions {
+        display: flex;
+        gap: 20px;
+        justify-content: flex-end;
+        margin-top: 30px;
+    }
+    
+    .btn-save, .btn-cancel {
+        padding: 12px 30px;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        font-size: 16px;
+        font-weight: 600;
+    }
+    
+    .btn-save {
+        background: linear-gradient(135deg, #667eea, #764ba2);
+        color: white;
+    }
+    
+    .btn-cancel {
+        background: #ddd;
+        color: #333;
+        text-decoration: none;
+        display: inline-block;
+        line-height: 42px;
+    }
+    
+    .modal {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0,0,0,0.5);
+        z-index: 1000;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    
+    .modal-content {
+        background: white;
+        padding: 30px;
+        border-radius: 20px;
+        max-width: 500px;
+        width: 90%;
+        max-height: 80vh;
+        overflow-y: auto;
+    }
+</style>
+
+<script>
+    const form = document.getElementById('personForm');
+    const personId = '{{person._id}}';
+    
+    form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        
+        const personData = {
+            fullName: document.getElementById('fullName').value,
+            lastName: document.getElementById('lastName').value,
+            firstName: document.getElementById('firstName').value,
+            patronymic: document.getElementById('patronymic').value,
+            birthYear: parseInt(document.getElementById('birthYear').value),
+            deathYear: document.getElementById('deathYear').value ? parseInt(document.getElementById('deathYear').value) : null,
+            shortBio: document.getElementById('shortBio').value,
+            biography: document.getElementById('biography').value,
+            order: parseInt(document.getElementById('order').value),
+            isActive: document.getElementById('isActive').value === 'true'
+        };
+        
+        document.getElementById('personData').value = JSON.stringify(personData);
+        
+        const method = personId ? 'PUT' : 'POST';
+        const action = personId ? `/admin/person/${personId}` : '/admin/person';
+        
+        const formData = new FormData(form);
+        
+        const response = await fetch(action, {
+            method: method,
+            body: formData
+        });
+        
+        if (response.ok || response.redirected) {
+            window.location.href = '/admin';
+        }
+    });
+    
+    // Артефакты модальное окно
+    const modal = document.getElementById('artifactModal');
+    let currentPersonId = '{{person._id}}';
+    
+    document.querySelector('.btn-add-artifact').onclick = () => {
+        document.getElementById('modalTitle').textContent = 'Добавить артефакт';
+        document.getElementById('artifactForm').reset();
+        document.getElementById('artifactId').value = '';
+        modal.style.display = 'flex';
+    };
+    
+    document.querySelectorAll('.btn-edit-artifact').forEach(btn => {
+        btn.onclick = async () => {
+            const artifactId = btn.dataset.id;
+            const response = await fetch(`/api/artifact/${currentPersonId}/${artifactId}`);
+            const artifact = await response.json();
+            
+            document.getElementById('modalTitle').textContent = 'Редактировать артефакт';
+            document.getElementById('artifactId').value = artifactId;
+            document.getElementById('artifactName').value = artifact.name;
+            document.getElementById('artifactDescription').value = artifact.description;
+            document.getElementById('artifactYear').value = artifact.year || '';
+            document.getElementById('artifactMaterial').value = artifact.material || '';
+            document.getElementById('artifactDimensions').value = artifact.dimensions || '';
+            document.getElementById('artifactVideoUrl').value = artifact.videoUrl || '';
+            modal.style.display = 'flex';
+        };
+    });
+    
+    document.querySelector('.modal-close').onclick = () => {
+        modal.style.display = 'none';
+    };
+    
+    document.getElementById('artifactForm').onsubmit = async (e) => {
+        e.preventDefault();
+        
+        const artifactId = document.getElementById('artifactId').value;
+        const formData = new FormData();
+        const artifactData = {
+            name: document.getElementById('artifactName').value,
+            description: document.getElementById('artifactDescription').value,
+            year: document.getElementById('artifactYear').value ? parseInt(document.getElementById('artifactYear').value) : null,
+            material: document.getElementById('artifactMaterial').value || null,
+            dimensions: document.getElementById('artifactDimensions').value || null,
+            videoUrl: document.getElementById('artifactVideoUrl').value || null
+        };
+        
+        formData.append('artifactData', JSON.stringify(artifactData));
+        const imageFile = document.getElementById('artifactImage').files[0];
+        if (imageFile) {
+            formData.append('artifactImage', imageFile);
+        }
+        
+        const url = artifactId 
+            ? `/admin/person/${currentPersonId}/artifact/${artifactId}`
+            : `/admin/person/${currentPersonId}/artifact`;
+        
+        const method = artifactId ? 'PUT' : 'POST';
+        
+        const response = await fetch(url, {
+            method: method,
+            body: formData
+        });
+        
+        if (response.ok || response.redirected) {
+            window.location.reload();
+        }
+    };
+</script>

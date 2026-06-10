@@ -1,0 +1,16 @@
+node_modules/
+.env
+.DS_Store
+*.log
+dist/
+build/
+.vscode/
+.idea/
+
+# Видеофайлы (большие файлы не должны попадать в Git)
+*.mp4
+*.mov
+*.avi
+*.mkv
+*.webm
+src/public/videos/

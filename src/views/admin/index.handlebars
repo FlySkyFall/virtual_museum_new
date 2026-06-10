@@ -1,0 +1,38 @@
+<div class="admin-header">
+    <h1>Управление персоналиями</h1>
+    <a href="/admin/person/create" class="btn btn-primary">+ Добавить персоналию</a>
+</div>
+
+<div class="persons-grid">
+    {{#each persons}}
+    <div class="person-card" data-id="{{_id}}">
+        <div class="person-image">
+            <img src="{{photoPath}}" alt="{{fullName}}">
+        </div>
+        <div class="person-info">
+            <h3>{{fullName}}</h3>
+            <p>{{birthYear}} - {{#if deathYear}}{{deathYear}}{{else}}н.в.{{/if}}</p>
+            <div class="person-actions">
+                <a href="/admin/person/{{_id}}/edit" class="btn-edit">Редактировать</a>
+                <button class="btn-delete" data-id="{{_id}}">Удалить</button>
+            </div>
+        </div>
+    </div>
+    {{/each}}
+</div>
+
+<script>
+    document.querySelectorAll('.btn-delete').forEach(btn => {
+        btn.addEventListener('click', async (e) => {
+            const id = btn.dataset.id;
+            if (confirm('Удалить эту персоналию?')) {
+                const response = await fetch(`/admin/person/${id}`, {
+                    method: 'DELETE'
+                });
+                if (response.ok) {
+                    btn.closest('.person-card').remove();
+                }
+            }
+        });
+    });
+</script>

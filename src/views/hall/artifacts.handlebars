@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{title}}</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Montserrat', sans-serif;
+            min-height: 100vh;
+            position: relative;
+        }
+        
+        /* Фоновое изображение */
+        .artifacts-background {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url('/images/literary-hall/artifacts-background.jpg');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            z-index: 0;
+        }
+
+        /* Левое верхнее изображение - вплотную к углу */
+        .top-left-image {
+            position: absolute;
+            top: 0;
+            left: 0;
+            z-index: 2;
+        }
+        
+        .title-image-wrapper {
+            position: relative;
+            display: inline-block;
+        }
+        
+        .title-image-bg {
+            display: block;
+            width: 60%;
+            height: 50%;
+        }
+        
+        /* Текст с ФИО поверх изображения */
+        .person-name-overlay {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: black;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+            white-space: nowrap;
+            font-family: 'Comic Sans MS', 'Comic Sans', cursive;
+            pointer-events: none;
+            text-align: center;
+            display: flex;
+            gap: 10px;
+            align-items: baseline;
+        }
+        
+        /* Фамилия - жирным шрифтом и больше */
+        .person-surname {
+            font-weight: 800;
+            font-size: 32px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            display: inline-block;
+        }
+        
+        /* Имя и отчество - обычным шрифтом */
+        .person-firstname {
+            font-weight: 400;
+            font-size: 20px;
+            display: inline-block;
+        }
+        
+        /* Основной контент */
+        .artifacts-content {
+            position: relative;
+            z-index: 1;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 40px 60px 100px 60px;
+        }
+        
+        /* Заголовок */
+        .artifacts-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .artifacts-header h1 {
+            font-size: 28px;
+            color: #333;
+            margin-bottom: 5px;
+            text-shadow: 2px 2px 4px rgba(255,255,255,0.5);
+        }
+        
+        .artifacts-header .person-name {
+            font-size: 16px;
+            color: #667eea;
+            font-weight: 600;
+        }
+        
+        /* Сетка артефактов - 3 колонки, 2 ряда */
+        .artifacts-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            grid-template-rows: repeat(2, auto);
+            gap: 15px 20px;
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        /* Карточка артефакта */
+        .artifact-card {
+            position: relative;
+            width: 100%;
+            max-width: 280px;
+            margin: 0 auto;
+            top: 20%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: none;
+            cursor: pointer;
+            background: transparent;
+            transition: transform 0.3s ease;
+            border-radius: 0;
+            overflow: visible;
+            box-shadow: none;
+            outline: none;
+        }
+        
+        .artifact-card:focus {
+            outline: none;
+        }
+        
+        .artifact-card::-moz-focus-inner {
+            border: 0;
+        }
+        
+        .artifact-image {
+            width: 100%;
+            height: auto;
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            border-radius: 0;
+            box-shadow: none;
+            border: none;
+            aspect-ratio: 1 / 1;
+            transition: transform 0.3s ease;
+        }
+        
+        /* Текст по центру карточки, белый, без эффектов */
+        .artifact-name-overlay {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+            color: white;
+            font-size: 18px;
+            font-weight: 600;
+            font-family: 'Montserrat', sans-serif;
+            text-shadow: none;
+            background: transparent;
+            padding: 0;
+            width: 80%;
+            word-wrap: break-word;
+            white-space: normal;
+            line-height: 1.3;
+            pointer-events: none;
+        }
+        
+        .artifact-card:hover {
+            transform: scale(1.05);
+        }
+        
+        .artifact-card:active {
+            transform: scale(0.98);
+        }
+        
+        /* Навигационные кнопки */
+        .nav-button {
+            position: fixed;
+            bottom: 20px;
+            z-index: 10;
+            width: 70px;
+            height: 70px;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+            border: none;
+            background: transparent;
+            padding: 0;
+            border-radius: 0;
+            outline: none;
+        }
+        
+        .nav-button:hover {
+            transform: scale(1.05);
+        }
+        
+        .nav-button:active {
+            transform: scale(0.98);
+        }
+        
+        .nav-button-img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            display: block;
+        }
+        
+        /* Кнопка Назад - левый нижний угол */
+        .back-button {
+            left: 30px;
+        }
+        
+        /* Кнопка Далее - правый нижний угол */
+        .next-button {
+            right: 30px;
+        }
+        
+        /* Номер страницы */
+        .page-info {
+            position: fixed;
+            bottom: 50px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 10;
+            background: rgba(0, 0, 0, 0.7);
+            color: white;
+            padding: 8px 20px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 600;
+            backdrop-filter: blur(5px);
+        }
+        
+        /* Сообщение если нет артефактов */
+        .no-artifacts {
+            text-align: center;
+            padding: 60px;
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 20px;
+            max-width: 500px;
+            margin: 0 auto;
+        }
+        
+        .no-artifacts p {
+            font-size: 18px;
+            color: #666;
+            margin-bottom: 20px;
+        }
+        
+        /* Адаптивность для планшетов */
+        @media (max-width: 1024px) {
+            .artifacts-grid {
+                gap: 12px 15px;
+            }
+            
+            .artifact-name-overlay {
+                font-size: 14px;
+            }
+            
+            .artifact-image {
+                width: 90%;
+            }
+            
+            .nav-button {
+                width: 60px;
+                height: 60px;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .artifacts-grid {
+                grid-template-columns: repeat(2, 1fr);
+                grid-template-rows: repeat(3, auto);
+                gap: 15px 15px;
+            }
+            
+            .artifacts-content {
+                padding: 80px 20px 100px 20px;
+            }
+            
+            .artifacts-header h1 {
+                font-size: 28px;
+            }
+            
+            .artifact-name-overlay {
+                font-size: 12px;
+            }
+            
+            .artifact-image {
+                width: 90%;
+            }
+            
+            .nav-button {
+                width: 50px;
+                height: 50px;
+                bottom: 20px;
+            }
+            
+            .page-info {
+                bottom: 40px;
+                font-size: 12px;
+                padding: 6px 15px;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .artifacts-grid {
+                grid-template-columns: 1fr;
+                grid-template-rows: repeat(6, auto);
+                gap: 15px;
+            }
+            
+            .artifact-name-overlay {
+                font-size: 14px;
+            }
+            
+            .artifact-image {
+                width: 80%;
+            }
+            
+            .nav-button {
+                width: 40px;
+                height: 40px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="artifacts-background"></div>
+
+    <!-- Левое верхнее изображение с ФИО поверх -->
+    <div class="top-left-image">
+        <div class="title-image-wrapper">
+            <img src="/images/literary-hall/person-title.png" alt="Литературное краеведение" class="title-image-bg">
+            <div class="person-name-overlay">
+                <span class="person-surname">{{person.lastName}}</span>
+                <span class="person-firstname">{{person.firstName}} {{person.patronymic}}</span>
+            </div>
+        </div>
+    </div>
+    
+    <div class="artifacts-content">
+        
+        {{#if artifacts.length}}
+        <div class="artifacts-grid">
+            {{#each artifacts}}
+            <button class="artifact-card" data-artifact-index="{{@index}}" data-artifact-name="{{name}}">
+                <div class="artifact-image" style="background-image: url('{{imagePath}}');"></div>
+                <div class="artifact-name-overlay">{{name}}</div>
+            </button>
+            {{/each}}
+        </div>
+        {{else}}
+        <div class="no-artifacts">
+            <p>📦 В данный момент артефакты отсутствуют</p>
+        </div>
+        {{/if}}
+    </div>
+    
+    <!-- Кнопка Назад -->
+    {{#if (gt currentPage 1)}}
+    <button class="nav-button back-button" id="prevPageBtn">
+        <img src="/images/back-button.png" alt="Назад" class="nav-button-img">
+    </button>
+    {{/if}}
+    
+    <!-- Кнопка Далее -->
+    {{#if (lt currentPage totalPages)}}
+    <button class="nav-button next-button" id="nextPageBtn">
+        <img src="/images/next-button.png" alt="Далее" class="nav-button-img">
+    </button>
+    {{/if}}
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Обработчики для карточек артефактов
+            const artifactCards = document.querySelectorAll('.artifact-card');
+            const personId = '{{personId}}';
+            const currentPage = {{currentPage}};
+            const totalPages = {{totalPages}};
+            
+            artifactCards.forEach((card, index) => {
+                card.addEventListener('click', function() {
+                    const artifactIndex = card.dataset.artifactIndex;
+                    console.log(`Переход к видео артефакта с индексом: ${artifactIndex}`);
+                    window.location.href = `/hall/artifact-video/${personId}/${artifactIndex}`;
+                });
+            });
+            
+            // Пагинация - кнопка Назад
+            const prevPageBtn = document.getElementById('prevPageBtn');
+            if (prevPageBtn) {
+                prevPageBtn.addEventListener('click', function() {
+                    const prevPage = currentPage - 1;
+                    window.location.href = `/hall/artifacts/${personId}?page=${prevPage}`;
+                });
+            }
+            
+            // Пагинация - кнопка Далее
+            const nextPageBtn = document.getElementById('nextPageBtn');
+            if (nextPageBtn) {
+                nextPageBtn.addEventListener('click', function() {
+                    const nextPage = currentPage + 1;
+                    window.location.href = `/hall/artifacts/${personId}?page=${nextPage}`;
+                });
+            }
+        });
+    </script>
+</body>
+</html>

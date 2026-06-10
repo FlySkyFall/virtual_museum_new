@@ -1,0 +1,19 @@
+<div class="hall-container">
+    <!-- Фоновое изображение зала -->
+    <div class="hall-background"></div>
+    
+    <!-- Контейнер с кнопками персоналий -->
+    <div class="persons-container">
+        {{#each persons}}
+        <button class="person-button" data-person-id="{{_id}}" data-person-name="{{fullName}}">
+            <div class="person-button-bg" style="background-image: url('{{buttonImagePath}}');"></div>
+            <div class="person-info">
+                <div class="person-name">
+                    <span class="person-surname">{{lastName}}</span>
+                    <span class="person-name-rest">{{firstName}} {{patronymic}}</span>
+                </div>
+            </div>
+        </button>
+        {{/each}}
+    </div>
+</div>
