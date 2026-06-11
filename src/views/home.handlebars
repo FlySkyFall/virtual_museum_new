@@ -10,4 +10,21 @@
         </button>
         {{/each}}
     </div>
+
+    <script>
+        (function() {
+            const img = document.querySelector('.museum-container img');
+            const w = window.innerWidth;
+            const h = window.innerHeight;
+            const ratio = (w / h).toFixed(3);
+            console.log('=== РЕАЛЬНАЯ ДИАГНОСТИКА ===');
+            console.log('Ширина окна:', w);
+            console.log('Высота окна:', h);
+            console.log('Соотношение экрана:', ratio);
+            if (img && img.complete) {
+                console.log('Изображение:', img.naturalWidth, 'x', img.naturalHeight);
+                console.log('Соотношение картинки:', (img.naturalWidth / img.naturalHeight).toFixed(3));
+            }
+        })();
+    </script>
 </div>
