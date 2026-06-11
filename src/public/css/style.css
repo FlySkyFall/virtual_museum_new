@@ -7,8 +7,8 @@
 body {
     font-family: 'Montserrat', sans-serif;
     overflow: hidden;
-    height: 100vh;
-    width: 100vw;
+    height: 100%;
+    width: 100%;
 }
 
 .museum-container {
@@ -30,6 +30,22 @@ body {
     background-position: center;
     background-repeat: no-repeat;
     z-index: 1;
+}
+
+/* Главное исправление - для вертикальной обрезки */
+@media (min-aspect-ratio: 16/9) {
+    .museum-background {
+        background-size: cover;
+        background-position: center 50%;
+    }
+}
+
+/* Для экранов, которые ниже 16:9 (ваш случай) */
+@media (max-aspect-ratio: 16/9) {
+    .museum-background {
+        background-size: auto 100%;  /* заполняем по высоте полностью */
+        background-position: center;
+    }
 }
 
 /* Добавляем затемнение по краям для лучшего вида */
