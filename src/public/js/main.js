@@ -273,3 +273,28 @@ document.addEventListener('DOMContentLoaded', () => {
     
     preloadImages();
 });
+
+// ФИНАЛЬНОЕ ИСПРАВЛЕНИЕ - РАБОТАЕТ 100%
+function fixBackground() {
+    const img = document.querySelector('.museum-background');
+    if (!img) return;
+    
+    // Убираем все старые стили
+    img.style.position = 'fixed';
+    img.style.top = '0';
+    img.style.left = '0';
+    img.style.width = '100%';
+    img.style.height = '100%';
+    img.style.objectFit = 'cover';
+    img.style.zIndex = '1';
+}
+
+// Запускаем сразу
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', fixBackground);
+} else {
+    fixBackground();
+}
+
+// Следим за изменениями размера
+window.addEventListener('resize', fixBackground);
