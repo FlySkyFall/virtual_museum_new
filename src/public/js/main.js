@@ -1,3 +1,51 @@
+// Функция для установки правильной высоты с учётом интерфейса браузера
+function setCorrectViewportHeight() {
+    // Получаем реальную доступную высоту окна
+    const viewportHeight = window.innerHeight;
+    
+    // Находим контейнер и фон
+    const museumContainer = document.querySelector('.museum-container');
+    const museumBackground = document.querySelector('.museum-background');
+    
+    if (museumContainer) {
+        museumContainer.style.height = viewportHeight + 'px';
+        console.log(`Установлена высота контейнера: ${viewportHeight}px`);
+    }
+    
+    if (museumBackground) {
+        museumBackground.style.height = viewportHeight + 'px';
+        console.log(`Установлена высота фона: ${viewportHeight}px`);
+    }
+}
+
+// Функция для обработки изменения размера окна (с debounce для производительности)
+let resizeTimeout;
+function handleResize() {
+    clearTimeout(resizeTimeout);
+    resizeTimeout = setTimeout(() => {
+        setCorrectViewportHeight();
+    }, 100);
+}
+
+// Запускаем установку высоты при загрузке страницы
+// Это нужно сделать ДО того, как DOMContentLoaded сработает, или внутри него
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', () => {
+        setCorrectViewportHeight();
+    });
+} else {
+    // DOM уже загружен
+    setCorrectViewportHeight();
+}
+
+// Слушаем изменение размера окна
+window.addEventListener('resize', handleResize);
+
+// Дополнительно: слушаем изменения ориентации экрана (для мобильных устройств)
+window.addEventListener('orientationchange', () => {
+    setTimeout(setCorrectViewportHeight, 50);
+});
+
 // Ожидаем загрузки DOM
 document.addEventListener('DOMContentLoaded', () => {
     // Находим все кнопки залов
