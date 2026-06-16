@@ -1,13 +1,17 @@
 const mongoose = require('mongoose');
+const bcrypt = require('bcryptjs');
 const Admin = require('./models/Admin');
 
 async function createAdmin() {
     try {
-        await mongoose.connect('mongodb://localhost:27017/virtual_museum');
+        await mongoose.connect('mongodb+srv://museum_admin:danchik2282271@cluster0.bsclqmy.mongodb.net/virtual_museum?appName=Cluster0');
+        
+        // Хешируем пароль вручную
+        const hashedPassword = await bcrypt.hash('admin123', 10);
         
         const admin = new Admin({
             username: 'admin',
-            password: 'admin123'
+            password: hashedPassword
         });
         
         await admin.save();
