@@ -3,14 +3,14 @@
 .hall-container {
     position: relative;
     width: 100%;
-    height: 100vh;
+    height: 100dvh; /* динамическая высота с учетом панели задач */
     overflow-y: auto;
     overflow-x: hidden;
     font-family: 'Montserrat', sans-serif;
     display: flex;
     flex-direction: column;
     justify-content: center;
-    padding: 30px 0; /* Увеличил отступы */
+    padding: 20px 0; /* отступы сверху/снизу, чтобы кнопки не обрезались */
 }
 
 /* Фоновое изображение зала - фиксируем фон */
@@ -27,7 +27,7 @@
     z-index: 1;
 }
 
-/* Заголовок зала - делаем его относительным и добавляем отступ снизу */
+/* Заголовок зала */
 .hall-header {
     position: relative;
     top: 0;
@@ -85,13 +85,13 @@
     width: 100%;
 }
 
-/* КНОПКА - полное прилегание к левому краю */
+/* КНОПКА */
 .person-button {
     position: relative;
     left: -15px;
     width: 85%;
-    height: auto; /* Меняем на auto */
-    min-height: 130px;
+    height: 150px; /* увеличили для полного отображения фона */
+    min-height: 120px;
     border: none;
     cursor: pointer;
     padding: 0;
@@ -100,12 +100,7 @@
     transition: none;
     overflow: visible;
     border-radius: 0;
-    flex-shrink: 0; /* Запрещаем сжатие */
-}
-
-/* Убираем отступ сверху у первой кнопки через first-child */
-.persons-container .person-button:first-child {
-    margin-top: 0;
+    flex-shrink: 0;
 }
 
 /* Само изображение кнопки */
@@ -129,19 +124,19 @@
     transform: scale(1.03);
 }
 
-/* Контейнер для текста - текст справа */
+/* Контейнер для текста – текст справа */
 .person-info {
     position: relative;
     z-index: 2;
     height: 100%;
-    min-height: 130px;
+    min-height: 120px;
     display: flex;
     flex-direction: column;
     justify-content: center;
-    align-items: flex-end; /* Выравнивание по правому краю */
+    align-items: flex-end; /* выравнивание по правому краю */
     padding: 20px 120px 20px 30px;
     color: black;
-    text-align: right; /* Текст справа */
+    text-align: right; /* текст справа */
     pointer-events: none;
 }
 
@@ -156,10 +151,10 @@
     font-family: 'Comic Sans MS', 'Comic Sans', cursive;
     display: flex;
     flex-wrap: wrap;
-    justify-content: flex-end; /* Выравнивание по правому краю */
+    justify-content: flex-end; /* элементы справа */
     align-items: baseline;
     gap: 5px 10px;
-    padding-right: 40px; /* Отступ от правого края */
+    padding-right: 40px; /* отступ от правого края, чтобы не было впритык */
 }
 
 /* Фамилия - жирная, большими буквами */
@@ -207,20 +202,17 @@
 
 /* Адаптивность для планшетов */
 @media (max-width: 1024px) {
-    .hall-container {
-        padding: 25px 0;
-    }
-    
     .persons-container {
         gap: 25px;
     }
     
     .person-button {
-        min-height: 110px;
+        height: 130px;
+        min-height: 100px;
     }
     
     .person-info {
-        min-height: 110px;
+        min-height: 100px;
         padding: 15px 100px 15px 25px;
     }
     
@@ -244,7 +236,7 @@
 /* Адаптивность для мобильных устройств */
 @media (max-width: 768px) {
     .hall-container {
-        padding: 15px 0;
+        padding: 10px 0;
     }
     
     .persons-container {
@@ -253,13 +245,14 @@
     }
     
     .person-button {
-        min-height: 90px;
+        height: 100px;
+        min-height: 80px;
         width: 95%;
         left: -5px;
     }
     
     .person-info {
-        min-height: 90px;
+        min-height: 80px;
         padding: 12px 70px 12px 20px;
     }
     
@@ -296,20 +289,17 @@
 
 /* Для очень больших экранов */
 @media (min-width: 1440px) {
-    .hall-container {
-        padding: 40px 0;
-    }
-    
     .persons-container {
         gap: 40px;
     }
     
     .person-button {
-        min-height: 180px;
+        height: 180px;
+        min-height: 150px;
     }
     
     .person-info {
-        min-height: 180px;
+        min-height: 150px;
         padding: 20px 150px 20px 40px;
     }
     
@@ -330,7 +320,7 @@
 /* Для маленьких экранов по высоте */
 @media (max-height: 800px) {
     .hall-container {
-        padding: 20px 0;
+        padding: 15px 0;
     }
     
     .persons-container {
@@ -338,6 +328,7 @@
     }
     
     .person-button {
+        height: 120px;
         min-height: 100px;
     }
     
@@ -369,6 +360,7 @@
     }
     
     .person-button {
+        height: 90px;
         min-height: 80px;
     }
     
