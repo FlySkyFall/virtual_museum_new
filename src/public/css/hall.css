@@ -8,8 +8,8 @@
     overflow-x: hidden;
     font-family: 'Montserrat', sans-serif;
     display: flex;
-    align-items: center; /* Центрирование по вертикали */
-    justify-content: center; /* Центрирование по горизонтали */
+    flex-direction: column;
+    justify-content: center; /* Центрирование по вертикали */
 }
 
 /* Фоновое изображение зала - фиксируем фон */
@@ -26,7 +26,7 @@
     z-index: 1;
 }
 
-/* Заголовок зала */
+/* Заголовок зала - делаем его относительным и добавляем отступ снизу */
 .hall-header {
     position: relative;
     top: 0;
@@ -38,7 +38,7 @@
     backdrop-filter: blur(10px);
     max-width: 400px;
     animation: slideInLeft 0.6s ease-out;
-    margin: 20px 0 30px 0;
+    margin: 20px 0 30px 0; /* Отступ сверху 20px, снизу 30px */
 }
 
 .back-to-main {
@@ -75,36 +75,38 @@
 /* Контейнер для кнопок персоналий */
 .persons-container {
     position: relative;
+    left: 0;
     z-index: 2;
     display: flex;
     flex-direction: column;
-    gap: 30px;
-    padding: 20px 0 40px 0;
+    gap: 30px; /* Отступы между кнопками */
+    padding: 0 0 40px 0; /* Убираем отступ сверху, оставляем снизу */
     width: 100%;
-    max-width: 1200px; /* Ограничение максимальной ширины */
-    margin: 0 auto; /* Центрирование */
 }
 
-/* КНОПКА - исправленная версия */
+/* КНОПКА - полное прилегание к левому краю */
 .person-button {
     position: relative;
+    left: -15px;
     width: 85%;
-    max-width: 900px; /* Максимальная ширина кнопки */
-    height: auto; /* Автоматическая высота */
-    min-height: 130px; /* Минимальная высота */
+    height: 130px;
+    min-height: 100px;
     border: none;
     cursor: pointer;
     padding: 0;
-    margin: 0 auto 0 0; /* Выравнивание по левому краю */
+    margin: 0;
     background: none;
-    overflow: hidden;
-    border-radius: 0 30px 30px 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    transition: none;
+    overflow: visible;
+    border-radius: 0;
 }
 
-/* Само изображение кнопки - исправлено */
+/* Убираем отступ сверху у первой кнопки через first-child */
+.persons-container .person-button:first-child {
+    margin-top: 0;
+}
+
+/* Само изображение кнопки */
 .person-button-bg {
     position: absolute;
     top: 0;
@@ -115,6 +117,9 @@
     background-position: center;
     background-repeat: no-repeat;
     transition: transform 0.3s ease;
+    border-radius: 0 30px 30px 0;
+    margin: 0;
+    padding: 0;
 }
 
 /* При наведении увеличиваем изображение */
@@ -122,20 +127,18 @@
     transform: scale(1.03);
 }
 
-/* Контейнер для текста - исправлен для центрирования */
+/* Контейнер для текста */
 .person-info {
     position: relative;
     z-index: 2;
-    width: 100%;
     height: 100%;
-    min-height: 130px;
+    min-height: 120px;
     display: flex;
     flex-direction: column;
     justify-content: center;
-    align-items: center; /* Центрирование по горизонтали */
-    padding: 20px 30px;
+    padding: 20px 120px 20px 30px;
     color: black;
-    text-align: center; /* Центрирование текста */
+    text-align: right;
     pointer-events: none;
 }
 
@@ -150,9 +153,9 @@
     font-family: 'Comic Sans MS', 'Comic Sans', cursive;
     display: flex;
     flex-wrap: wrap;
-    justify-content: center;
+    justify-content: flex-end; /* Выравнивание текста вправо */
     align-items: baseline;
-    gap: 5px 10px; /* Отступы между элементами */
+    gap: 5px 10px;
 }
 
 /* Фамилия - жирная, большими буквами */
@@ -205,25 +208,21 @@
     }
     
     .person-button {
-        min-height: 120px;
-        width: 90%;
+        min-height: 100px;
+        height: 110px;
     }
     
     .person-info {
-        min-height: 120px;
-        padding: 15px 25px;
+        min-height: 100px;
+        padding: 15px 100px 15px 25px;
     }
     
     .person-surname {
-        font-size: 28px;
+        font-size: 24px;
     }
     
     .person-name-rest {
-        font-size: 20px;
-    }
-    
-    .person-name {
-        font-size: 24px;
+        font-size: 18px;
     }
     
     .hall-title {
@@ -235,37 +234,34 @@
 @media (max-width: 768px) {
     .persons-container {
         gap: 20px;
-        padding: 10px 0 30px 0;
+        padding: 0 0 30px 0;
     }
     
     .person-button {
-        min-height: 90px;
+        min-height: 80px;
+        height: 80px;
         width: 95%;
-        border-radius: 0 20px 20px 0;
+        left: -5px;
     }
     
     .person-info {
-        min-height: 90px;
-        padding: 10px 20px;
+        min-height: 80px;
+        padding: 12px 70px 12px 20px;
     }
     
     .person-surname {
-        font-size: 20px;
+        font-size: 18px;
     }
     
     .person-name-rest {
-        font-size: 16px;
-    }
-    
-    .person-name {
-        font-size: 20px;
+        font-size: 14px;
     }
     
     .hall-header {
         position: relative;
         top: 0;
-        left: 0;
-        right: 0;
+        left: 20px;
+        right: 20px;
         margin: 20px 20px 30px 20px;
         max-width: none;
         padding: 15px 20px;
@@ -284,26 +280,24 @@
 @media (min-width: 1440px) {
     .persons-container {
         gap: 40px;
-        max-width: 1400px;
     }
     
     .person-button {
-        min-height: 160px;
-        width: 80%;
-        max-width: 1000px;
+        min-height: 150px;
+        height: 150px;
     }
     
     .person-info {
-        min-height: 160px;
-        padding: 25px 40px;
+        min-height: 150px;
+        padding: 20px 150px 20px 40px;
     }
     
     .person-surname {
-        font-size: 40px;
+        font-size: 38px;
     }
     
     .person-name-rest {
-        font-size: 30px;
+        font-size: 28px;
     }
     
     .person-name {
@@ -311,32 +305,28 @@
     }
 }
 
-/* Для очень маленьких экранов */
+/* Для маленьких экранов */
 @media (max-height: 700px) {
     .persons-container {
         gap: 15px;
-        padding: 10px 0 20px 0;
     }
     
     .person-button {
         min-height: 80px;
+        height: 80px;
     }
     
     .person-info {
         min-height: 80px;
-        padding: 8px 15px;
+        padding: 10px 80px 10px 20px;
     }
     
     .person-surname {
-        font-size: 18px;
+        font-size: 20px;
     }
     
     .person-name-rest {
         font-size: 14px;
-    }
-    
-    .person-name {
-        font-size: 18px;
     }
 }
 
