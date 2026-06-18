@@ -210,3 +210,45 @@ main {
 .hall-button::-moz-focus-inner {
     border: 0;
 }
+
+/* Логотип в левом нижнем углу */
+.logo-link {
+    position: absolute;
+    bottom: 30px;      /* отступ снизу */
+    left: 30px;        /* отступ слева */
+    z-index: 10;       /* поверх фона и кнопок */
+    display: block;
+    transition: transform 0.3s ease;
+}
+
+.logo-link:hover {
+    transform: scale(1.05);
+}
+
+.logo {
+    display: block;
+    max-width: 150px;  /* максимальная ширина логотипа */
+    height: auto;      /* сохраняем пропорции */
+    width: 100%;       /* чтобы адаптироваться */
+}
+
+/* Адаптивность для мобильных устройств */
+@media (max-width: 768px) {
+    .logo-link {
+        bottom: 20px;
+        left: 20px;
+    }
+    .logo {
+        max-width: 100px;
+    }
+}
+
+@media (max-width: 480px) {
+    .logo-link {
+        bottom: 15px;
+        left: 15px;
+    }
+    .logo {
+        max-width: 80px;
+    }
+}
