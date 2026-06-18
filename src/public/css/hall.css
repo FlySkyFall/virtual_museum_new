@@ -80,7 +80,7 @@
     display: flex;
     flex-direction: column;
     gap: 30px; /* Отступы между кнопками */
-    padding: 0 0 40px 0; /* Убираем отступ сверху, оставляем снизу */
+    padding: 0; /* Убираем отступ сверху, оставляем снизу */
     width: 100%;
 }
 
@@ -89,8 +89,8 @@
     position: relative;
     left: -15px;
     width: 85%;
-    height: 130px;
-    min-height: 100px;
+    height: 160px;
+    min-height: 130px;
     border: none;
     cursor: pointer;
     padding: 0;
@@ -132,13 +132,14 @@
     position: relative;
     z-index: 2;
     height: 100%;
-    min-height: 120px;
+    min-height: 130px;
     display: flex;
     flex-direction: column;
     justify-content: center;
+    align-items: center;
     padding: 20px 120px 20px 30px;
     color: black;
-    text-align: right;
+    text-align: center;
     pointer-events: none;
 }
 
@@ -153,7 +154,7 @@
     font-family: 'Comic Sans MS', 'Comic Sans', cursive;
     display: flex;
     flex-wrap: wrap;
-    justify-content: flex-end; /* Выравнивание текста вправо */
+    justify-content: center; /* Выравнивание текста вправо */
     align-items: baseline;
     gap: 5px 10px;
 }
@@ -283,12 +284,12 @@
     }
     
     .person-button {
-        min-height: 150px;
-        height: 150px;
+        min-height: 180px;
+        height: 180px;
     }
     
     .person-info {
-        min-height: 150px;
+        min-height: 180px;
         padding: 20px 150px 20px 40px;
     }
     
