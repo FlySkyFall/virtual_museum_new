@@ -211,44 +211,32 @@ main {
     border: 0;
 }
 
-/* Логотип в левом нижнем углу */
-.logo-link {
+/* Логотип в левом нижнем углу - не кликабельный */
+.logo {
     position: absolute;
     bottom: 30px;      /* отступ снизу */
-    left: 30px;        /* отступ слева */
+    left: 60px;        /* отступ слева */
     z-index: 10;       /* поверх фона и кнопок */
+    max-width: 120px;  /* уменьшенный размер */
+    height: auto;      /* сохранение пропорций */
+    width: auto;
     display: block;
-    transition: transform 0.3s ease;
-}
-
-.logo-link:hover {
-    transform: scale(1.05);
-}
-
-.logo {
-    display: block;
-    max-width: 150px;  /* максимальная ширина логотипа */
-    height: auto;      /* сохраняем пропорции */
-    width: 100%;       /* чтобы адаптироваться */
+    pointer-events: none; /* чтобы точно не был кликабельным (опционально) */
 }
 
 /* Адаптивность для мобильных устройств */
 @media (max-width: 768px) {
-    .logo-link {
+    .logo {
         bottom: 20px;
         left: 20px;
-    }
-    .logo {
-        max-width: 100px;
+        max-width: 90px;
     }
 }
 
 @media (max-width: 480px) {
-    .logo-link {
+    .logo {
         bottom: 15px;
         left: 15px;
-    }
-    .logo {
-        max-width: 80px;
+        max-width: 70px;
     }
 }
