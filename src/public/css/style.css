@@ -215,7 +215,7 @@ main {
 .logo {
     position: absolute;
     bottom: 30px;      /* отступ снизу */
-    left: 60px;        /* отступ слева */
+    left: 90px;        /* отступ слева */
     z-index: 10;       /* поверх фона и кнопок */
     max-width: 120px;  /* уменьшенный размер */
     height: auto;      /* сохранение пропорций */
