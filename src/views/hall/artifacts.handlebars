@@ -6,346 +6,340 @@
     <title>{{title}}</title>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-        
-        body {
-            font-family: 'Montserrat', sans-serif;
-            min-height: 100vh;
-            position: relative;
-        }
-        
-        /* Фоновое изображение */
-        .artifacts-background {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-image: url('/images/literary-hall/artifacts-background.jpg');
-            background-size: cover;
-            background-position: center;
-            background-repeat: no-repeat;
-            z-index: 0;
-        }
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+    
+    body {
+        font-family: 'Montserrat', sans-serif;
+        min-height: 100vh;
+        position: relative;
+    }
+    
+    /* Фоновое изображение */
+    .artifacts-background {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-image: url('/images/literary-hall/artifacts-background.jpg');
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+        z-index: 0;
+    }
 
-        /* Левое верхнее изображение - вплотную к углу */
-        .top-left-image {
-            position: absolute;
-            top: 0;
-            left: 0;
-            z-index: 2;
-        }
-        
-        .title-image-wrapper {
-            position: relative;
-            display: inline-block;
-        }
-        
-        .title-image-bg {
-            display: block;
-            width: 60%;
-            height: 50%;
-        }
-        
-        /* Текст с ФИО поверх изображения */
-        .person-name-overlay {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            color: black;
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
-            white-space: nowrap;
-            font-family: 'Comic Sans MS', 'Comic Sans', cursive;
-            pointer-events: none;
-            text-align: center;
-            display: flex;
-            gap: 10px;
-            align-items: baseline;
-        }
-        
-        /* Фамилия - жирным шрифтом и больше */
-        .person-surname {
-            font-weight: 800;
-            font-size: 32px;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            display: inline-block;
-        }
-        
-        /* Имя и отчество - обычным шрифтом */
-        .person-firstname {
-            font-weight: 400;
-            font-size: 20px;
-            display: inline-block;
-        }
-        
-        /* Основной контент */
+    /* Левое верхнее изображение - вплотную к углу */
+    .top-left-image {
+        position: absolute;
+        top: 0;
+        left: 0;
+        z-index: 2;
+    }
+    
+    .title-image-wrapper {
+        position: relative;
+        display: inline-block;
+    }
+    
+    .title-image-bg {
+        display: block;
+        width: 60%;
+        height: 50%;
+    }
+    
+    /* Текст с ФИО поверх изображения */
+    .person-name-overlay {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        color: black;
+        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+        white-space: nowrap;
+        font-family: 'Comic Sans MS', 'Comic Sans', cursive;
+        pointer-events: none;
+        text-align: center;
+        display: flex;
+        gap: 10px;
+        align-items: baseline;
+    }
+    
+    /* Фамилия - жирным шрифтом и больше */
+    .person-surname {
+        font-weight: 800;
+        font-size: 32px;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        display: inline-block;
+    }
+    
+    /* Имя и отчество - обычным шрифтом */
+    .person-firstname {
+        font-weight: 400;
+        font-size: 20px;
+        display: inline-block;
+    }
+    
+    /* Основной контент - исправлено */
+    .artifacts-content {
+        position: relative;
+        z-index: 1;
+        height: 100vh;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: flex-start; /* сетка прижата к верху */
+        padding: 120px 60px 100px 60px; /* отступ сверху для верхней планки */
+    }
+    
+    /* Заголовок */
+    .artifacts-header {
+        text-align: center;
+        margin-bottom: 30px;
+    }
+    
+    .artifacts-header h1 {
+        font-size: 28px;
+        color: #333;
+        margin-bottom: 5px;
+        text-shadow: 2px 2px 4px rgba(255,255,255,0.5);
+    }
+    
+    .artifacts-header .person-name {
+        font-size: 16px;
+        color: #667eea;
+        font-weight: 600;
+    }
+    
+    /* Сетка артефактов - 3 колонки, 2 ряда */
+    .artifacts-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        grid-template-rows: repeat(2, auto);
+        gap: 15px 20px;
+        width: 100%;
+        max-width: 1200px;
+        margin: 0 auto;
+    }
+    
+    /* Карточка артефакта - исправлено */
+    .artifact-card {
+        position: relative;
+        width: 100%;
+        max-width: 280px;
+        margin: 0 auto;
+        /* top: 20%;  УДАЛЕНО */
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border: none;
+        cursor: pointer;
+        background: transparent;
+        transition: transform 0.3s ease;
+        border-radius: 0;
+        overflow: visible;
+        box-shadow: none;
+        outline: none;
+    }
+    
+    .artifact-card:focus {
+        outline: none;
+    }
+    
+    .artifact-card::-moz-focus-inner {
+        border: 0;
+    }
+    
+    .artifact-image {
+        width: 100%;
+        height: auto;
+        background-size: contain; /* полное помещение изображения */
+        background-position: center;
+        background-repeat: no-repeat;
+        border-radius: 0;
+        box-shadow: none;
+        border: none;
+        aspect-ratio: 1 / 1;
+        transition: transform 0.3s ease;
+    }
+    
+    /* Текст по центру карточки, белый, без эффектов */
+    .artifact-name-overlay {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        text-align: center;
+        color: white;
+        font-size: 18px;
+        font-weight: 600;
+        font-family: 'Montserrat', sans-serif;
+        text-shadow: none;
+        background: transparent;
+        padding: 0;
+        width: 80%;
+        word-wrap: break-word;
+        white-space: normal;
+        line-height: 1.3;
+        pointer-events: none;
+    }
+    
+    .artifact-card:hover {
+        transform: scale(1.05);
+    }
+    
+    .artifact-card:active {
+        transform: scale(0.98);
+    }
+    
+    /* Навигационные кнопки */
+    .nav-button {
+        position: fixed;
+        bottom: 20px;
+        z-index: 10;
+        width: 70px;
+        height: 70px;
+        cursor: pointer;
+        transition: transform 0.3s ease;
+        border: none;
+        background: transparent;
+        padding: 0;
+        border-radius: 0;
+        outline: none;
+    }
+    
+    .nav-button:hover {
+        transform: scale(1.05);
+    }
+    
+    .nav-button:active {
+        transform: scale(0.98);
+    }
+    
+    .nav-button-img {
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+        display: block;
+    }
+    
+    /* Кнопка Назад - левый нижний угол */
+    .back-button {
+        left: 30px;
+    }
+    
+    /* Кнопка Далее - правый нижний угол */
+    .next-button {
+        right: 30px;
+    }
+    
+    /* Номер страницы */
+    .page-info {
+        position: fixed;
+        bottom: 50px;
+        left: 50%;
+        transform: translateX(-50%);
+        z-index: 10;
+        background: rgba(0, 0, 0, 0.7);
+        color: white;
+        padding: 8px 20px;
+        border-radius: 20px;
+        font-size: 14px;
+        font-weight: 600;
+        backdrop-filter: blur(5px);
+    }
+    
+    /* Сообщение если нет артефактов */
+    .no-artifacts {
+        text-align: center;
+        padding: 60px;
+        background: rgba(255, 255, 255, 0.9);
+        border-radius: 20px;
+        max-width: 500px;
+        margin: 0 auto;
+    }
+    
+    .no-artifacts p {
+        font-size: 18px;
+        color: #666;
+        margin-bottom: 20px;
+    }
+    
+    /* Адаптивность для планшетов */
+    @media (max-width: 1024px) {
         .artifacts-content {
-            position: relative;
-            z-index: 1;
-            height: 100vh;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            padding: 40px 60px 100px 60px;
+            padding: 100px 40px 80px 40px;
         }
-        
-        /* Заголовок */
-        .artifacts-header {
-            text-align: center;
-            margin-bottom: 30px;
+        .artifacts-grid {
+            gap: 12px 15px;
         }
-        
+        .artifact-name-overlay {
+            font-size: 14px;
+        }
+        .artifact-image {
+            width: 90%;
+        }
+        .nav-button {
+            width: 60px;
+            height: 60px;
+        }
+    }
+    
+    @media (max-width: 768px) {
+        .artifacts-content {
+            padding: 80px 20px 80px 20px;
+        }
+        .artifacts-grid {
+            grid-template-columns: repeat(2, 1fr);
+            grid-template-rows: repeat(3, auto);
+            gap: 15px 15px;
+        }
         .artifacts-header h1 {
             font-size: 28px;
-            color: #333;
-            margin-bottom: 5px;
-            text-shadow: 2px 2px 4px rgba(255,255,255,0.5);
         }
-        
-        .artifacts-header .person-name {
-            font-size: 16px;
-            color: #667eea;
-            font-weight: 600;
-        }
-        
-        /* Сетка артефактов - 3 колонки, 2 ряда */
-        .artifacts-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            grid-template-rows: repeat(2, auto);
-            gap: 15px 20px;
-            width: 100%;
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-        
-        /* Карточка артефакта */
-        .artifact-card {
-            position: relative;
-            width: 100%;
-            max-width: 280px;
-            margin: 0 auto;
-            top: 20%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border: none;
-            cursor: pointer;
-            background: transparent;
-            transition: transform 0.3s ease;
-            border-radius: 0;
-            overflow: visible;
-            box-shadow: none;
-            outline: none;
-        }
-        
-        .artifact-card:focus {
-            outline: none;
-        }
-        
-        .artifact-card::-moz-focus-inner {
-            border: 0;
-        }
-        
-        .artifact-image {
-            width: 100%;
-            height: auto;
-            background-size: cover;
-            background-position: center;
-            background-repeat: no-repeat;
-            border-radius: 0;
-            box-shadow: none;
-            border: none;
-            aspect-ratio: 1 / 1;
-            transition: transform 0.3s ease;
-        }
-        
-        /* Текст по центру карточки, белый, без эффектов */
         .artifact-name-overlay {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            text-align: center;
-            color: white;
-            font-size: 18px;
-            font-weight: 600;
-            font-family: 'Montserrat', sans-serif;
-            text-shadow: none;
-            background: transparent;
-            padding: 0;
-            width: 80%;
-            word-wrap: break-word;
-            white-space: normal;
-            line-height: 1.3;
-            pointer-events: none;
+            font-size: 12px;
         }
-        
-        .artifact-card:hover {
-            transform: scale(1.05);
+        .artifact-image {
+            width: 90%;
         }
-        
-        .artifact-card:active {
-            transform: scale(0.98);
-        }
-        
-        /* Навигационные кнопки */
         .nav-button {
-            position: fixed;
+            width: 50px;
+            height: 50px;
             bottom: 20px;
-            z-index: 10;
-            width: 70px;
-            height: 70px;
-            cursor: pointer;
-            transition: transform 0.3s ease;
-            border: none;
-            background: transparent;
-            padding: 0;
-            border-radius: 0;
-            outline: none;
         }
-        
-        .nav-button:hover {
-            transform: scale(1.05);
-        }
-        
-        .nav-button:active {
-            transform: scale(0.98);
-        }
-        
-        .nav-button-img {
-            width: 100%;
-            height: 100%;
-            object-fit: contain;
-            display: block;
-        }
-        
-        /* Кнопка Назад - левый нижний угол */
-        .back-button {
-            left: 30px;
-        }
-        
-        /* Кнопка Далее - правый нижний угол */
-        .next-button {
-            right: 30px;
-        }
-        
-        /* Номер страницы */
         .page-info {
-            position: fixed;
-            bottom: 50px;
-            left: 50%;
-            transform: translateX(-50%);
-            z-index: 10;
-            background: rgba(0, 0, 0, 0.7);
-            color: white;
-            padding: 8px 20px;
-            border-radius: 20px;
+            bottom: 40px;
+            font-size: 12px;
+            padding: 6px 15px;
+        }
+    }
+    
+    @media (max-width: 480px) {
+        .artifacts-content {
+            padding: 70px 15px 70px 15px;
+        }
+        .artifacts-grid {
+            grid-template-columns: 1fr;
+            grid-template-rows: repeat(6, auto);
+            gap: 15px;
+        }
+        .artifact-name-overlay {
             font-size: 14px;
-            font-weight: 600;
-            backdrop-filter: blur(5px);
         }
-        
-        /* Сообщение если нет артефактов */
-        .no-artifacts {
-            text-align: center;
-            padding: 60px;
-            background: rgba(255, 255, 255, 0.9);
-            border-radius: 20px;
-            max-width: 500px;
-            margin: 0 auto;
+        .artifact-image {
+            width: 80%;
         }
-        
-        .no-artifacts p {
-            font-size: 18px;
-            color: #666;
-            margin-bottom: 20px;
+        .nav-button {
+            width: 40px;
+            height: 40px;
         }
-        
-        /* Адаптивность для планшетов */
-        @media (max-width: 1024px) {
-            .artifacts-grid {
-                gap: 12px 15px;
-            }
-            
-            .artifact-name-overlay {
-                font-size: 14px;
-            }
-            
-            .artifact-image {
-                width: 90%;
-            }
-            
-            .nav-button {
-                width: 60px;
-                height: 60px;
-            }
-        }
-        
-        @media (max-width: 768px) {
-            .artifacts-grid {
-                grid-template-columns: repeat(2, 1fr);
-                grid-template-rows: repeat(3, auto);
-                gap: 15px 15px;
-            }
-            
-            .artifacts-content {
-                padding: 80px 20px 100px 20px;
-            }
-            
-            .artifacts-header h1 {
-                font-size: 28px;
-            }
-            
-            .artifact-name-overlay {
-                font-size: 12px;
-            }
-            
-            .artifact-image {
-                width: 90%;
-            }
-            
-            .nav-button {
-                width: 50px;
-                height: 50px;
-                bottom: 20px;
-            }
-            
-            .page-info {
-                bottom: 40px;
-                font-size: 12px;
-                padding: 6px 15px;
-            }
-        }
-        
-        @media (max-width: 480px) {
-            .artifacts-grid {
-                grid-template-columns: 1fr;
-                grid-template-rows: repeat(6, auto);
-                gap: 15px;
-            }
-            
-            .artifact-name-overlay {
-                font-size: 14px;
-            }
-            
-            .artifact-image {
-                width: 80%;
-            }
-            
-            .nav-button {
-                width: 40px;
-                height: 40px;
-            }
-        }
-    </style>
+    }
+</style>
 </head>
 <body>
     <div class="artifacts-background"></div>
