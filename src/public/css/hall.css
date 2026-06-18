@@ -10,7 +10,7 @@
     display: flex;
     flex-direction: column;
     justify-content: center;
-    padding: 20px 0; /* ДОБАВЛЯЕМ - отступы сверху и снизу */
+    padding: 30px 0; /* Увеличил отступы */
 }
 
 /* Фоновое изображение зала - фиксируем фон */
@@ -90,7 +90,7 @@
     position: relative;
     left: -15px;
     width: 85%;
-    height: 160px;
+    height: auto; /* Меняем на auto */
     min-height: 130px;
     border: none;
     cursor: pointer;
@@ -100,6 +100,7 @@
     transition: none;
     overflow: visible;
     border-radius: 0;
+    flex-shrink: 0; /* Запрещаем сжатие */
 }
 
 /* Убираем отступ сверху у первой кнопки через first-child */
@@ -128,7 +129,7 @@
     transform: scale(1.03);
 }
 
-/* Контейнер для текста */
+/* Контейнер для текста - текст справа */
 .person-info {
     position: relative;
     z-index: 2;
@@ -137,10 +138,10 @@
     display: flex;
     flex-direction: column;
     justify-content: center;
-    align-items: center; /* Центрирование по горизонтали */
+    align-items: flex-end; /* Выравнивание по правому краю */
     padding: 20px 120px 20px 30px;
     color: black;
-    text-align: center;
+    text-align: right; /* Текст справа */
     pointer-events: none;
 }
 
@@ -155,10 +156,10 @@
     font-family: 'Comic Sans MS', 'Comic Sans', cursive;
     display: flex;
     flex-wrap: wrap;
-    justify-content: center; /* Центрирование */
+    justify-content: flex-end; /* Выравнивание по правому краю */
     align-items: baseline;
     gap: 5px 10px;
-    padding-right: 40px; /* ДОБАВЛЯЕМ - сдвиг текста вправо */
+    padding-right: 40px; /* Отступ от правого края */
 }
 
 /* Фамилия - жирная, большими буквами */
@@ -206,13 +207,16 @@
 
 /* Адаптивность для планшетов */
 @media (max-width: 1024px) {
+    .hall-container {
+        padding: 25px 0;
+    }
+    
     .persons-container {
         gap: 25px;
     }
     
     .person-button {
         min-height: 110px;
-        height: 110px;
     }
     
     .person-info {
@@ -229,7 +233,7 @@
     }
     
     .person-name {
-        padding-right: 30px; /* ДОБАВЛЯЕМ */
+        padding-right: 30px;
     }
     
     .hall-title {
@@ -240,7 +244,7 @@
 /* Адаптивность для мобильных устройств */
 @media (max-width: 768px) {
     .hall-container {
-        padding: 10px 0; /* ДОБАВЛЯЕМ - меньшие отступы */
+        padding: 15px 0;
     }
     
     .persons-container {
@@ -250,7 +254,6 @@
     
     .person-button {
         min-height: 90px;
-        height: 90px;
         width: 95%;
         left: -5px;
     }
@@ -269,7 +272,7 @@
     }
     
     .person-name {
-        padding-right: 20px; /* ДОБАВЛЯЕМ */
+        padding-right: 20px;
     }
     
     .hall-header {
@@ -293,13 +296,16 @@
 
 /* Для очень больших экранов */
 @media (min-width: 1440px) {
+    .hall-container {
+        padding: 40px 0;
+    }
+    
     .persons-container {
         gap: 40px;
     }
     
     .person-button {
         min-height: 180px;
-        height: 180px;
     }
     
     .person-info {
@@ -317,14 +323,45 @@
     
     .person-name {
         font-size: 32px;
-        padding-right: 50px; /* ДОБАВЛЯЕМ */
+        padding-right: 50px;
     }
 }
 
-/* Для маленьких экранов */
-@media (max-height: 700px) {
+/* Для маленьких экранов по высоте */
+@media (max-height: 800px) {
     .hall-container {
-        padding: 10px 0; /* ДОБАВЛЯЕМ */
+        padding: 20px 0;
+    }
+    
+    .persons-container {
+        gap: 20px;
+    }
+    
+    .person-button {
+        min-height: 100px;
+    }
+    
+    .person-info {
+        min-height: 100px;
+        padding: 15px 90px 15px 25px;
+    }
+    
+    .person-surname {
+        font-size: 24px;
+    }
+    
+    .person-name-rest {
+        font-size: 18px;
+    }
+    
+    .person-name {
+        padding-right: 30px;
+    }
+}
+
+@media (max-height: 650px) {
+    .hall-container {
+        padding: 10px 0;
     }
     
     .persons-container {
@@ -333,7 +370,6 @@
     
     .person-button {
         min-height: 80px;
-        height: 80px;
     }
     
     .person-info {
@@ -350,7 +386,7 @@
     }
     
     .person-name {
-        padding-right: 20px; /* ДОБАВЛЯЕМ */
+        padding-right: 20px;
     }
 }
 
