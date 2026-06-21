@@ -19,7 +19,7 @@ document.addEventListener('DOMContentLoaded', () => {
             addLoadingToButton(button);
             
             setTimeout(() => {
-                window.location.href = `/hall/military-section/${sectionId}`;
+                window.location.href = `/hall/war-section/${sectionId}`;
             }, 500);
         });
     });

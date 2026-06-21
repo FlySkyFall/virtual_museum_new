@@ -1,16 +1,16 @@
 <div class="hall-container war-hall">
-    <!-- Фоновое изображение зала - пока заглушка -->
+    <!-- Фоновое изображение зала -->
     <div class="hall-background" style="background-image: url('/images/war-hall/war-hall-bg-placeholder.jpg');"></div>
     
-    <!-- Логотип/индикатор зала в левом верхнем углу -->
+    <!-- Логотип/индикатор зала в левом верхнем углу (неактивная кнопка-изображение) -->
     <div class="hall-indicator">
         <img src="/images/war-hall/war-hall-logo.png" alt="Военно-исторический зал" class="hall-logo">
     </div>
     
-    <!-- Контейнер с кнопками разделов -->
+    <!-- Контейнер с тремя статичными кнопками разделов -->
     <div class="sections-container">
         {{#each sections}}
-        <button class="section-button" data-section-id="{{_id}}" data-section-title="{{title}}">
+        <button class="section-button" data-section-id="{{id}}" data-section-title="{{title}}">
             <div class="section-button-bg" style="background-image: url('{{buttonImagePath}}');"></div>
             <div class="section-info">
                 <div class="section-title">

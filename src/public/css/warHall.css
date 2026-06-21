@@ -1,5 +1,5 @@
 /* Стили для военно-исторического зала */
-.hall-container.war-hall {
+.war-hall {
     position: relative;
     width: 100%;
     height: 100dvh;
@@ -22,7 +22,7 @@
     z-index: 1;
 }
 
-/* Индикатор зала (логотип в левом верхнем углу) */
+/* Индикатор зала (логотип в левом верхнем углу) - НЕАКТИВНАЯ КНОПКА */
 .hall-indicator {
     position: absolute;
     top: 20px;
@@ -32,12 +32,14 @@
     height: auto;
     opacity: 1;
     animation: slideInLeft 0.6s ease-out;
+    cursor: default; /* курсор по умолчанию, чтобы показать что нельзя нажать */
 }
 
 .hall-logo {
     width: 100%;
     height: auto;
     display: block;
+    pointer-events: none; /* отключаем кликабельность */
 }
 
 /* Контейнер для кнопок разделов */
@@ -48,21 +50,20 @@
     display: flex;
     flex-direction: column;
     gap: 20px;
-    padding: 20px 0;
+    padding: 0;
     width: 100%;
     min-height: 0;
     justify-content: center;
-    margin-top: 80px; /* Отступ сверху, чтобы кнопки не прилипали к верхнему краю */
+    margin-top: 80px; /* ОТСТУП СВЕРХУ - как вы просили */
 }
 
-/* КНОПКИ РАЗДЕЛОВ */
+/* КНОПКИ РАЗДЕЛОВ - такие же как в первом зале */
 .section-button {
     position: relative;
     left: -15px;
     width: 85%;
-    flex: 0 1 auto;
-    height: 22%; /* Примерная высота, будет адаптироваться */
-    min-height: 80px;
+    flex: 1 1 0; /* равномерное распределение как в первом зале */
+    min-height: 0;
     border: none;
     cursor: pointer;
     padding: 0;
@@ -94,7 +95,7 @@
     transform: scale(1.03);
 }
 
-/* Контейнер для текста */
+/* Контейнер для текста – текст справа с отступом */
 .section-info {
     position: relative;
     z-index: 2;
@@ -169,6 +170,17 @@
     }
 }
 
+@keyframes slideInFromLeft {
+    from {
+        opacity: 0;
+        transform: translateX(-100%);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
 @keyframes fadeIn {
     from {
         opacity: 0;
@@ -187,7 +199,7 @@
 .section-button:nth-child(2) { animation-delay: 0.2s; }
 .section-button:nth-child(3) { animation-delay: 0.3s; }
 
-/* Адаптивность */
+/* Адаптивность - копируем из первого зала */
 @media (max-width: 1024px) {
     .sections-container {
         gap: 15px;
@@ -266,7 +278,7 @@
     }
     
     .section-button {
-        height: 18%;
+        flex: 1 1 0;
         min-height: 60px;
     }
     
@@ -293,6 +305,47 @@
     }
 }
 
+/* Для маленьких экранов по высоте */
+@media (max-height: 700px) {
+    .sections-container {
+        gap: 10px;
+        margin-top: 60px;
+    }
+    
+    .section-info {
+        padding: 3px 80px 3px 20px;
+    }
+    
+    .section-main {
+        font-size: 24px;
+    }
+    
+    .section-title {
+        font-size: 22px;
+        padding-right: 30px;
+    }
+}
+
+@media (max-height: 550px) {
+    .sections-container {
+        gap: 5px;
+        margin-top: 50px;
+    }
+    
+    .section-info {
+        padding: 2px 60px 2px 15px;
+    }
+    
+    .section-main {
+        font-size: 18px;
+    }
+    
+    .section-title {
+        font-size: 18px;
+        padding-right: 20px;
+    }
+}
+
 /* Эффект клика */
 .section-button:active .section-button-bg {
     transform: scale(0.98);
@@ -307,7 +360,7 @@
 }
 
 /* Убираем скролл */
-.hall-container::-webkit-scrollbar {
+.war-hall::-webkit-scrollbar {
     width: 0;
     background: transparent;
 }
