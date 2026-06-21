@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{title}}</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+    
+    body {
+        font-family: 'Montserrat', sans-serif;
+        min-height: 100vh;
+        position: relative;
+    }
+    
+    .video-background {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-image: url('/images/war-hall/video-bg-placeholder.jpg');
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+        z-index: 0;
+    }
+    
+    .video-content {
+        position: relative;
+        z-index: 1;
+        height: 100vh;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        padding: 40px;
+    }
+    
+    .video-container {
+        width: 80%;
+        max-width: 800px;
+        background: rgba(0,0,0,0.8);
+        border-radius: 20px;
+        padding: 20px;
+        box-shadow: 0 10px 40px rgba(0,0,0,0.5);
+    }
+    
+    .artifact-name {
+        color: white;
+        font-size: 28px;
+        margin-bottom: 20px;
+        text-align: center;
+    }
+    
+    .video-placeholder {
+        width: 100%;
+        aspect-ratio: 16/9;
+        background: #1a1a1a;
+        border-radius: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #666;
+        font-size: 18px;
+    }
+    
+    .back-button {
+        position: absolute;
+        bottom: 30px;
+        right: 30px;
+        z-index: 10;
+        width: 60px;
+        height: 60px;
+        cursor: pointer;
+        transition: transform 0.3s ease;
+        border: none;
+        background: transparent;
+        padding: 0;
+    }
+    
+    .back-button:hover {
+        transform: scale(1.1);
+    }
+    
+    .back-button-img {
+        width: 100%;
+        height: 100%;
+        display: block;
+    }
+    
+    @media (max-width: 768px) {
+        .video-container {
+            width: 95%;
+            padding: 10px;
+        }
+        .artifact-name {
+            font-size: 20px;
+        }
+    }
+    </style>
+</head>
+<body>
+    <div class="video-background"></div>
+    
+    <div class="video-content">
+        <div class="video-container">
+            <h2 class="artifact-name">{{artifact.name}}</h2>
+            <div class="video-placeholder">
+                🎥 Видео будет добавлено позже
+            </div>
+            <p style="color: #aaa; text-align: center; margin-top: 15px;">
+                {{artifact.description}}
+            </p>
+        </div>
+    </div>
+    
+    <a href="/hall/military-artifacts/{{sectionId}}" class="back-button">
+        <img src="/images/war-hall/back-button.png" alt="Назад" class="back-button-img">
+    </a>
+</body>
+</html>

@@ -14,12 +14,13 @@ document.addEventListener('DOMContentLoaded', () => {
             const sectionTitle = button.dataset.sectionTitle;
             
             createRippleEffect(button, e);
-            console.log(`Переход на страницу раздела: ${sectionTitle} (ID: ${sectionId})`);
-            showNotification(`Загрузка раздела "${sectionTitle}"...`);
+            console.log(`Переход на страницу артефактов раздела: ${sectionTitle} (ID: ${sectionId})`);
+            showNotification(`Загрузка артефактов "${sectionTitle}"...`);
             addLoadingToButton(button);
             
+            // Переход сразу на страницу артефактов
             setTimeout(() => {
-                window.location.href = `/hall/war-section/${sectionId}`;
+                window.location.href = `/hall/military-artifacts/${sectionId}`;
             }, 500);
         });
     });
