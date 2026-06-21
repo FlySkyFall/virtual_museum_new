@@ -1,0 +1,25 @@
+<div class="hall-container military-section-page">
+    <!-- Фоновое изображение зала -->
+    <div class="hall-background" style="background-image: url('/images/war-hall/section-bg-placeholder.jpg');"></div>
+    
+    <!-- Логотип/индикатор зала в левом верхнем углу -->
+    <div class="hall-indicator">
+        <img src="/images/war-hall/war-hall-logo.png" alt="Военно-исторический зал" class="hall-logo">
+    </div>
+    
+    <!-- Контейнер с кнопками артефактов -->
+    <div class="artifacts-container">
+        {{#each section.artifacts}}
+        <button class="artifact-button" data-artifact-index="{{@index}}" data-artifact-name="{{this.name}}">
+            <div class="artifact-button-bg" style="background-image: url('{{this.imagePath}}');"></div>
+        </button>
+        {{/each}}
+    </div>
+    
+    <!-- Кнопка "Назад" -->
+    <a href="/hall/war-history" class="back-button">
+        <img src="/images/war-hall/back-button.png" alt="Назад" class="back-button-image">
+    </a>
+</div>
+
+<script src="/js/militarySection.js"></script>
