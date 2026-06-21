@@ -14,9 +14,9 @@ const halls = [
     },
     {
         id: 2,
-        name: 'Зал Природы',
-        description: 'Удивительный мир флоры и фауны',
-        route: '/hall/nature',
+        name: 'Военно исторический зал',
+        description: 'Знакомство с локальными и мировыми военными конфликтами',
+        route: '/hall/war-history',
         position: { top: '6%', left: '69%' }, // Правый верхний угол со смещением
         width: '300px',
         height: '220px'

@@ -1,0 +1,30 @@
+<div class="hall-container war-hall">
+    <!-- Фоновое изображение зала - пока заглушка -->
+    <div class="hall-background" style="background-image: url('/images/war-hall/war-hall-bg-placeholder.jpg');"></div>
+    
+    <!-- Логотип/индикатор зала в левом верхнем углу -->
+    <div class="hall-indicator">
+        <img src="/images/war-hall/war-hall-logo.png" alt="Военно-исторический зал" class="hall-logo">
+    </div>
+    
+    <!-- Контейнер с кнопками разделов -->
+    <div class="sections-container">
+        {{#each sections}}
+        <button class="section-button" data-section-id="{{_id}}" data-section-title="{{title}}">
+            <div class="section-button-bg" style="background-image: url('{{buttonImagePath}}');"></div>
+            <div class="section-info">
+                <div class="section-title">
+                    <span class="section-main">{{title}}</span>
+                </div>
+            </div>
+        </button>
+        {{/each}}
+    </div>
+    
+    <!-- Кнопка "Назад" в правом нижнем углу -->
+    <a href="/" class="back-button">
+        <img src="/images/war-hall/back-button.png" alt="Назад" class="back-button-image">
+    </a>
+</div>
+
+<script src="/js/warHall.js"></script>

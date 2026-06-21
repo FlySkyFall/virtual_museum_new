@@ -58,11 +58,13 @@ mongoose.connect(process.env.MONGODB_URI)
 // Импорт маршрутов
 const indexRoutes = require('./routes/index');
 const hallRoutes = require('./routes/hall');
+const warHallRoutes = require('./routes/warHall');
 const adminRoutes = require('./routes/admin');
 
 // Использование маршрутов
 app.use('/', indexRoutes);
 app.use('/hall', hallRoutes);
+app.use('/hall', warHallRoutes);
 app.use('/admin', adminRoutes);
 
 // Обработка 404 - должна быть после всех маршрутов
