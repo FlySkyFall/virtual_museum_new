@@ -82,10 +82,11 @@ router.get('/logout', (req, res) => {
 });
 
 // Главная страница админки
+// Главная страница админки
 router.get('/', requireAuth, async (req, res) => {
     try {
-        // Находим ВСЕХ персоналий
-        const persons = await Person.find({}).sort({ order: 1 });
+        // Находим ВСЕХ персоналий и преобразуем в обычные объекты
+        const persons = await Person.find({}).sort({ order: 1 }).lean();
         
         console.log('=== ЗАПРОС К АДМИНКЕ ===');
         console.log('Найдено персоналий:', persons.length);
@@ -95,7 +96,7 @@ router.get('/', requireAuth, async (req, res) => {
             console.log(`${index + 1}. ${p.fullName} (ID: ${p._id}) - Активен: ${p.isActive}, Артефактов: ${p.artifacts ? p.artifacts.length : 0}`);
         });
         
-        const activePersons = persons.filter(p => p.isActive).length;
+        const activePersons = persons.filter(p => p.isActive === true).length;
         const totalArtifacts = persons.reduce((sum, p) => sum + (p.artifacts ? p.artifacts.length : 0), 0);
         
         res.render('admin/index', { 

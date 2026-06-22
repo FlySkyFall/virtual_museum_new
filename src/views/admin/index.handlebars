@@ -346,19 +346,6 @@
             margin-bottom: 20px;
         }
         
-        .debug-json {
-            background: #1a1a2e;
-            color: #0f0;
-            padding: 15px;
-            border-radius: 10px;
-            font-family: monospace;
-            font-size: 12px;
-            overflow: auto;
-            max-height: 400px;
-            margin-bottom: 20px;
-            white-space: pre-wrap;
-        }
-        
         @media (max-width: 768px) {
             .sidebar {
                 width: 100%;
@@ -422,22 +409,6 @@
                 </div>
             </div>
             
-            <!-- Отладочная информация -->
-            <div style="background: #f8f9fa; padding: 15px; border-radius: 10px; margin-bottom: 20px;">
-                <h4>Отладочная информация:</h4>
-                <div>Количество персоналий в массиве: <strong>{{persons.length}}</strong></div>
-                <div style="font-size: 12px; color: #666; margin-top: 5px;">
-                    Первая персоналия: 
-                    {{#if persons.length}}
-                        {{#with persons.[0]}}
-                            {{this.fullName}} (ID: {{this._id}})
-                        {{/with}}
-                    {{else}}
-                        Нет персоналий
-                    {{/if}}
-                </div>
-            </div>
-            
             {{#if persons.length}}
             <div class="persons-grid">
                 {{#each persons}}
@@ -490,7 +461,6 @@
         document.addEventListener('DOMContentLoaded', function() {
             console.log('=== АДМИНКА ЗАГРУЖЕНА ===');
             
-            // Выводим все данные персоналий
             const cards = document.querySelectorAll('.person-card');
             console.log('Найдено карточек:', cards.length);
             
