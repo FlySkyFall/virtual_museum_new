@@ -81,16 +81,22 @@ router.get('/logout', (req, res) => {
     res.redirect('/admin/login');
 });
 
-// Главная страница админки - ИСПРАВЛЕНО: убираем фильтр по hallId
+// Главная страница админки
 router.get('/', requireAuth, async (req, res) => {
     try {
-        // Находим ВСЕХ персоналий, не фильтруем по hallId
+        // Находим ВСЕХ персоналий
         const persons = await Person.find({}).sort({ order: 1 });
+        
+        console.log('=== ЗАПРОС К АДМИНКЕ ===');
+        console.log('Найдено персоналий:', persons.length);
+        
+        // Выводим информацию о каждой персоналии
+        persons.forEach((p, index) => {
+            console.log(`${index + 1}. ${p.fullName} (ID: ${p._id}) - Активен: ${p.isActive}, Артефактов: ${p.artifacts ? p.artifacts.length : 0}`);
+        });
+        
         const activePersons = persons.filter(p => p.isActive).length;
         const totalArtifacts = persons.reduce((sum, p) => sum + (p.artifacts ? p.artifacts.length : 0), 0);
-        
-        console.log('Найдено персоналий:', persons.length);
-        console.log('Первая персоналия:', persons[0] ? persons[0].fullName : 'нет');
         
         res.render('admin/index', { 
             layout: false,
@@ -112,6 +118,7 @@ router.get('/person/create', requireAuth, (req, res) => {
         layout: false,
         title: 'Добавить персоналию',
         person: {
+            _id: null,
             fullName: '',
             lastName: '',
             firstName: '',
@@ -135,15 +142,8 @@ router.post('/person', requireAuth, upload.fields([
     { name: 'buttonImage', maxCount: 1 }
 ]), async (req, res) => {
     try {
-        console.log('Тело запроса:', req.body);
-        console.log('Файлы:', req.files);
-        
+        console.log('Создание персоналии');
         const personData = JSON.parse(req.body.personData);
-        
-        // Проверяем обязательные поля
-        if (!personData.fullName || !personData.lastName || !personData.firstName || !personData.birthYear) {
-            return res.status(400).send('Заполните все обязательные поля');
-        }
         
         const person = new Person({
             ...personData,
@@ -155,6 +155,7 @@ router.post('/person', requireAuth, upload.fields([
         });
         
         await person.save();
+        console.log('Создана персоналия:', person.fullName, 'ID:', person._id);
         res.redirect('/admin');
     } catch (error) {
         console.error('Ошибка при создании персоналии:', error);
@@ -162,7 +163,7 @@ router.post('/person', requireAuth, upload.fields([
     }
 });
 
-// Редактирование персоналии - ИСПРАВЛЕНО: правильный путь
+// Редактирование персоналии
 router.get('/person/:id/edit', requireAuth, async (req, res) => {
     try {
         const personId = req.params.id;
@@ -175,6 +176,7 @@ router.get('/person/:id/edit', requireAuth, async (req, res) => {
         }
         
         console.log('Найдена персоналия:', person.fullName);
+        console.log('Артефактов:', person.artifacts ? person.artifacts.length : 0);
         
         res.render('admin/person-form', { 
             layout: false,
@@ -224,6 +226,7 @@ router.post('/person/:id', requireAuth, upload.fields([
         }
         
         await person.save();
+        console.log('Обновлена персоналия:', person.fullName);
         res.redirect('/admin');
     } catch (error) {
         console.error('Ошибка при обновлении персоналии:', error);
@@ -241,6 +244,7 @@ router.delete('/person/:id', requireAuth, async (req, res) => {
         if (!person) {
             return res.status(404).json({ success: false, error: 'Персоналия не найдена' });
         }
+        console.log('Удалена персоналия:', person.fullName);
         res.json({ success: true });
     } catch (error) {
         console.error('Ошибка при удалении персоналии:', error);
@@ -268,6 +272,7 @@ router.post('/person/:personId/artifact', requireAuth, upload.single('artifactIm
         person.artifacts.push(artifact);
         await person.save();
         
+        console.log('Добавлен артефакт:', artifact.name);
         res.redirect(`/admin/person/${personId}/edit`);
     } catch (error) {
         console.error('Ошибка при добавлении артефакта:', error);
@@ -303,6 +308,7 @@ router.put('/person/:personId/artifact/:artifactId', requireAuth, upload.single(
         }
         
         await person.save();
+        console.log('Обновлен артефакт:', artifactData.name);
         res.redirect(`/admin/person/${personId}/edit`);
     } catch (error) {
         console.error('Ошибка при обновлении артефакта:', error);

@@ -145,26 +145,6 @@
             box-shadow: 0 5px 20px rgba(102, 126, 234, 0.4);
         }
         
-        .btn-secondary {
-            background: #e8ecf1;
-            color: #333;
-            padding: 10px 20px;
-            border: none;
-            border-radius: 10px;
-            cursor: pointer;
-            font-weight: 600;
-            font-size: 14px;
-            text-decoration: none;
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            transition: all 0.3s;
-        }
-        
-        .btn-secondary:hover {
-            background: #d5d9e0;
-        }
-        
         .btn-danger {
             background: #ff6b6b;
             color: white;
@@ -445,30 +425,31 @@
             {{#if persons.length}}
             <div class="persons-grid">
                 {{#each persons}}
-                <div class="person-card" data-id="{{_id}}">
+                <div class="person-card" data-id="{{this._id}}">
                     <div class="person-card-header">
                         <div class="person-avatar">
-                            <img src="{{photoPath}}" alt="{{fullName}}" onerror="this.src='/images/persons/placeholder.jpg'">
+                            <img src="{{this.photoPath}}" alt="{{this.fullName}}" onerror="this.src='/images/persons/placeholder.jpg'">
                         </div>
                         <div class="person-title">
-                            <h3>{{fullName}}</h3>
-                            <div class="years">{{birthYear}} — {{#if deathYear}}{{deathYear}}{{else}}н.в.{{/if}}</div>
-                            <span class="person-status {{#if isActive}}status-active{{else}}status-inactive{{/if}}">
-                                {{#if isActive}}Активен{{else}}Неактивен{{/if}}
+                            <h3>{{this.fullName}}</h3>
+                            <div class="years">{{this.birthYear}} — {{#if this.deathYear}}{{this.deathYear}}{{else}}н.в.{{/if}}</div>
+                            <span class="person-status {{#if this.isActive}}status-active{{else}}status-inactive{{/if}}">
+                                {{#if this.isActive}}Активен{{else}}Неактивен{{/if}}
                             </span>
+                            <div style="font-size: 11px; color: #999; margin-top: 5px;">ID: {{this._id}}</div>
                         </div>
                     </div>
                     <div class="person-card-body">
-                        <div class="bio-preview">{{shortBio}}</div>
+                        <div class="bio-preview">{{this.shortBio}}</div>
                         <div class="artifacts-count">
                             <i class="fas fa-box"></i>
-                            {{#if artifacts}}{{artifacts.length}}{{else}}0{{/if}} артефактов
+                            {{#if this.artifacts}}{{this.artifacts.length}}{{else}}0{{/if}} артефактов
                         </div>
                         <div class="person-actions">
-                            <a href="/admin/person/{{_id}}/edit" class="btn-warning">
+                            <a href="/admin/person/{{this._id}}/edit" class="btn-warning">
                                 <i class="fas fa-edit"></i> Редактировать
                             </a>
-                            <button class="btn-danger delete-person" data-id="{{_id}}">
+                            <button class="btn-danger delete-person" data-id="{{this._id}}">
                                 <i class="fas fa-trash"></i> Удалить
                             </button>
                         </div>
@@ -491,11 +472,26 @@
     
     <script>
         document.addEventListener('DOMContentLoaded', function() {
+            console.log('=== АДМИНКА ЗАГРУЖЕНА ===');
+            
+            // Выводим информацию о карточках
+            const cards = document.querySelectorAll('.person-card');
+            console.log('Найдено карточек:', cards.length);
+            
+            cards.forEach((card, index) => {
+                const id = card.dataset.id;
+                const name = card.querySelector('h3')?.textContent || 'Без имени';
+                console.log(`Карточка ${index + 1}: ID=${id}, Имя=${name}`);
+            });
+            
+            // Удаление персоналии
             document.querySelectorAll('.delete-person').forEach(btn => {
                 btn.addEventListener('click', async function() {
                     const id = this.dataset.id;
                     const card = this.closest('.person-card');
-                    const name = card.querySelector('h3').textContent;
+                    const name = card.querySelector('h3')?.textContent || 'Без имени';
+                    
+                    console.log('Удаление персоналии:', id, name);
                     
                     if (confirm(`Вы уверены, что хотите удалить персоналию "${name}"?\nВсе артефакты также будут удалены.`)) {
                         try {
@@ -513,6 +509,7 @@
                                 alert('Ошибка при удалении персоналии');
                             }
                         } catch (error) {
+                            console.error('Ошибка:', error);
                             alert('Ошибка при удалении персоналии');
                         }
                     }
