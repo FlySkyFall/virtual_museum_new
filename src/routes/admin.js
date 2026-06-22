@@ -33,7 +33,7 @@ const storage = multer.diskStorage({
 
 const upload = multer({ 
     storage: storage,
-    limits: { fileSize: 10 * 1024 * 1024 } // 10MB limit
+    limits: { fileSize: 10 * 1024 * 1024 }
 });
 
 // Middleware для проверки авторизации
@@ -81,12 +81,16 @@ router.get('/logout', (req, res) => {
     res.redirect('/admin/login');
 });
 
-// Главная страница админки
+// Главная страница админки - ИСПРАВЛЕНО: убираем фильтр по hallId
 router.get('/', requireAuth, async (req, res) => {
     try {
-        const persons = await Person.find({ hallId: 1 }).sort({ order: 1 });
+        // Находим ВСЕХ персоналий, не фильтруем по hallId
+        const persons = await Person.find({}).sort({ order: 1 });
         const activePersons = persons.filter(p => p.isActive).length;
-        const totalArtifacts = persons.reduce((sum, p) => sum + p.artifacts.length, 0);
+        const totalArtifacts = persons.reduce((sum, p) => sum + (p.artifacts ? p.artifacts.length : 0), 0);
+        
+        console.log('Найдено персоналий:', persons.length);
+        console.log('Первая персоналия:', persons[0] ? persons[0].fullName : 'нет');
         
         res.render('admin/index', { 
             layout: false,
@@ -97,8 +101,8 @@ router.get('/', requireAuth, async (req, res) => {
             admin: true
         });
     } catch (error) {
-        console.error(error);
-        res.status(500).send('Ошибка загрузки страницы');
+        console.error('Ошибка загрузки страницы:', error);
+        res.status(500).send('Ошибка загрузки страницы: ' + error.message);
     }
 });
 
@@ -107,7 +111,21 @@ router.get('/person/create', requireAuth, (req, res) => {
     res.render('admin/person-form', { 
         layout: false,
         title: 'Добавить персоналию',
-        person: null,
+        person: {
+            fullName: '',
+            lastName: '',
+            firstName: '',
+            patronymic: '',
+            birthYear: '',
+            deathYear: null,
+            shortBio: '',
+            biography: '',
+            order: 0,
+            isActive: true,
+            photoPath: '/images/persons/placeholder.jpg',
+            buttonImagePath: '/images/literary-hall/person-placeholder.png',
+            artifacts: []
+        },
         action: '/admin/person'
     });
 });
@@ -117,6 +135,9 @@ router.post('/person', requireAuth, upload.fields([
     { name: 'buttonImage', maxCount: 1 }
 ]), async (req, res) => {
     try {
+        console.log('Тело запроса:', req.body);
+        console.log('Файлы:', req.files);
+        
         const personData = JSON.parse(req.body.personData);
         
         // Проверяем обязательные поля
@@ -126,36 +147,44 @@ router.post('/person', requireAuth, upload.fields([
         
         const person = new Person({
             ...personData,
-            photoPath: req.files['photo'] ? '/uploads/persons/' + req.files['photo'][0].filename : '/images/persons/placeholder.jpg',
-            buttonImagePath: req.files['buttonImage'] ? '/uploads/buttons/' + req.files['buttonImage'][0].filename : '/images/literary-hall/person-placeholder.png',
+            photoPath: req.files && req.files['photo'] ? '/uploads/persons/' + req.files['photo'][0].filename : '/images/persons/placeholder.jpg',
+            buttonImagePath: req.files && req.files['buttonImage'] ? '/uploads/buttons/' + req.files['buttonImage'][0].filename : '/images/literary-hall/person-placeholder.png',
             hallId: 1,
-            order: personData.order || (await Person.countDocuments({ hallId: 1 }) + 1)
+            order: personData.order || (await Person.countDocuments() + 1),
+            artifacts: []
         });
         
         await person.save();
         res.redirect('/admin');
     } catch (error) {
-        console.error(error);
+        console.error('Ошибка при создании персоналии:', error);
         res.status(500).send('Ошибка при создании персоналии: ' + error.message);
     }
 });
 
-// Редактирование персоналии
+// Редактирование персоналии - ИСПРАВЛЕНО: правильный путь
 router.get('/person/:id/edit', requireAuth, async (req, res) => {
     try {
-        const person = await Person.findById(req.params.id);
+        const personId = req.params.id;
+        console.log('Редактирование персоналии с ID:', personId);
+        
+        const person = await Person.findById(personId);
         if (!person) {
+            console.log('Персоналия не найдена с ID:', personId);
             return res.status(404).send('Персоналия не найдена');
         }
+        
+        console.log('Найдена персоналия:', person.fullName);
+        
         res.render('admin/person-form', { 
             layout: false,
             title: 'Редактировать персоналию',
             person: person,
-            action: `/admin/person/${req.params.id}`
+            action: `/admin/person/${personId}`
         });
     } catch (error) {
-        console.error(error);
-        res.status(500).send('Ошибка загрузки страницы');
+        console.error('Ошибка загрузки страницы редактирования:', error);
+        res.status(500).send('Ошибка загрузки страницы: ' + error.message);
     }
 });
 
@@ -164,8 +193,11 @@ router.post('/person/:id', requireAuth, upload.fields([
     { name: 'buttonImage', maxCount: 1 }
 ]), async (req, res) => {
     try {
+        const personId = req.params.id;
+        console.log('Обновление персоналии с ID:', personId);
+        
         const personData = JSON.parse(req.body.personData);
-        const person = await Person.findById(req.params.id);
+        const person = await Person.findById(personId);
         
         if (!person) {
             return res.status(404).send('Персоналия не найдена');
@@ -183,18 +215,18 @@ router.post('/person/:id', requireAuth, upload.fields([
         person.order = personData.order;
         person.isActive = personData.isActive;
         
-        if (req.files['photo']) {
+        if (req.files && req.files['photo']) {
             person.photoPath = '/uploads/persons/' + req.files['photo'][0].filename;
         }
         
-        if (req.files['buttonImage']) {
+        if (req.files && req.files['buttonImage']) {
             person.buttonImagePath = '/uploads/buttons/' + req.files['buttonImage'][0].filename;
         }
         
         await person.save();
         res.redirect('/admin');
     } catch (error) {
-        console.error(error);
+        console.error('Ошибка при обновлении персоналии:', error);
         res.status(500).send('Ошибка при обновлении персоналии: ' + error.message);
     }
 });
@@ -202,13 +234,16 @@ router.post('/person/:id', requireAuth, upload.fields([
 // Удаление персоналии
 router.delete('/person/:id', requireAuth, async (req, res) => {
     try {
-        const person = await Person.findByIdAndDelete(req.params.id);
+        const personId = req.params.id;
+        console.log('Удаление персоналии с ID:', personId);
+        
+        const person = await Person.findByIdAndDelete(personId);
         if (!person) {
             return res.status(404).json({ success: false, error: 'Персоналия не найдена' });
         }
         res.json({ success: true });
     } catch (error) {
-        console.error(error);
+        console.error('Ошибка при удалении персоналии:', error);
         res.status(500).json({ success: false, error: error.message });
     }
 });
@@ -216,7 +251,10 @@ router.delete('/person/:id', requireAuth, async (req, res) => {
 // Добавление артефакта
 router.post('/person/:personId/artifact', requireAuth, upload.single('artifactImage'), async (req, res) => {
     try {
-        const person = await Person.findById(req.params.personId);
+        const personId = req.params.personId;
+        console.log('Добавление артефакта для персоналии:', personId);
+        
+        const person = await Person.findById(personId);
         if (!person) {
             return res.status(404).send('Персоналия не найдена');
         }
@@ -230,9 +268,9 @@ router.post('/person/:personId/artifact', requireAuth, upload.single('artifactIm
         person.artifacts.push(artifact);
         await person.save();
         
-        res.redirect(`/admin/person/${req.params.personId}/edit`);
+        res.redirect(`/admin/person/${personId}/edit`);
     } catch (error) {
-        console.error(error);
+        console.error('Ошибка при добавлении артефакта:', error);
         res.status(500).send('Ошибка при добавлении артефакта: ' + error.message);
     }
 });
@@ -240,12 +278,16 @@ router.post('/person/:personId/artifact', requireAuth, upload.single('artifactIm
 // Редактирование артефакта
 router.put('/person/:personId/artifact/:artifactId', requireAuth, upload.single('artifactImage'), async (req, res) => {
     try {
-        const person = await Person.findById(req.params.personId);
+        const personId = req.params.personId;
+        const artifactId = req.params.artifactId;
+        console.log('Обновление артефакта:', artifactId, 'для персоналии:', personId);
+        
+        const person = await Person.findById(personId);
         if (!person) {
             return res.status(404).send('Персоналия не найдена');
         }
         
-        const artifactIndex = person.artifacts.findIndex(a => a._id.toString() === req.params.artifactId);
+        const artifactIndex = person.artifacts.findIndex(a => a._id.toString() === artifactId);
         if (artifactIndex === -1) {
             return res.status(404).send('Артефакт не найден');
         }
@@ -261,9 +303,9 @@ router.put('/person/:personId/artifact/:artifactId', requireAuth, upload.single(
         }
         
         await person.save();
-        res.redirect(`/admin/person/${req.params.personId}/edit`);
+        res.redirect(`/admin/person/${personId}/edit`);
     } catch (error) {
-        console.error(error);
+        console.error('Ошибка при обновлении артефакта:', error);
         res.status(500).send('Ошибка при обновлении артефакта: ' + error.message);
     }
 });
@@ -271,16 +313,20 @@ router.put('/person/:personId/artifact/:artifactId', requireAuth, upload.single(
 // Удаление артефакта
 router.delete('/person/:personId/artifact/:artifactId', requireAuth, async (req, res) => {
     try {
-        const person = await Person.findById(req.params.personId);
+        const personId = req.params.personId;
+        const artifactId = req.params.artifactId;
+        console.log('Удаление артефакта:', artifactId, 'для персоналии:', personId);
+        
+        const person = await Person.findById(personId);
         if (!person) {
             return res.status(404).json({ success: false, error: 'Персоналия не найдена' });
         }
         
-        person.artifacts = person.artifacts.filter(a => a._id.toString() !== req.params.artifactId);
+        person.artifacts = person.artifacts.filter(a => a._id.toString() !== artifactId);
         await person.save();
         res.json({ success: true });
     } catch (error) {
-        console.error(error);
+        console.error('Ошибка при удалении артефакта:', error);
         res.status(500).json({ success: false, error: error.message });
     }
 });
