@@ -170,7 +170,9 @@ router.get('/person/:id/edit', requireAuth, async (req, res) => {
         const personId = req.params.id;
         console.log('Редактирование персоналии с ID:', personId);
         
-        const person = await Person.findById(personId);
+        // Используем lean() для получения обычного объекта
+        const person = await Person.findById(personId).lean();
+        
         if (!person) {
             console.log('Персоналия не найдена с ID:', personId);
             return res.status(404).send('Персоналия не найдена');
@@ -178,6 +180,7 @@ router.get('/person/:id/edit', requireAuth, async (req, res) => {
         
         console.log('Найдена персоналия:', person.fullName);
         console.log('Артефактов:', person.artifacts ? person.artifacts.length : 0);
+        console.log('Данные персоналии:', JSON.stringify(person, null, 2));
         
         res.render('admin/person-form', { 
             layout: false,
@@ -191,6 +194,7 @@ router.get('/person/:id/edit', requireAuth, async (req, res) => {
     }
 });
 
+// Обновление персоналии - используем POST вместо PUT
 router.post('/person/:id', requireAuth, upload.fields([
     { name: 'photo', maxCount: 1 },
     { name: 'buttonImage', maxCount: 1 }
@@ -210,13 +214,13 @@ router.post('/person/:id', requireAuth, upload.fields([
         person.fullName = personData.fullName;
         person.lastName = personData.lastName;
         person.firstName = personData.firstName;
-        person.patronymic = personData.patronymic;
+        person.patronymic = personData.patronymic || '';
         person.birthYear = personData.birthYear;
         person.deathYear = personData.deathYear || null;
-        person.shortBio = personData.shortBio;
-        person.biography = personData.biography;
-        person.order = personData.order;
-        person.isActive = personData.isActive;
+        person.shortBio = personData.shortBio || '';
+        person.biography = personData.biography || '';
+        person.order = personData.order || 0;
+        person.isActive = personData.isActive === true || personData.isActive === 'true';
         
         if (req.files && req.files['photo']) {
             person.photoPath = '/uploads/persons/' + req.files['photo'][0].filename;
