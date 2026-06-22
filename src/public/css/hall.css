@@ -24,6 +24,32 @@
     z-index: 1;
 }
 
+.hall-logo {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    z-index: 10;
+    max-width: 100px;
+    height: auto;
+    pointer-events: none;
+}
+
+@media (max-width: 768px) {
+            .hall-logo {
+                top: 15px;
+                left: 15px;
+                max-width: 70px;
+            }
+        }
+
+@media (max-width: 480px) {
+    .hall-logo {
+        top: 10px;
+        left: 10px;
+        max-width: 50px;
+    }
+}
+
 /* Заголовок зала - пока оставим, но если он мешает, можно убрать */
 .hall-header {
     position: relative;
