@@ -337,4 +337,34 @@ router.delete('/person/:personId/artifact/:artifactId', requireAuth, async (req,
     }
 });
 
+// Временный маршрут для отладки - ПОСЛЕ всех других маршрутов
+router.get('/debug', requireAuth, async (req, res) => {
+    try {
+        const persons = await Person.find({});
+        console.log('=== ОТЛАДКА БАЗЫ ДАННЫХ ===');
+        console.log('Всего записей:', persons.length);
+        
+        if (persons.length > 0) {
+            console.log('Первая запись:', JSON.stringify(persons[0].toObject(), null, 2));
+            console.log('Ключи первой записи:', Object.keys(persons[0].toObject()));
+        }
+        
+        res.json({
+            total: persons.length,
+            sample: persons.length > 0 ? persons[0].toObject() : null,
+            all: persons.map(p => ({
+                id: p._id,
+                fullName: p.fullName,
+                lastName: p.lastName,
+                firstName: p.firstName,
+                isActive: p.isActive,
+                artifactsCount: p.artifacts ? p.artifacts.length : 0
+            }))
+        });
+    } catch (error) {
+        console.error('Ошибка отладки:', error);
+        res.status(500).json({ error: error.message });
+    }
+});
+
 module.exports = router;
