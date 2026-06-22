@@ -43,6 +43,58 @@
             justify-content: center;
             padding: 40px 80px;
         }
+
+        /* Левое верхнее изображение - вплотную к углу */
+        .top-left-image {
+            position: absolute;
+            top: 0;
+            left: 0;
+            z-index: 2;
+        }
+        
+        .title-image-wrapper {
+            position: relative;
+            display: inline-block;
+        }
+        
+        .title-image-bg {
+            display: block;
+            width: 60%;
+            height: 50%;
+        }
+        
+        /* Текст с ФИО поверх изображения */
+        .person-name-overlay {
+            position: absolute;
+            top: 50%;
+            left: 45%;
+            transform: translate(-50%, -50%);
+            color: black;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+            white-space: nowrap;
+            font-family: 'Comic Sans MS', 'Comic Sans', cursive;
+            pointer-events: none;
+            text-align: center;
+            display: flex;
+            gap: 10px;
+            align-items: baseline;
+        }
+        
+        /* Фамилия - жирным шрифтом и больше */
+        .person-surname {
+            font-weight: 800;
+            font-size: 32px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            display: inline-block;
+        }
+        
+        /* Имя и отчество - обычным шрифтом */
+        .person-firstname {
+            font-weight: 400;
+            font-size: 20px;
+            display: inline-block;
+        }
         
         /* Левая половина - кнопки */
         .left-buttons {
@@ -281,6 +333,17 @@
 </head>
 <body>
     <div class="video-background"></div>
+
+    <!-- Левое верхнее изображение с ФИО поверх -->
+    <div class="top-left-image">
+        <div class="title-image-wrapper">
+            <img src="/images/literary-hall/person-title.png" alt="Литературное краеведение" class="title-image-bg">
+            <div class="person-name-overlay">
+                <span class="person-surname">{{person.lastName}}</span>
+                <span class="person-firstname">{{person.firstName}} {{person.patronymic}}</span>
+            </div>
+        </div>
+    </div>
     
     <div class="video-content">
         <!-- Левая половина - две кнопки -->
