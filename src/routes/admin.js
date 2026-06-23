@@ -6,21 +6,16 @@ const multer = require('multer');
 const path = require('path');
 const fs = require('fs');
 
-// ----- Настройка multer с дисковым хранилищем -----
+// Настройка multer с дисковым хранилищем
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
     let folder = 'uploads/others';
     if (file.fieldname === 'photo') folder = 'uploads/persons';
-    else if (file.fieldname === 'buttonImage') folder = 'uploads/buttons';
     else if (file.fieldname === 'artifactImage') folder = 'uploads/artifacts';
-    // Создаём папку, если её нет
-    if (!fs.existsSync(folder)) {
-      fs.mkdirSync(folder, { recursive: true });
-    }
+    if (!fs.existsSync(folder)) fs.mkdirSync(folder, { recursive: true });
     cb(null, folder);
   },
   filename: function (req, file, cb) {
-    // Генерируем уникальное имя: fieldname + временная метка + оригинальное расширение
     const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
     const ext = path.extname(file.originalname);
     cb(null, file.fieldname + '-' + uniqueSuffix + ext);
@@ -29,10 +24,10 @@ const storage = multer.diskStorage({
 
 const upload = multer({
   storage: storage,
-  limits: { fileSize: 10 * 1024 * 1024 } // 10 MB
+  limits: { fileSize: 10 * 1024 * 1024 }
 });
 
-// ----- Middleware авторизации -----
+// Middleware авторизации
 const requireAuth = async (req, res, next) => {
   if (!req.session || !req.session.adminId) {
     return res.redirect('/admin/login');
@@ -40,7 +35,7 @@ const requireAuth = async (req, res, next) => {
   next();
 };
 
-// ----- Вход и выход -----
+// ----- Вход и выход (без изменений) -----
 router.get('/login', (req, res) => {
   res.render('admin/login', { layout: false, error: null });
 });
@@ -70,7 +65,7 @@ router.get('/logout', (req, res) => {
   res.redirect('/admin/login');
 });
 
-// ----- Главная админки -----
+// ----- Главная админки (без изменений) -----
 router.get('/', requireAuth, async (req, res) => {
   try {
     const persons = await Person.find({}).sort({ order: 1 }).lean();
@@ -108,35 +103,24 @@ router.get('/person/create', requireAuth, (req, res) => {
       order: 0,
       isActive: true,
       photoPath: '/images/persons/placeholder.jpg',
-      buttonImagePath: '/images/literary-hall/person-placeholder.png',
+      // buttonImagePath не передаём и не используем
       artifacts: []
     }
   });
 });
 
-router.post('/person', requireAuth, upload.fields([
-  { name: 'photo', maxCount: 1 },
-  { name: 'buttonImage', maxCount: 1 }
-]), async (req, res) => {
+router.post('/person', requireAuth, upload.single('photo'), async (req, res) => {
   try {
     const personData = JSON.parse(req.body.personData);
-
     let photoPath = '/images/persons/placeholder.jpg';
-    let buttonImagePath = '/images/literary-hall/person-placeholder.png';
 
-    if (req.files && req.files['photo'] && req.files['photo'][0]) {
-      const file = req.files['photo'][0];
-      photoPath = '/uploads/persons/' + file.filename;
-    }
-    if (req.files && req.files['buttonImage'] && req.files['buttonImage'][0]) {
-      const file = req.files['buttonImage'][0];
-      buttonImagePath = '/uploads/buttons/' + file.filename;
+    if (req.file) {
+      photoPath = '/uploads/persons/' + req.file.filename;
     }
 
     const person = new Person({
       ...personData,
       photoPath,
-      buttonImagePath,
       hallId: 1,
       order: personData.order || (await Person.countDocuments() + 1),
       artifacts: []
@@ -166,17 +150,14 @@ router.get('/person/:id/edit', requireAuth, async (req, res) => {
   }
 });
 
-router.post('/person/:id', requireAuth, upload.fields([
-  { name: 'photo', maxCount: 1 },
-  { name: 'buttonImage', maxCount: 1 }
-]), async (req, res) => {
+router.post('/person/:id', requireAuth, upload.single('photo'), async (req, res) => {
   try {
     const person = await Person.findById(req.params.id);
     if (!person) return res.status(404).send('Персоналия не найдена');
 
     const personData = JSON.parse(req.body.personData);
 
-    // Обновляем основные поля
+    // Обновляем все поля, кроме buttonImagePath
     person.fullName = personData.fullName;
     person.lastName = personData.lastName;
     person.firstName = personData.firstName;
@@ -189,14 +170,8 @@ router.post('/person/:id', requireAuth, upload.fields([
     person.isActive = personData.isActive === true || personData.isActive === 'true';
 
     // Если загружено новое фото – обновляем путь
-    if (req.files && req.files['photo'] && req.files['photo'][0]) {
-      const file = req.files['photo'][0];
-      person.photoPath = '/uploads/persons/' + file.filename;
-    }
-    // Если загружена новая кнопка – обновляем путь
-    if (req.files && req.files['buttonImage'] && req.files['buttonImage'][0]) {
-      const file = req.files['buttonImage'][0];
-      person.buttonImagePath = '/uploads/buttons/' + file.filename;
+    if (req.file) {
+      person.photoPath = '/uploads/persons/' + req.file.filename;
     }
 
     await person.save();
@@ -207,7 +182,7 @@ router.post('/person/:id', requireAuth, upload.fields([
   }
 });
 
-// ----- Удаление персоналии -----
+// ----- Удаление персоналии (без изменений) -----
 router.delete('/person/:id', requireAuth, async (req, res) => {
   try {
     const person = await Person.findByIdAndDelete(req.params.id);
@@ -218,9 +193,7 @@ router.delete('/person/:id', requireAuth, async (req, res) => {
   }
 });
 
-// ----- Работа с артефактами -----
-
-// Добавление артефакта
+// ----- Работа с артефактами (без изменений) -----
 router.post('/person/:personId/artifact', requireAuth, upload.single('artifactImage'), async (req, res) => {
   try {
     const person = await Person.findById(req.params.personId);
@@ -233,11 +206,7 @@ router.post('/person/:personId/artifact', requireAuth, upload.single('artifactIm
       imagePath = '/uploads/artifacts/' + req.file.filename;
     }
 
-    const artifact = {
-      ...artifactData,
-      imagePath
-    };
-
+    const artifact = { ...artifactData, imagePath };
     person.artifacts.push(artifact);
     await person.save();
     res.redirect(`/admin/person/${req.params.personId}/edit`);
@@ -247,7 +216,6 @@ router.post('/person/:personId/artifact', requireAuth, upload.single('artifactIm
   }
 });
 
-// Редактирование артефакта
 router.put('/person/:personId/artifact/:artifactId', requireAuth, upload.single('artifactImage'), async (req, res) => {
   try {
     const person = await Person.findById(req.params.personId);
@@ -257,7 +225,6 @@ router.put('/person/:personId/artifact/:artifactId', requireAuth, upload.single(
     if (artifactIndex === -1) return res.status(404).send('Артефакт не найден');
 
     const artifactData = JSON.parse(req.body.artifactData);
-    // Обновляем поля артефакта
     person.artifacts[artifactIndex].name = artifactData.name;
     person.artifacts[artifactIndex].description = artifactData.description;
     person.artifacts[artifactIndex].year = artifactData.year || null;
@@ -277,7 +244,6 @@ router.put('/person/:personId/artifact/:artifactId', requireAuth, upload.single(
   }
 });
 
-// Удаление артефакта
 router.delete('/person/:personId/artifact/:artifactId', requireAuth, async (req, res) => {
   try {
     const person = await Person.findById(req.params.personId);
@@ -291,7 +257,7 @@ router.delete('/person/:personId/artifact/:artifactId', requireAuth, async (req,
   }
 });
 
-// ----- Отладка -----
+// ----- Отладка (без изменений) -----
 router.get('/debug', requireAuth, async (req, res) => {
   try {
     const persons = await Person.find({});

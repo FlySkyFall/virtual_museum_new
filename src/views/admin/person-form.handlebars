@@ -7,6 +7,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <style>
+    /* Все стили остаются без изменений (см. предыдущий листинг) */
     * { margin: 0; padding: 0; box-sizing: border-box; }
     body { font-family: 'Montserrat', sans-serif; background: #f0f2f5; }
     .admin-wrapper { display: flex; min-height: 100vh; }
@@ -164,19 +165,17 @@
           </div>
         </div>
 
+        <!-- Раздел "Изображения" теперь только для фото человека -->
         <div class="form-section">
-          <h2><i class="fas fa-image"></i> Изображения</h2>
-          <div class="form-row">
-            <div class="form-group">
-              <label>Фото человека</label>
-              {{#if person.photoPath}}<div class="current-image"><img src="{{person.photoPath}}" alt="Фото"></div>{{/if}}
-              <input type="file" name="photo" accept="image/*">
-            </div>
-            <div class="form-group">
-              <label>Изображение для кнопки (с ФИО)</label>
-              {{#if person.buttonImagePath}}<div class="current-image"><img src="{{person.buttonImagePath}}" alt="Кнопка"></div>{{/if}}
-              <input type="file" name="buttonImage" accept="image/*">
-            </div>
+          <h2><i class="fas fa-image"></i> Фото человека</h2>
+          <div class="form-group">
+            <label>Фото человека</label>
+            {{#if person.photoPath}}
+              <div class="current-image">
+                <img src="{{person.photoPath}}" alt="Фото">
+              </div>
+            {{/if}}
+            <input type="file" name="photo" accept="image/*">
           </div>
         </div>
 
@@ -219,7 +218,7 @@
   </main>
 </div>
 
-<!-- Модальное окно для артефакта -->
+<!-- Модальное окно для артефакта (без изменений) -->
 <div class="modal" id="artifactModal">
   <div class="modal-content">
     <div class="modal-header"><h2 id="modalTitle">Добавить артефакт</h2><span class="modal-close" id="modalClose">&times;</span></div>
@@ -298,7 +297,6 @@
         document.getElementById('artifactName').value = name;
         document.getElementById('artifactDescription').value = desc;
         document.getElementById('artifactVideoUrl').value = videoUrl;
-        // Очищаем остальные поля (можно заполнить, если есть данные, но в текущей версии мы не храним year/material/dimensions в DOM)
         document.getElementById('artifactYear').value = '';
         document.getElementById('artifactMaterial').value = '';
         document.getElementById('artifactDimensions').value = '';
@@ -319,7 +317,7 @@
       });
     });
 
-    // Сохранение артефакта (добавление/редактирование)
+    // Сохранение артефакта
     artifactForm.addEventListener('submit', async function(e) {
       e.preventDefault();
       const artifactId = document.getElementById('artifactId').value;
