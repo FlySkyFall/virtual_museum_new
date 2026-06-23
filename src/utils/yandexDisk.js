@@ -4,20 +4,16 @@ const path = require('path');
 
 const YANDEX_DISK_API = 'https://cloud-api.yandex.net/v1/disk';
 
-/**
- * Загружает файл на Яндекс.Диск и возвращает публичную ссылку
- * @param {Buffer} fileBuffer - содержимое файла
- * @param {string} originalName - оригинальное имя файла
- * @param {string} folder - папка на Диске (например, 'persons', 'artifacts')
- * @returns {Promise<string>} - публичная ссылка на файл
- */
 async function uploadAndPublish(fileBuffer, originalName, folder = 'others') {
   try {
     const token = process.env.YANDEX_DISK_TOKEN;
     if (!token) throw new Error('YANDEX_DISK_TOKEN не задан в .env');
 
     const baseFolder = process.env.YANDEX_DISK_FOLDER || 'app_uploads';
-    const remotePath = `/${baseFolder}/${folder}/${Date.now()}-${path.basename(originalName)}`;
+    const cleanFolder = folder.replace(/^\/+|\/+$/g, '');
+    const remotePath = `/${baseFolder}/${cleanFolder}/${Date.now()}-${path.basename(originalName)}`;
+
+    console.log(`📤 Загрузка на Яндекс.Диск: ${remotePath}`);
 
     // 1. Получаем URL для загрузки
     const uploadUrlResponse = await axios.get(`${YANDEX_DISK_API}/resources/upload`, {
@@ -29,39 +25,52 @@ async function uploadAndPublish(fileBuffer, originalName, folder = 'others') {
     });
 
     const uploadUrl = uploadUrlResponse.data.href;
+    console.log(`✅ Получен URL загрузки`);
 
     // 2. Загружаем файл
     const formData = new FormData();
     formData.append('file', fileBuffer, { filename: originalName });
 
     await axios.put(uploadUrl, formData, {
-      headers: {
-        ...formData.getHeaders(),
-        'Content-Type': 'multipart/form-data'
-      }
+      headers: formData.getHeaders()
     });
+
+    console.log(`✅ Файл загружен`);
 
     // 3. Делаем файл публичным
-    const publishResponse = await axios.put(`${YANDEX_DISK_API}/resources/publish`, null, {
+    await axios.put(`${YANDEX_DISK_API}/resources/publish`, null, {
       headers: { Authorization: `OAuth ${token}` },
       params: { path: remotePath }
     });
 
-    // 4. Получаем публичную ссылку
-    const publicUrl = publishResponse.data.href; // это ссылка вида https://yadi.sk/i/...
-    // Для получения прямой ссылки на файл (без страницы) нужно добавить ?force_download=true или использовать другой метод,
-    // но проще сохранить ссылку на страницу файла, либо получить прямую через meta.
-    // Лучше получить прямую ссылку на скачивание:
+    console.log(`✅ Файл опубликован`);
+
+    // Небольшая пауза для обновления метаданных
+    await new Promise(resolve => setTimeout(resolve, 1000));
+
+    // 4. Получаем прямую ссылку на файл
     const metaResponse = await axios.get(`${YANDEX_DISK_API}/resources`, {
       headers: { Authorization: `OAuth ${token}` },
-      params: { path: remotePath }
+      params: { path: remotePath, fields: 'file' }
     });
-    const directLink = metaResponse.data.file; // это прямая ссылка на файл
 
+    const directLink = metaResponse.data.file;
+    if (!directLink) {
+      throw new Error('Не удалось получить прямую ссылку на файл');
+    }
+    console.log(`✅ Прямая ссылка: ${directLink}`);
     return directLink;
   } catch (error) {
-    console.error('Ошибка при загрузке на Яндекс.Диск:', error.response?.data || error.message);
-    throw new Error('Не удалось загрузить файл на Яндекс.Диск');
+    console.error('❌ Ошибка при загрузке на Яндекс.Диск:');
+    if (error.response) {
+      console.error('Статус:', error.response.status);
+      console.error('Данные:', JSON.stringify(error.response.data, null, 2));
+    } else if (error.request) {
+      console.error('Нет ответа от сервера');
+    } else {
+      console.error(error.message);
+    }
+    throw new Error(`не удалось загрузить файл на Яндекс.Диск: ${error.response?.data?.message || error.message}`);
   }
 }
 
