@@ -255,14 +255,41 @@ router.post('/person/:id', requireAuth, upload.fields([
     try {
         const personId = req.params.id;
         console.log('Обновление персоналии с ID:', personId);
+        console.log('Тело запроса (keys):', Object.keys(req.body));
+        console.log('Файлы:', req.files ? Object.keys(req.files) : 'Нет файлов');
+
+        // Подробно выводим информацию о файлах
+        if (req.files) {
+            if (req.files['photo']) {
+                console.log('📸 Фото загружено:', req.files['photo'][0]);
+                console.log('📸 Путь к фото:', req.files['photo'][0].path);
+                console.log('📸 Имя файла:', req.files['photo'][0].filename);
+            }
+            if (req.files['buttonImage']) {
+                console.log('🖼️ Изображение кнопки загружено:', req.files['buttonImage'][0]);
+                console.log('🖼️ Путь к кнопке:', req.files['buttonImage'][0].path);
+                console.log('🖼️ Имя файла:', req.files['buttonImage'][0].filename);
+            }
+        }
+        
+        // Проверяем, есть ли данные в req.body.personData
+        if (!req.body.personData) {
+            console.error('❌ Нет данных personData в запросе');
+            return res.status(400).send('Отсутствуют данные персоналии');
+        }
         
         const personData = JSON.parse(req.body.personData);
+        console.log('📝 Данные персоналии:', personData);
+
         const person = await Person.findById(personId);
         
         if (!person) {
             return res.status(404).send('Персоналия не найдена');
         }
         
+        console.log('👤 Текущая персоналия:', person.fullName);
+        console.log('🖼️ Текущий путь к кнопке:', person.buttonImagePath);
+
         // Обновляем данные
         person.fullName = personData.fullName;
         person.lastName = personData.lastName;
@@ -275,12 +302,26 @@ router.post('/person/:id', requireAuth, upload.fields([
         person.order = personData.order || 0;
         person.isActive = personData.isActive === true || personData.isActive === 'true';
         
-        if (req.files && req.files['photo']) {
+        // ОБНОВЛЯЕМ ФОТО, ЕСЛИ ЗАГРУЖЕНО НОВОЕ
+        if (req.files && req.files['photo'] && req.files['photo'][0]) {
+            const oldPhoto = person.photoPath;
             person.photoPath = '/uploads/persons/' + req.files['photo'][0].filename;
+            console.log('✅ Обновлено фото:');
+            console.log('   Было:', oldPhoto);
+            console.log('   Стало:', person.photoPath);
+        } else {
+            console.log('ℹ️ Фото не обновлялось');
         }
         
-        if (req.files && req.files['buttonImage']) {
+        // ОБНОВЛЯЕМ КНОПКУ, ЕСЛИ ЗАГРУЖЕНО НОВОЕ ИЗОБРАЖЕНИЕ
+        if (req.files && req.files['buttonImage'] && req.files['buttonImage'][0]) {
+            const oldButton = person.buttonImagePath;
             person.buttonImagePath = '/uploads/buttons/' + req.files['buttonImage'][0].filename;
+            console.log('✅ Обновлена кнопка:');
+            console.log('   Было:', oldButton);
+            console.log('   Стало:', person.buttonImagePath);
+        } else {
+            console.log('ℹ️ Кнопка не обновлялась');
         }
         
         await person.save();
