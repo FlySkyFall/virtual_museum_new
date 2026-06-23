@@ -3,31 +3,16 @@ const router = express.Router();
 const Person = require('../models/Person');
 const Admin = require('../models/Admin');
 const multer = require('multer');
-const path = require('path');
-const fs = require('fs');
+const { uploadAndPublish } = require('../utils/yandexDisk');
 
-// Настройка multer с дисковым хранилищем
-const storage = multer.diskStorage({
-  destination: function (req, file, cb) {
-    let folder = 'uploads/others';
-    if (file.fieldname === 'photo') folder = 'uploads/persons';
-    else if (file.fieldname === 'artifactImage') folder = 'uploads/artifacts';
-    if (!fs.existsSync(folder)) fs.mkdirSync(folder, { recursive: true });
-    cb(null, folder);
-  },
-  filename: function (req, file, cb) {
-    const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
-    const ext = path.extname(file.originalname);
-    cb(null, file.fieldname + '-' + uniqueSuffix + ext);
-  }
-});
-
+// Настройка multer для приёма файлов в память (буфер)
+const storage = multer.memoryStorage();
 const upload = multer({
   storage: storage,
-  limits: { fileSize: 10 * 1024 * 1024 }
+  limits: { fileSize: 10 * 1024 * 1024 } // 10 MB
 });
 
-// Middleware авторизации
+// Middleware авторизации (без изменений)
 const requireAuth = async (req, res, next) => {
   if (!req.session || !req.session.adminId) {
     return res.redirect('/admin/login');
@@ -103,7 +88,6 @@ router.get('/person/create', requireAuth, (req, res) => {
       order: 0,
       isActive: true,
       photoPath: '/images/persons/placeholder.jpg',
-      // buttonImagePath не передаём и не используем
       artifacts: []
     }
   });
@@ -115,7 +99,8 @@ router.post('/person', requireAuth, upload.single('photo'), async (req, res) => 
     let photoPath = '/images/persons/placeholder.jpg';
 
     if (req.file) {
-      photoPath = '/uploads/persons/' + req.file.filename;
+      // Загружаем на Яндекс.Диск
+      photoPath = await uploadAndPublish(req.file.buffer, req.file.originalname, 'persons');
     }
 
     const person = new Person({
@@ -157,7 +142,7 @@ router.post('/person/:id', requireAuth, upload.single('photo'), async (req, res)
 
     const personData = JSON.parse(req.body.personData);
 
-    // Обновляем все поля, кроме buttonImagePath
+    // Обновляем все поля
     person.fullName = personData.fullName;
     person.lastName = personData.lastName;
     person.firstName = personData.firstName;
@@ -169,9 +154,9 @@ router.post('/person/:id', requireAuth, upload.single('photo'), async (req, res)
     person.order = personData.order || 0;
     person.isActive = personData.isActive === true || personData.isActive === 'true';
 
-    // Если загружено новое фото – обновляем путь
+    // Если загружено новое фото – обновляем путь через Яндекс.Диск
     if (req.file) {
-      person.photoPath = '/uploads/persons/' + req.file.filename;
+      person.photoPath = await uploadAndPublish(req.file.buffer, req.file.originalname, 'persons');
     }
 
     await person.save();
@@ -193,7 +178,7 @@ router.delete('/person/:id', requireAuth, async (req, res) => {
   }
 });
 
-// ----- Работа с артефактами (без изменений) -----
+// ----- Работа с артефактами -----
 router.post('/person/:personId/artifact', requireAuth, upload.single('artifactImage'), async (req, res) => {
   try {
     const person = await Person.findById(req.params.personId);
@@ -203,7 +188,7 @@ router.post('/person/:personId/artifact', requireAuth, upload.single('artifactIm
     let imagePath = '/images/artifacts/placeholder.jpg';
 
     if (req.file) {
-      imagePath = '/uploads/artifacts/' + req.file.filename;
+      imagePath = await uploadAndPublish(req.file.buffer, req.file.originalname, 'artifacts');
     }
 
     const artifact = { ...artifactData, imagePath };
@@ -233,7 +218,7 @@ router.put('/person/:personId/artifact/:artifactId', requireAuth, upload.single(
     person.artifacts[artifactIndex].videoUrl = artifactData.videoUrl || null;
 
     if (req.file) {
-      person.artifacts[artifactIndex].imagePath = '/uploads/artifacts/' + req.file.filename;
+      person.artifacts[artifactIndex].imagePath = await uploadAndPublish(req.file.buffer, req.file.originalname, 'artifacts');
     }
 
     await person.save();
@@ -266,7 +251,6 @@ router.get('/debug', requireAuth, async (req, res) => {
       persons: persons.map(p => ({
         id: p._id,
         fullName: p.fullName,
-        buttonImagePath: p.buttonImagePath,
         photoPath: p.photoPath,
         isActive: p.isActive,
         artifactsCount: p.artifacts ? p.artifacts.length : 0
