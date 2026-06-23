@@ -4,6 +4,31 @@ const path = require('path');
 
 const YANDEX_DISK_API = 'https://cloud-api.yandex.net/v1/disk';
 
+/**
+ * Создаёт папку на Яндекс.Диске, если она не существует
+ */
+async function createFolder(folderPath) {
+  const token = process.env.YANDEX_DISK_TOKEN;
+  try {
+    await axios.put(`${YANDEX_DISK_API}/resources`, null, {
+      headers: { Authorization: `OAuth ${token}` },
+      params: {
+        path: folderPath,
+        overwrite: false
+      }
+    });
+    console.log(`📁 Папка создана: ${folderPath}`);
+  } catch (error) {
+    // Если папка уже существует, код 409 - это нормально
+    if (error.response && error.response.status === 409) {
+      console.log(`📁 Папка уже существует: ${folderPath}`);
+      return;
+    }
+    // Другие ошибки пробрасываем дальше
+    throw error;
+  }
+}
+
 async function uploadAndPublish(fileBuffer, originalName, folder = 'others') {
   try {
     const token = process.env.YANDEX_DISK_TOKEN;
@@ -11,9 +36,15 @@ async function uploadAndPublish(fileBuffer, originalName, folder = 'others') {
 
     const baseFolder = process.env.YANDEX_DISK_FOLDER || 'app_uploads';
     const cleanFolder = folder.replace(/^\/+|\/+$/g, '');
+    // Убираем слеши в начале и конце
     const remotePath = `/${baseFolder}/${cleanFolder}/${Date.now()}-${path.basename(originalName)}`;
 
     console.log(`📤 Загрузка на Яндекс.Диск: ${remotePath}`);
+
+    // Создаём корневую папку, если её нет
+    await createFolder(`/${baseFolder}`);
+    // Создаём вложенную папку
+    await createFolder(`/${baseFolder}/${cleanFolder}`);
 
     // 1. Получаем URL для загрузки
     const uploadUrlResponse = await axios.get(`${YANDEX_DISK_API}/resources/upload`, {
