@@ -42,10 +42,10 @@ app.use(session({
 }));
 
 // Статические файлы - ВАЖНО для Render
-app.use('/css', express.static(path.join(__dirname, 'public/css')));
-app.use('/js', express.static(path.join(__dirname, 'public/js')));
 app.use('/uploads', express.static(path.join(__dirname, 'public/uploads')));
 app.use('/images', express.static(path.join(__dirname, 'public/images')));
+app.use('/css', express.static(path.join(__dirname, 'public/css')));
+app.use('/js', express.static(path.join(__dirname, 'public/js')));
 app.use(express.static(path.join(__dirname, 'public'))); // общий fallback
 
 app.use(express.json());
