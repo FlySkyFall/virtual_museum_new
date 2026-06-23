@@ -4,9 +4,6 @@ const path = require('path');
 
 const YANDEX_DISK_API = 'https://cloud-api.yandex.net/v1/disk';
 
-/**
- * Создаёт папку на Яндекс.Диске, если она не существует
- */
 async function createFolder(folderPath) {
   const token = process.env.YANDEX_DISK_TOKEN;
   try {
@@ -19,7 +16,6 @@ async function createFolder(folderPath) {
     });
     console.log(`📁 Папка создана: ${folderPath}`);
   } catch (error) {
-    // Если папка уже существует, код 409 - это нормально
     if (error.response && error.response.status === 409) {
       console.log(`📁 Папка уже существует: ${folderPath}`);
       return;
@@ -33,13 +29,12 @@ async function uploadAndPublish(fileBuffer, originalName, folder = 'others') {
     const token = process.env.YANDEX_DISK_TOKEN;
     if (!token) throw new Error('YANDEX_DISK_TOKEN не задан в .env');
 
-    const baseFolder = process.env.YANDEX_DISK_FOLDER || 'app_uploads';
+    const baseFolder = process.env.YANDESK_FOLDER || 'app_uploads';
     const cleanFolder = folder.replace(/^\/+|\/+$/g, '');
     const remotePath = `/${baseFolder}/${cleanFolder}/${Date.now()}-${path.basename(originalName)}`;
 
     console.log(`📤 Загрузка на Яндекс.Диск: ${remotePath}`);
 
-    // Создаём корневую и вложенную папки
     await createFolder(`/${baseFolder}`);
     await createFolder(`/${baseFolder}/${cleanFolder}`);
 
@@ -73,15 +68,17 @@ async function uploadAndPublish(fileBuffer, originalName, folder = 'others') {
 
     console.log(`✅ Файл опубликован`);
 
-    // 4. Получаем публичную ссылку (страница)
-    const publicUrl = publishResponse.data.href; // например, https://yadi.sk/i/...
-    console.log(`📎 Публичная страница: ${publicUrl}`);
+    // 4. Получаем public_key из ответа
+    const publicKey = publishResponse.data.public_key;
+    if (!publicKey) {
+      throw new Error('Не удалось получить public_key после публикации');
+    }
+    console.log(`🔑 Public key: ${publicKey}`);
 
     // 5. Получаем прямую ссылку на файл через API публичных ресурсов
-    // Это даёт ссылку, доступную без авторизации
     const publicResourcesResponse = await axios.get(`${YANDEX_DISK_API}/public/resources`, {
       params: {
-        public_key: publicUrl
+        public_key: publicKey
       }
     });
 
