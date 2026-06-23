@@ -42,21 +42,24 @@ app.use(session({
 }));
 
 // Маршрут для получения файлов из GridFS
-app.get('/uploads/:filename(*)', async (req, res) => {
+app.get('/uploads/:filename', async (req, res) => {
     try {
+        const filename = req.params.filename;
+        console.log('📁 Запрос файла из GridFS:', filename);
+        
         const bucket = new mongoose.mongo.GridFSBucket(mongoose.connection.db, {
             bucketName: 'uploads'
         });
         
-        const downloadStream = bucket.openDownloadStreamByName(req.params.filename);
+        const downloadStream = bucket.openDownloadStreamByName(filename);
         
         downloadStream.on('error', (err) => {
-            console.error('Ошибка при получении файла из GridFS:', err);
-            res.status(404).send('Файл не найден');
+            console.error('❌ Ошибка при получении файла из GridFS:', err);
+            res.status(404).send('Файл не найден: ' + filename);
         });
         
         // Устанавливаем правильный content-type
-        const ext = path.extname(req.params.filename).toLowerCase();
+        const ext = path.extname(filename).toLowerCase();
         const contentTypes = {
             '.jpg': 'image/jpeg',
             '.jpeg': 'image/jpeg',
@@ -69,7 +72,7 @@ app.get('/uploads/:filename(*)', async (req, res) => {
         
         downloadStream.pipe(res);
     } catch (error) {
-        console.error('Ошибка при получении файла из GridFS:', error);
+        console.error('❌ Ошибка при получении файла из GridFS:', error);
         res.status(404).send('Файл не найден');
     }
 });
