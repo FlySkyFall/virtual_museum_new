@@ -466,4 +466,22 @@ router.get('/debug', requireAuth, async (req, res) => {
     }
 });
 
+// МАРШРУТ ДЛЯ ПРОВЕРКИ ФАЙЛОВ
+router.get('/check-files', requireAuth, async (req, res) => {
+    const uploadsPath = path.join(__dirname, '..', 'public/uploads');
+    const buttonsPath = path.join(uploadsPath, 'buttons');
+    
+    let files = [];
+    if (fs.existsSync(buttonsPath)) {
+        files = fs.readdirSync(buttonsPath);
+    }
+    
+    res.json({
+        uploadsExists: fs.existsSync(uploadsPath),
+        buttonsExists: fs.existsSync(buttonsPath),
+        buttonsPath: buttonsPath,
+        files: files
+    });
+});
+
 module.exports = router;
