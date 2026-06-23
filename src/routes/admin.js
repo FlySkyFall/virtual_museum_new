@@ -3,7 +3,6 @@ const router = express.Router();
 const Person = require('../models/Person');
 const Admin = require('../models/Admin');
 const multer = require('multer');
-const { GridFsStorage } = require('multer-gridfs-storage');
 const mongoose = require('mongoose');
 const crypto = require('crypto');
 const path = require('path');
@@ -17,41 +16,57 @@ const requireAuth = async (req, res, next) => {
     next();
 };
 
-// Настройка GridFS Storage
-const storage = new GridFsStorage({
-    url: process.env.MONGODB_URI,
-    file: (req, file) => {
-        return new Promise((resolve, reject) => {
-            crypto.randomBytes(16, (err, buf) => {
-                if (err) {
-                    return reject(err);
-                }
-                // Определяем папку для файла
-                let folder = 'others';
-                if (file.fieldname === 'photo') folder = 'persons';
-                else if (file.fieldname === 'buttonImage') folder = 'buttons';
-                else if (file.fieldname === 'artifactImage') folder = 'artifacts';
-                
-                const filename = folder + '/' + buf.toString('hex') + path.extname(file.originalname);
-                const fileInfo = {
-                    filename: filename,
-                    bucketName: 'uploads',
-                    metadata: {
-                        fieldname: file.fieldname,
-                        originalName: file.originalname,
-                        folder: folder
-                    }
-                };
-                resolve(fileInfo);
-            });
-        });
-    }
-});
-
+// Настройка multer для хранения в памяти (buffer)
+const storage = multer.memoryStorage();
 const upload = multer({ 
     storage: storage,
     limits: { fileSize: 10 * 1024 * 1024 }
 });
+
+// Функция для сохранения файла в GridFS
+const saveToGridFS = (fileBuffer, originalName, fieldname) => {
+    return new Promise((resolve, reject) => {
+        // Определяем папку
+        let folder = 'others';
+        if (fieldname === 'photo') folder = 'persons';
+        else if (fieldname === 'buttonImage') folder = 'buttons';
+        else if (fieldname === 'artifactImage') folder = 'artifacts';
+        
+        // Генерируем уникальное имя
+        crypto.randomBytes(16, (err, buf) => {
+            if (err) return reject(err);
+            
+            const filename = folder + '/' + buf.toString('hex') + path.extname(originalName);
+            
+            // Создаем bucket
+            const bucket = new mongoose.mongo.GridFSBucket(mongoose.connection.db, {
+                bucketName: 'uploads'
+            });
+            
+            // Создаем поток для загрузки
+            const uploadStream = bucket.openUploadStream(filename, {
+                metadata: {
+                    fieldname: fieldname,
+                    originalName: originalName,
+                    folder: folder,
+                    uploadDate: new Date()
+                }
+            });
+            
+            // Записываем буфер
+            uploadStream.write(fileBuffer);
+            uploadStream.end();
+            
+            uploadStream.on('finish', () => {
+                resolve(filename);
+            });
+            
+            uploadStream.on('error', (error) => {
+                reject(error);
+            });
+        });
+    });
+};
 
 // Страница входа
 router.get('/login', (req, res) => {
@@ -152,27 +167,24 @@ router.post('/person', requireAuth, upload.fields([
         console.log('=== СОЗДАНИЕ ПЕРСОНАЛИИ ===');
         console.log('Файлы:', req.files ? Object.keys(req.files) : 'Нет файлов');
 
-        if (req.files) {
-            if (req.files['photo']) {
-                console.log('📸 Фото загружено в GridFS:', req.files['photo'][0].filename);
-            }
-            if (req.files['buttonImage']) {
-                console.log('🖼️ Изображение кнопки загружено в GridFS:', req.files['buttonImage'][0].filename);
-            }
-        }
-
         const personData = JSON.parse(req.body.personData);
         
         let photoPath = '/images/persons/placeholder.jpg';
         let buttonImagePath = '/images/literary-hall/person-placeholder.png';
         
+        // Сохраняем фото в GridFS
         if (req.files && req.files['photo'] && req.files['photo'][0]) {
-            photoPath = '/uploads/' + req.files['photo'][0].filename;
+            const file = req.files['photo'][0];
+            const filename = await saveToGridFS(file.buffer, file.originalname, 'photo');
+            photoPath = '/uploads/' + filename;
             console.log('✅ Сохранен путь к фото:', photoPath);
         }
         
+        // Сохраняем кнопку в GridFS
         if (req.files && req.files['buttonImage'] && req.files['buttonImage'][0]) {
-            buttonImagePath = '/uploads/' + req.files['buttonImage'][0].filename;
+            const file = req.files['buttonImage'][0];
+            const filename = await saveToGridFS(file.buffer, file.originalname, 'buttonImage');
+            buttonImagePath = '/uploads/' + filename;
             console.log('✅ Сохранен путь к кнопке:', buttonImagePath);
         }
         
@@ -236,10 +248,10 @@ router.post('/person/:id', requireAuth, upload.fields([
 
         if (req.files) {
             if (req.files['photo']) {
-                console.log('📸 Фото загружено в GridFS:', req.files['photo'][0].filename);
+                console.log('📸 Фото загружено, размер:', req.files['photo'][0].size);
             }
             if (req.files['buttonImage']) {
-                console.log('🖼️ Изображение кнопки загружено в GridFS:', req.files['buttonImage'][0].filename);
+                console.log('🖼️ Изображение кнопки загружено, размер:', req.files['buttonImage'][0].size);
             }
         }
         
@@ -272,8 +284,10 @@ router.post('/person/:id', requireAuth, upload.fields([
         
         // ОБНОВЛЯЕМ ФОТО, ЕСЛИ ЗАГРУЖЕНО НОВОЕ
         if (req.files && req.files['photo'] && req.files['photo'][0]) {
+            const file = req.files['photo'][0];
+            const filename = await saveToGridFS(file.buffer, file.originalname, 'photo');
             const oldPhoto = person.photoPath;
-            person.photoPath = '/uploads/' + req.files['photo'][0].filename;
+            person.photoPath = '/uploads/' + filename;
             console.log('✅ Обновлено фото:');
             console.log('   Было:', oldPhoto);
             console.log('   Стало:', person.photoPath);
@@ -283,8 +297,10 @@ router.post('/person/:id', requireAuth, upload.fields([
         
         // ОБНОВЛЯЕМ КНОПКУ, ЕСЛИ ЗАГРУЖЕНО НОВОЕ ИЗОБРАЖЕНИЕ
         if (req.files && req.files['buttonImage'] && req.files['buttonImage'][0]) {
+            const file = req.files['buttonImage'][0];
+            const filename = await saveToGridFS(file.buffer, file.originalname, 'buttonImage');
             const oldButton = person.buttonImagePath;
-            person.buttonImagePath = '/uploads/' + req.files['buttonImage'][0].filename;
+            person.buttonImagePath = '/uploads/' + filename;
             console.log('✅ Обновлена кнопка:');
             console.log('   Было:', oldButton);
             console.log('   Стало:', person.buttonImagePath);
@@ -331,9 +347,17 @@ router.post('/person/:personId/artifact', requireAuth, upload.single('artifactIm
         }
         
         const artifactData = JSON.parse(req.body.artifactData);
+        let imagePath = '/images/artifacts/placeholder.jpg';
+        
+        if (req.file) {
+            const filename = await saveToGridFS(req.file.buffer, req.file.originalname, 'artifactImage');
+            imagePath = '/uploads/' + filename;
+            console.log('✅ Сохранен артефакт:', imagePath);
+        }
+        
         const artifact = {
             ...artifactData,
-            imagePath: req.file ? '/uploads/' + req.file.filename : '/images/artifacts/placeholder.jpg'
+            imagePath: imagePath
         };
         
         person.artifacts.push(artifact);
@@ -371,7 +395,9 @@ router.put('/person/:personId/artifact/:artifactId', requireAuth, upload.single(
         };
         
         if (req.file) {
-            person.artifacts[artifactIndex].imagePath = '/uploads/' + req.file.filename;
+            const filename = await saveToGridFS(req.file.buffer, req.file.originalname, 'artifactImage');
+            person.artifacts[artifactIndex].imagePath = '/uploads/' + filename;
+            console.log('✅ Обновлен артефакт:', person.artifacts[artifactIndex].imagePath);
         }
         
         await person.save();

@@ -41,7 +41,7 @@ app.use(session({
     cookie: { secure: false, maxAge: 3600000 }
 }));
 
-// Маршрут для получения файлов из GridFS (ДО статических файлов!)
+// Маршрут для получения файлов из GridFS
 app.get('/uploads/:filename(*)', async (req, res) => {
     try {
         const bucket = new mongoose.mongo.GridFSBucket(mongoose.connection.db, {
