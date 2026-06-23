@@ -77,6 +77,18 @@ app.get('/uploads/:filename', async (req, res) => {
     }
 });
 
+app.get('/debug/gridfs-files', async (req, res) => {
+    try {
+        const bucket = new mongoose.mongo.GridFSBucket(mongoose.connection.db, {
+            bucketName: 'uploads'
+        });
+        const files = await bucket.find({}).toArray();
+        res.json(files.map(f => ({ filename: f.filename, id: f._id, length: f.length })));
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+});
+
 app.use('/images', express.static(path.join(__dirname, 'public/images')));
 app.use('/css', express.static(path.join(__dirname, 'public/css')));
 app.use('/js', express.static(path.join(__dirname, 'public/js')));
