@@ -6,6 +6,24 @@ const multer = require('multer');
 const path = require('path');
 const fs = require('fs');
 
+// ПРОВЕРКА И СОЗДАНИЕ ПАПОК
+const uploadDirs = [
+    'public/uploads',
+    'public/uploads/persons',
+    'public/uploads/buttons',
+    'public/uploads/artifacts'
+];
+
+uploadDirs.forEach(dir => {
+    const fullPath = path.join(__dirname, '..', dir);
+    if (!fs.existsSync(fullPath)) {
+        fs.mkdirSync(fullPath, { recursive: true });
+        console.log(`✅ Создана папка: ${dir}`);
+    } else {
+        console.log(`✅ Папка существует: ${dir}`);
+    }
+});
+
 // Настройка multer для загрузки файлов
 const storage = multer.diskStorage({
     destination: function(req, file, cb) {
@@ -19,15 +37,22 @@ const storage = multer.diskStorage({
             uploadPath += 'artifacts/';
         }
         
-        if (!fs.existsSync(uploadPath)) {
-            fs.mkdirSync(uploadPath, { recursive: true });
+        const fullPath = path.join(__dirname, '..', uploadPath);
+        console.log(`📁 Сохранение файла в: ${fullPath}`);
+        
+        // Убедимся, что папка существует
+        if (!fs.existsSync(fullPath)) {
+            fs.mkdirSync(fullPath, { recursive: true });
+            console.log(`✅ Создана папка: ${fullPath}`);
         }
         
-        cb(null, uploadPath);
+        cb(null, fullPath);
     },
     filename: function(req, file, cb) {
         const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
-        cb(null, uniqueSuffix + path.extname(file.originalname));
+        const filename = uniqueSuffix + path.extname(file.originalname);
+        console.log(`📄 Имя файла: ${filename}`);
+        cb(null, filename);
     }
 });
 
@@ -35,7 +60,6 @@ const upload = multer({
     storage: storage,
     limits: { fileSize: 10 * 1024 * 1024 }
 });
-
 // Middleware для проверки авторизации
 const requireAuth = async (req, res, next) => {
     if (!req.session || !req.session.adminId) {
@@ -144,7 +168,36 @@ router.post('/person', requireAuth, upload.fields([
 ]), async (req, res) => {
     try {
         console.log('Создание персоналии');
+        console.log('Тело запроса:', req.body);
+        console.log('Файлы:', req.files);
+
+        // Проверяем, есть ли файлы
+        if (req.files) {
+            if (req.files['photo']) {
+                console.log('📸 Фото загружено:', req.files['photo'][0].filename);
+                console.log('📸 Путь к фото:', req.files['photo'][0].path);
+            }
+            if (req.files['buttonImage']) {
+                console.log('🖼️ Изображение кнопки загружено:', req.files['buttonImage'][0].filename);
+                console.log('🖼️ Путь к кнопке:', req.files['buttonImage'][0].path);
+            }
+        }
+
         const personData = JSON.parse(req.body.personData);
+        
+        let photoPath = '/images/persons/placeholder.jpg';
+        let buttonImagePath = '/images/literary-hall/person-placeholder.png';
+        
+        // ВАЖНО: используем правильный путь для доступа через браузер
+        if (req.files && req.files['photo'] && req.files['photo'][0]) {
+            photoPath = '/uploads/persons/' + req.files['photo'][0].filename;
+            console.log('✅ Сохранен путь к фото:', photoPath);
+        }
+        
+        if (req.files && req.files['buttonImage'] && req.files['buttonImage'][0]) {
+            buttonImagePath = '/uploads/buttons/' + req.files['buttonImage'][0].filename;
+            console.log('✅ Сохранен путь к кнопке:', buttonImagePath);
+        }
         
         const person = new Person({
             ...personData,
