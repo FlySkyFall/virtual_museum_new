@@ -11,17 +11,20 @@ const fs = require('fs');
 
 // Создаем директории для загрузки, если их нет
 const ensureDirectoryExists = (dir) => {
-    if (!fs.existsSync(dir)) {
-        fs.mkdirSync(dir, { recursive: true });
+    const fullPath = path.join(__dirname, '..', dir);
+    if (!fs.existsSync(fullPath)) {
+        fs.mkdirSync(fullPath, { recursive: true });
+        console.log(`📁 Создана папка: ${dir}`);
     }
 };
 
 // Настройка хранилища для фото персоналий
 const personStorage = multer.diskStorage({
     destination: (req, file, cb) => {
+        // ВАЖНО: сохраняем в папку public/images/persons
         const dir = 'public/images/persons';
         ensureDirectoryExists(dir);
-        cb(null, dir);
+        cb(null, path.join(__dirname, '..', dir));
     },
     filename: (req, file, cb) => {
         const uniqueName = Date.now() + '-' + Math.round(Math.random() * 1E9) + path.extname(file.originalname);
@@ -34,7 +37,7 @@ const artifactStorage = multer.diskStorage({
     destination: (req, file, cb) => {
         const dir = 'public/images/artifacts';
         ensureDirectoryExists(dir);
-        cb(null, dir);
+        cb(null, path.join(__dirname, '..', dir));
     },
     filename: (req, file, cb) => {
         const uniqueName = Date.now() + '-' + Math.round(Math.random() * 1E9) + path.extname(file.originalname);
@@ -47,7 +50,7 @@ const buttonStorage = multer.diskStorage({
     destination: (req, file, cb) => {
         const dir = 'public/images/literary-hall';
         ensureDirectoryExists(dir);
-        cb(null, dir);
+        cb(null, path.join(__dirname, '..', dir));
     },
     filename: (req, file, cb) => {
         const uniqueName = Date.now() + '-' + Math.round(Math.random() * 1E9) + path.extname(file.originalname);
@@ -172,14 +175,16 @@ router.get('/person/create', requireAuth, (req, res) => {
     });
 });
 
-// ВАЖНО: Маршрут для СОЗДАНИЯ должен быть ПЕРЕД маршрутом для РЕДАКТИРОВАНИЯ
 router.post('/person', requireAuth, uploadPersonPhoto, async (req, res) => {
     try {
         const personData = JSON.parse(req.body.personData);
         let photoPath = '/images/persons/placeholder.jpg';
         
         if (req.file) {
+            // Путь для БД (относительно папки public)
             photoPath = '/images/persons/' + req.file.filename;
+            console.log('✅ Файл сохранен:', req.file.path);
+            console.log('✅ Путь для БД:', photoPath);
         }
 
         const person = new Person({
@@ -191,9 +196,10 @@ router.post('/person', requireAuth, uploadPersonPhoto, async (req, res) => {
         });
 
         await person.save();
+        console.log('✅ Персоналия создана:', person.fullName);
         res.redirect('/admin');
     } catch (error) {
-        console.error(error);
+        console.error('❌ Ошибка при создании персоналии:', error);
         res.status(500).send('Ошибка при создании персоналии: ' + error.message);
     }
 });
@@ -202,7 +208,6 @@ router.post('/person', requireAuth, uploadPersonPhoto, async (req, res) => {
 
 router.get('/person/:id/edit', requireAuth, async (req, res) => {
     try {
-        // Проверяем, что ID валидный
         if (!req.params.id || req.params.id === 'create') {
             return res.redirect('/admin/person/create');
         }
@@ -224,7 +229,6 @@ router.get('/person/:id/edit', requireAuth, async (req, res) => {
 
 router.post('/person/:id', requireAuth, uploadPersonPhoto, async (req, res) => {
     try {
-        // Проверяем, что ID валидный
         if (!req.params.id || req.params.id === 'create') {
             return res.status(400).send('Неверный ID персоналии');
         }
@@ -234,7 +238,6 @@ router.post('/person/:id', requireAuth, uploadPersonPhoto, async (req, res) => {
 
         const personData = JSON.parse(req.body.personData);
 
-        // Обновляем все поля
         person.fullName = personData.fullName;
         person.lastName = personData.lastName;
         person.firstName = personData.firstName;
@@ -246,22 +249,24 @@ router.post('/person/:id', requireAuth, uploadPersonPhoto, async (req, res) => {
         person.order = personData.order || 0;
         person.isActive = personData.isActive === true || personData.isActive === 'true';
 
-        // Если загружено новое фото – обновляем путь
         if (req.file) {
-            // Удаляем старое фото, если оно не стандартное
+            // Удаляем старое фото
             if (person.photoPath && person.photoPath !== '/images/persons/placeholder.jpg') {
-                const oldPath = path.join('public', person.photoPath);
+                const oldPath = path.join(__dirname, '..', 'public', person.photoPath);
                 if (fs.existsSync(oldPath)) {
                     fs.unlinkSync(oldPath);
+                    console.log('🗑️ Старое фото удалено:', oldPath);
                 }
             }
+            // Сохраняем новое фото
             person.photoPath = '/images/persons/' + req.file.filename;
+            console.log('✅ Фото обновлено:', person.photoPath);
         }
 
         await person.save();
         res.redirect('/admin');
     } catch (error) {
-        console.error(error);
+        console.error('❌ Ошибка при обновлении персоналии:', error);
         res.status(500).send('Ошибка при обновлении персоналии: ' + error.message);
     }
 });
@@ -275,17 +280,18 @@ router.delete('/person/:id', requireAuth, async (req, res) => {
 
         // Удаляем фото персоналии
         if (person.photoPath && person.photoPath !== '/images/persons/placeholder.jpg') {
-            const photoPath = path.join('public', person.photoPath);
+            const photoPath = path.join(__dirname, '..', 'public', person.photoPath);
             if (fs.existsSync(photoPath)) {
                 fs.unlinkSync(photoPath);
+                console.log('🗑️ Фото удалено:', photoPath);
             }
         }
 
-        // Удаляем все фото артефактов
+        // Удаляем фото артефактов
         if (person.artifacts && person.artifacts.length > 0) {
             person.artifacts.forEach(artifact => {
                 if (artifact.imagePath && !artifact.imagePath.includes('placeholder')) {
-                    const artifactPath = path.join('public', artifact.imagePath);
+                    const artifactPath = path.join(__dirname, '..', 'public', artifact.imagePath);
                     if (fs.existsSync(artifactPath)) {
                         fs.unlinkSync(artifactPath);
                     }
@@ -308,15 +314,15 @@ router.post('/person/:personId/button-image', requireAuth, uploadButtonImage, as
         if (!person) return res.status(404).send('Персоналия не найдена');
 
         if (req.file) {
-            // Удаляем старую картинку кнопки
             if (person.buttonImagePath && person.buttonImagePath !== '/images/literary-hall/person-placeholder.png') {
-                const oldPath = path.join('public', person.buttonImagePath);
+                const oldPath = path.join(__dirname, '..', 'public', person.buttonImagePath);
                 if (fs.existsSync(oldPath)) {
                     fs.unlinkSync(oldPath);
                 }
             }
             person.buttonImagePath = '/images/literary-hall/' + req.file.filename;
             await person.save();
+            console.log('✅ Изображение для кнопки обновлено:', person.buttonImagePath);
         }
 
         res.redirect(`/admin/person/${req.params.personId}/edit`);
@@ -328,7 +334,6 @@ router.post('/person/:personId/button-image', requireAuth, uploadButtonImage, as
 
 // ==================== РАБОТА С АРТЕФАКТАМИ ====================
 
-// Добавление артефакта
 router.post('/person/:personId/artifact', requireAuth, uploadArtifactImage, async (req, res) => {
     try {
         const person = await Person.findById(req.params.personId);
@@ -351,7 +356,6 @@ router.post('/person/:personId/artifact', requireAuth, uploadArtifactImage, asyn
     }
 });
 
-// Редактирование артефакта
 router.post('/person/:personId/artifact/:artifactId', requireAuth, uploadArtifactImage, async (req, res) => {
     try {
         const person = await Person.findById(req.params.personId);
@@ -362,7 +366,6 @@ router.post('/person/:personId/artifact/:artifactId', requireAuth, uploadArtifac
 
         const artifactData = JSON.parse(req.body.artifactData);
         
-        // Обновляем данные артефакта
         person.artifacts[artifactIndex].name = artifactData.name;
         person.artifacts[artifactIndex].description = artifactData.description;
         person.artifacts[artifactIndex].year = artifactData.year || null;
@@ -370,12 +373,10 @@ router.post('/person/:personId/artifact/:artifactId', requireAuth, uploadArtifac
         person.artifacts[artifactIndex].dimensions = artifactData.dimensions || null;
         person.artifacts[artifactIndex].videoUrl = artifactData.videoUrl || null;
 
-        // Если загружено новое изображение
         if (req.file) {
-            // Удаляем старое изображение
             const oldImagePath = person.artifacts[artifactIndex].imagePath;
             if (oldImagePath && !oldImagePath.includes('placeholder')) {
-                const oldPath = path.join('public', oldImagePath);
+                const oldPath = path.join(__dirname, '..', 'public', oldImagePath);
                 if (fs.existsSync(oldPath)) {
                     fs.unlinkSync(oldPath);
                 }
@@ -391,7 +392,6 @@ router.post('/person/:personId/artifact/:artifactId', requireAuth, uploadArtifac
     }
 });
 
-// Удаление артефакта
 router.delete('/person/:personId/artifact/:artifactId', requireAuth, async (req, res) => {
     try {
         const person = await Person.findById(req.params.personId);
@@ -400,10 +400,9 @@ router.delete('/person/:personId/artifact/:artifactId', requireAuth, async (req,
         const artifactIndex = person.artifacts.findIndex(a => a._id.toString() === req.params.artifactId);
         if (artifactIndex === -1) return res.status(404).json({ success: false, error: 'Артефакт не найден' });
 
-        // Удаляем изображение артефакта
         const artifact = person.artifacts[artifactIndex];
         if (artifact.imagePath && !artifact.imagePath.includes('placeholder')) {
-            const imagePath = path.join('public', artifact.imagePath);
+            const imagePath = path.join(__dirname, '..', 'public', artifact.imagePath);
             if (fs.existsSync(imagePath)) {
                 fs.unlinkSync(imagePath);
             }
