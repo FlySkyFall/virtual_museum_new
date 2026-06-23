@@ -36,7 +36,6 @@ async function uploadAndPublish(fileBuffer, originalName, folder = 'others') {
 
     const baseFolder = process.env.YANDEX_DISK_FOLDER || 'app_uploads';
     const cleanFolder = folder.replace(/^\/+|\/+$/g, '');
-    // Убираем слеши в начале и конце
     const remotePath = `/${baseFolder}/${cleanFolder}/${Date.now()}-${path.basename(originalName)}`;
 
     console.log(`📤 Загрузка на Яндекс.Диск: ${remotePath}`);
