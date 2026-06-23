@@ -3,63 +3,12 @@ const router = express.Router();
 const Person = require('../models/Person');
 const Admin = require('../models/Admin');
 const multer = require('multer');
+const { GridFsStorage } = require('multer-gridfs-storage');
+const mongoose = require('mongoose');
+const crypto = require('crypto');
 const path = require('path');
 const fs = require('fs');
 
-// ПРОВЕРКА И СОЗДАНИЕ ПАПОК
-const uploadDirs = [
-    'public/uploads',
-    'public/uploads/persons',
-    'public/uploads/buttons',
-    'public/uploads/artifacts'
-];
-
-uploadDirs.forEach(dir => {
-    const fullPath = path.join(__dirname, '..', dir);
-    if (!fs.existsSync(fullPath)) {
-        fs.mkdirSync(fullPath, { recursive: true });
-        console.log(`✅ Создана папка: ${dir}`);
-    } else {
-        console.log(`✅ Папка существует: ${dir}`);
-    }
-});
-
-// Настройка multer для загрузки файлов
-const storage = multer.diskStorage({
-    destination: function(req, file, cb) {
-        let uploadPath = 'public/uploads/';
-        
-        if (file.fieldname === 'photo') {
-            uploadPath += 'persons/';
-        } else if (file.fieldname === 'buttonImage') {
-            uploadPath += 'buttons/';
-        } else if (file.fieldname === 'artifactImage') {
-            uploadPath += 'artifacts/';
-        }
-        
-        const fullPath = path.join(__dirname, '..', uploadPath);
-        console.log(`📁 Сохранение файла в: ${fullPath}`);
-        
-        // Убедимся, что папка существует
-        if (!fs.existsSync(fullPath)) {
-            fs.mkdirSync(fullPath, { recursive: true });
-            console.log(`✅ Создана папка: ${fullPath}`);
-        }
-        
-        cb(null, fullPath);
-    },
-    filename: function(req, file, cb) {
-        const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
-        const filename = uniqueSuffix + path.extname(file.originalname);
-        console.log(`📄 Имя файла: ${filename}`);
-        cb(null, filename);
-    }
-});
-
-const upload = multer({ 
-    storage: storage,
-    limits: { fileSize: 10 * 1024 * 1024 }
-});
 // Middleware для проверки авторизации
 const requireAuth = async (req, res, next) => {
     if (!req.session || !req.session.adminId) {
@@ -67,6 +16,42 @@ const requireAuth = async (req, res, next) => {
     }
     next();
 };
+
+// Настройка GridFS Storage
+const storage = new GridFsStorage({
+    url: process.env.MONGODB_URI,
+    file: (req, file) => {
+        return new Promise((resolve, reject) => {
+            crypto.randomBytes(16, (err, buf) => {
+                if (err) {
+                    return reject(err);
+                }
+                // Определяем папку для файла
+                let folder = 'others';
+                if (file.fieldname === 'photo') folder = 'persons';
+                else if (file.fieldname === 'buttonImage') folder = 'buttons';
+                else if (file.fieldname === 'artifactImage') folder = 'artifacts';
+                
+                const filename = folder + '/' + buf.toString('hex') + path.extname(file.originalname);
+                const fileInfo = {
+                    filename: filename,
+                    bucketName: 'uploads',
+                    metadata: {
+                        fieldname: file.fieldname,
+                        originalName: file.originalname,
+                        folder: folder
+                    }
+                };
+                resolve(fileInfo);
+            });
+        });
+    }
+});
+
+const upload = multer({ 
+    storage: storage,
+    limits: { fileSize: 10 * 1024 * 1024 }
+});
 
 // Страница входа
 router.get('/login', (req, res) => {
@@ -106,16 +91,13 @@ router.get('/logout', (req, res) => {
 });
 
 // Главная страница админки
-// Главная страница админки
 router.get('/', requireAuth, async (req, res) => {
     try {
-        // Находим ВСЕХ персоналий и преобразуем в обычные объекты
         const persons = await Person.find({}).sort({ order: 1 }).lean();
         
         console.log('=== ЗАПРОС К АДМИНКЕ ===');
         console.log('Найдено персоналий:', persons.length);
         
-        // Выводим информацию о каждой персоналии
         persons.forEach((p, index) => {
             console.log(`${index + 1}. ${p.fullName} (ID: ${p._id}) - Активен: ${p.isActive}, Артефактов: ${p.artifacts ? p.artifacts.length : 0}`);
         });
@@ -167,19 +149,15 @@ router.post('/person', requireAuth, upload.fields([
     { name: 'buttonImage', maxCount: 1 }
 ]), async (req, res) => {
     try {
-        console.log('Создание персоналии');
-        console.log('Тело запроса:', req.body);
-        console.log('Файлы:', req.files);
+        console.log('=== СОЗДАНИЕ ПЕРСОНАЛИИ ===');
+        console.log('Файлы:', req.files ? Object.keys(req.files) : 'Нет файлов');
 
-        // Проверяем, есть ли файлы
         if (req.files) {
             if (req.files['photo']) {
-                console.log('📸 Фото загружено:', req.files['photo'][0].filename);
-                console.log('📸 Путь к фото:', req.files['photo'][0].path);
+                console.log('📸 Фото загружено в GridFS:', req.files['photo'][0].filename);
             }
             if (req.files['buttonImage']) {
-                console.log('🖼️ Изображение кнопки загружено:', req.files['buttonImage'][0].filename);
-                console.log('🖼️ Путь к кнопке:', req.files['buttonImage'][0].path);
+                console.log('🖼️ Изображение кнопки загружено в GridFS:', req.files['buttonImage'][0].filename);
             }
         }
 
@@ -188,31 +166,30 @@ router.post('/person', requireAuth, upload.fields([
         let photoPath = '/images/persons/placeholder.jpg';
         let buttonImagePath = '/images/literary-hall/person-placeholder.png';
         
-        // ВАЖНО: используем правильный путь для доступа через браузер
         if (req.files && req.files['photo'] && req.files['photo'][0]) {
-            photoPath = '/uploads/persons/' + req.files['photo'][0].filename;
+            photoPath = '/uploads/' + req.files['photo'][0].filename;
             console.log('✅ Сохранен путь к фото:', photoPath);
         }
         
         if (req.files && req.files['buttonImage'] && req.files['buttonImage'][0]) {
-            buttonImagePath = '/uploads/buttons/' + req.files['buttonImage'][0].filename;
+            buttonImagePath = '/uploads/' + req.files['buttonImage'][0].filename;
             console.log('✅ Сохранен путь к кнопке:', buttonImagePath);
         }
         
         const person = new Person({
             ...personData,
-            photoPath: req.files && req.files['photo'] ? '/uploads/persons/' + req.files['photo'][0].filename : '/images/persons/placeholder.jpg',
-            buttonImagePath: req.files && req.files['buttonImage'] ? '/uploads/buttons/' + req.files['buttonImage'][0].filename : '/images/literary-hall/person-placeholder.png',
+            photoPath: photoPath,
+            buttonImagePath: buttonImagePath,
             hallId: 1,
             order: personData.order || (await Person.countDocuments() + 1),
             artifacts: []
         });
         
         await person.save();
-        console.log('Создана персоналия:', person.fullName, 'ID:', person._id);
+        console.log('✅ Создана персоналия:', person.fullName, 'ID:', person._id);
         res.redirect('/admin');
     } catch (error) {
-        console.error('Ошибка при создании персоналии:', error);
+        console.error('❌ Ошибка при создании персоналии:', error);
         res.status(500).send('Ошибка при создании персоналии: ' + error.message);
     }
 });
@@ -223,7 +200,6 @@ router.get('/person/:id/edit', requireAuth, async (req, res) => {
         const personId = req.params.id;
         console.log('Редактирование персоналии с ID:', personId);
         
-        // Используем lean() для получения обычного объекта
         const person = await Person.findById(personId).lean();
         
         if (!person) {
@@ -232,8 +208,8 @@ router.get('/person/:id/edit', requireAuth, async (req, res) => {
         }
         
         console.log('Найдена персоналия:', person.fullName);
-        console.log('Артефактов:', person.artifacts ? person.artifacts.length : 0);
-        console.log('Данные персоналии:', JSON.stringify(person, null, 2));
+        console.log('buttonImagePath:', person.buttonImagePath);
+        console.log('photoPath:', person.photoPath);
         
         res.render('admin/person-form', { 
             layout: false,
@@ -247,40 +223,32 @@ router.get('/person/:id/edit', requireAuth, async (req, res) => {
     }
 });
 
-// Обновление персоналии - используем POST вместо PUT
+// Обновление персоналии
 router.post('/person/:id', requireAuth, upload.fields([
     { name: 'photo', maxCount: 1 },
     { name: 'buttonImage', maxCount: 1 }
 ]), async (req, res) => {
     try {
         const personId = req.params.id;
-        console.log('Обновление персоналии с ID:', personId);
-        console.log('Тело запроса (keys):', Object.keys(req.body));
+        console.log('=== ОБНОВЛЕНИЕ ПЕРСОНАЛИИ ===');
+        console.log('ID персоналии:', personId);
         console.log('Файлы:', req.files ? Object.keys(req.files) : 'Нет файлов');
 
-        // Подробно выводим информацию о файлах
         if (req.files) {
             if (req.files['photo']) {
-                console.log('📸 Фото загружено:', req.files['photo'][0]);
-                console.log('📸 Путь к фото:', req.files['photo'][0].path);
-                console.log('📸 Имя файла:', req.files['photo'][0].filename);
+                console.log('📸 Фото загружено в GridFS:', req.files['photo'][0].filename);
             }
             if (req.files['buttonImage']) {
-                console.log('🖼️ Изображение кнопки загружено:', req.files['buttonImage'][0]);
-                console.log('🖼️ Путь к кнопке:', req.files['buttonImage'][0].path);
-                console.log('🖼️ Имя файла:', req.files['buttonImage'][0].filename);
+                console.log('🖼️ Изображение кнопки загружено в GridFS:', req.files['buttonImage'][0].filename);
             }
         }
         
-        // Проверяем, есть ли данные в req.body.personData
         if (!req.body.personData) {
             console.error('❌ Нет данных personData в запросе');
             return res.status(400).send('Отсутствуют данные персоналии');
         }
         
         const personData = JSON.parse(req.body.personData);
-        console.log('📝 Данные персоналии:', personData);
-
         const person = await Person.findById(personId);
         
         if (!person) {
@@ -305,7 +273,7 @@ router.post('/person/:id', requireAuth, upload.fields([
         // ОБНОВЛЯЕМ ФОТО, ЕСЛИ ЗАГРУЖЕНО НОВОЕ
         if (req.files && req.files['photo'] && req.files['photo'][0]) {
             const oldPhoto = person.photoPath;
-            person.photoPath = '/uploads/persons/' + req.files['photo'][0].filename;
+            person.photoPath = '/uploads/' + req.files['photo'][0].filename;
             console.log('✅ Обновлено фото:');
             console.log('   Было:', oldPhoto);
             console.log('   Стало:', person.photoPath);
@@ -316,7 +284,7 @@ router.post('/person/:id', requireAuth, upload.fields([
         // ОБНОВЛЯЕМ КНОПКУ, ЕСЛИ ЗАГРУЖЕНО НОВОЕ ИЗОБРАЖЕНИЕ
         if (req.files && req.files['buttonImage'] && req.files['buttonImage'][0]) {
             const oldButton = person.buttonImagePath;
-            person.buttonImagePath = '/uploads/buttons/' + req.files['buttonImage'][0].filename;
+            person.buttonImagePath = '/uploads/' + req.files['buttonImage'][0].filename;
             console.log('✅ Обновлена кнопка:');
             console.log('   Было:', oldButton);
             console.log('   Стало:', person.buttonImagePath);
@@ -325,10 +293,10 @@ router.post('/person/:id', requireAuth, upload.fields([
         }
         
         await person.save();
-        console.log('Обновлена персоналия:', person.fullName);
+        console.log('✅ Персоналия обновлена:', person.fullName);
         res.redirect('/admin');
     } catch (error) {
-        console.error('Ошибка при обновлении персоналии:', error);
+        console.error('❌ Ошибка при обновлении персоналии:', error);
         res.status(500).send('Ошибка при обновлении персоналии: ' + error.message);
     }
 });
@@ -365,7 +333,7 @@ router.post('/person/:personId/artifact', requireAuth, upload.single('artifactIm
         const artifactData = JSON.parse(req.body.artifactData);
         const artifact = {
             ...artifactData,
-            imagePath: req.file ? '/uploads/artifacts/' + req.file.filename : '/images/artifacts/placeholder.jpg'
+            imagePath: req.file ? '/uploads/' + req.file.filename : '/images/artifacts/placeholder.jpg'
         };
         
         person.artifacts.push(artifact);
@@ -403,7 +371,7 @@ router.put('/person/:personId/artifact/:artifactId', requireAuth, upload.single(
         };
         
         if (req.file) {
-            person.artifacts[artifactIndex].imagePath = '/uploads/artifacts/' + req.file.filename;
+            person.artifacts[artifactIndex].imagePath = '/uploads/' + req.file.filename;
         }
         
         await person.save();
@@ -436,52 +404,30 @@ router.delete('/person/:personId/artifact/:artifactId', requireAuth, async (req,
     }
 });
 
-// Временный маршрут для отладки - ПОСЛЕ всех других маршрутов
+// Отладочные маршруты
 router.get('/debug', requireAuth, async (req, res) => {
     try {
         const persons = await Person.find({});
         console.log('=== ОТЛАДКА БАЗЫ ДАННЫХ ===');
         console.log('Всего записей:', persons.length);
         
-        if (persons.length > 0) {
-            console.log('Первая запись:', JSON.stringify(persons[0].toObject(), null, 2));
-            console.log('Ключи первой записи:', Object.keys(persons[0].toObject()));
-        }
+        const result = persons.map(p => ({
+            id: p._id,
+            fullName: p.fullName,
+            buttonImagePath: p.buttonImagePath,
+            photoPath: p.photoPath,
+            isActive: p.isActive,
+            artifactsCount: p.artifacts ? p.artifacts.length : 0
+        }));
         
         res.json({
             total: persons.length,
-            sample: persons.length > 0 ? persons[0].toObject() : null,
-            all: persons.map(p => ({
-                id: p._id,
-                fullName: p.fullName,
-                lastName: p.lastName,
-                firstName: p.firstName,
-                isActive: p.isActive,
-                artifactsCount: p.artifacts ? p.artifacts.length : 0
-            }))
+            persons: result
         });
     } catch (error) {
         console.error('Ошибка отладки:', error);
         res.status(500).json({ error: error.message });
     }
-});
-
-// МАРШРУТ ДЛЯ ПРОВЕРКИ ФАЙЛОВ
-router.get('/check-files', requireAuth, async (req, res) => {
-    const uploadsPath = path.join(__dirname, '..', 'public/uploads');
-    const buttonsPath = path.join(uploadsPath, 'buttons');
-    
-    let files = [];
-    if (fs.existsSync(buttonsPath)) {
-        files = fs.readdirSync(buttonsPath);
-    }
-    
-    res.json({
-        uploadsExists: fs.existsSync(uploadsPath),
-        buttonsExists: fs.existsSync(buttonsPath),
-        buttonsPath: buttonsPath,
-        files: files
-    });
 });
 
 module.exports = router;

@@ -41,6 +41,45 @@ app.use(session({
     cookie: { secure: false, maxAge: 3600000 }
 }));
 
+// Маршрут для получения файлов из GridFS (ДО статических файлов!)
+app.get('/uploads/:filename(*)', async (req, res) => {
+    try {
+        const bucket = new mongoose.mongo.GridFSBucket(mongoose.connection.db, {
+            bucketName: 'uploads'
+        });
+        
+        const downloadStream = bucket.openDownloadStreamByName(req.params.filename);
+        
+        downloadStream.on('error', (err) => {
+            console.error('Ошибка при получении файла из GridFS:', err);
+            res.status(404).send('Файл не найден');
+        });
+        
+        // Устанавливаем правильный content-type
+        const ext = path.extname(req.params.filename).toLowerCase();
+        const contentTypes = {
+            '.jpg': 'image/jpeg',
+            '.jpeg': 'image/jpeg',
+            '.png': 'image/png',
+            '.gif': 'image/gif',
+            '.webp': 'image/webp',
+            '.svg': 'image/svg+xml'
+        };
+        res.set('Content-Type', contentTypes[ext] || 'application/octet-stream');
+        
+        downloadStream.pipe(res);
+    } catch (error) {
+        console.error('Ошибка при получении файла из GridFS:', error);
+        res.status(404).send('Файл не найден');
+    }
+});
+
+// Статические файлы
+app.use('/images', express.static(path.join(__dirname, 'public/images')));
+app.use('/css', express.static(path.join(__dirname, 'public/css')));
+app.use('/js', express.static(path.join(__dirname, 'public/js')));
+app.use(express.static(path.join(__dirname, 'public')));
+
 // Статические файлы - ВАЖНО для Render
 app.use('/uploads', express.static(path.join(__dirname, 'public/uploads')));
 app.use('/images', express.static(path.join(__dirname, 'public/images')));
