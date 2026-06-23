@@ -206,7 +206,8 @@
         </div>
 
         <div class="form-container">
-            <form id="personForm" method="POST" enctype="multipart/form-data">
+            <!-- ВАЖНО: Правильный action для формы -->
+            <form id="personForm" method="POST" enctype="multipart/form-data" action="{{#if isEdit}}/admin/person/{{person._id}}{{else}}/admin/person{{/if}}">
                 <input type="hidden" name="personData" id="personData">
 
                 <!-- Основная информация -->
@@ -312,7 +313,8 @@
                 </div>
             </form>
 
-            <!-- Артефакты -->
+            <!-- Артефакты (только для редактирования) -->
+            {{#if isEdit}}
             <div class="artifacts-section">
                 <h3><i class="fas fa-box"></i> Артефакты (личные вещи)</h3>
 
@@ -389,6 +391,7 @@
                     </form>
                 </div>
             </div>
+            {{/if}}
         </div>
     </main>
 </div>
@@ -433,6 +436,7 @@
         this.submit();
     });
 
+    {{#if isEdit}}
     // Удаление артефакта
     document.querySelectorAll('.delete-artifact').forEach(btn => {
         btn.addEventListener('click', async function() {
@@ -455,13 +459,12 @@
         });
     });
 
-    // Редактирование артефакта - заполняем форму данными артефакта
+    // Редактирование артефакта
     document.querySelectorAll('.edit-artifact').forEach(btn => {
         btn.addEventListener('click', function() {
             const artifactId = this.dataset.artifactId;
             const card = this.closest('.artifact-card');
             
-            // Получаем данные из карточки
             const name = card.querySelector('h4')?.textContent || '';
             const description = card.querySelector('.artifact-info p')?.textContent?.replace('Описание:', '').trim() || '';
             const yearEl = card.querySelector('.artifact-info p:nth-child(2)');
@@ -473,7 +476,6 @@
             const videoEl = card.querySelector('.artifact-info a');
             const videoUrl = videoEl ? videoEl.href : '';
             
-            // Заполняем форму (находим ближайшую форму добавления)
             const form = document.getElementById('artifactForm');
             form.querySelector('[name="artifactName"]').value = name;
             form.querySelector('[name="artifactDescription"]').value = description;
@@ -482,15 +484,12 @@
             form.querySelector('[name="artifactDimensions"]').value = dimensions;
             form.querySelector('[name="artifactVideoUrl"]').value = videoUrl;
             
-            // Меняем action формы на редактирование
             const personId = '{{person._id}}';
             form.action = `/admin/person/${personId}/artifact/${artifactId}`;
             
-            // Меняем текст кнопки
             const submitBtn = form.querySelector('button[type="submit"]');
             submitBtn.innerHTML = '<i class="fas fa-save"></i> Обновить артефакт';
             
-            // Добавляем кнопку отмены если её нет
             if (!form.querySelector('.btn-cancel-edit')) {
                 const cancelBtn = document.createElement('button');
                 cancelBtn.type = 'button';
@@ -498,7 +497,6 @@
                 cancelBtn.innerHTML = '<i class="fas fa-times"></i> Отменить';
                 cancelBtn.style.marginLeft = '10px';
                 cancelBtn.onclick = function() {
-                    // Возвращаем форму в исходное состояние
                     form.action = `/admin/person/${personId}/artifact`;
                     submitBtn.innerHTML = '<i class="fas fa-plus"></i> Добавить артефакт';
                     form.reset();
@@ -507,10 +505,10 @@
                 form.appendChild(cancelBtn);
             }
             
-            // Прокручиваем к форме
             form.scrollIntoView({ behavior: 'smooth', block: 'center' });
         });
     });
+    {{/if}}
 </script>
 </body>
 </html>
