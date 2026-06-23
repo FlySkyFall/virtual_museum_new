@@ -172,6 +172,7 @@ router.get('/person/create', requireAuth, (req, res) => {
     });
 });
 
+// ВАЖНО: Маршрут для СОЗДАНИЯ должен быть ПЕРЕД маршрутом для РЕДАКТИРОВАНИЯ
 router.post('/person', requireAuth, uploadPersonPhoto, async (req, res) => {
     try {
         const personData = JSON.parse(req.body.personData);
@@ -201,8 +202,14 @@ router.post('/person', requireAuth, uploadPersonPhoto, async (req, res) => {
 
 router.get('/person/:id/edit', requireAuth, async (req, res) => {
     try {
+        // Проверяем, что ID валидный
+        if (!req.params.id || req.params.id === 'create') {
+            return res.redirect('/admin/person/create');
+        }
+        
         const person = await Person.findById(req.params.id).lean();
         if (!person) return res.status(404).send('Персоналия не найдена');
+        
         res.render('admin/person-form', {
             layout: false,
             title: 'Редактировать персоналию',
@@ -217,6 +224,11 @@ router.get('/person/:id/edit', requireAuth, async (req, res) => {
 
 router.post('/person/:id', requireAuth, uploadPersonPhoto, async (req, res) => {
     try {
+        // Проверяем, что ID валидный
+        if (!req.params.id || req.params.id === 'create') {
+            return res.status(400).send('Неверный ID персоналии');
+        }
+        
         const person = await Person.findById(req.params.id);
         if (!person) return res.status(404).send('Персоналия не найдена');
 
