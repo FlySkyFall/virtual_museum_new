@@ -210,33 +210,3 @@ main {
 .hall-button::-moz-focus-inner {
     border: 0;
 }
-
-/* Логотип в левом нижнем углу - не кликабельный */
-.logo {
-    position: absolute;
-    bottom: 30px;      /* отступ снизу */
-    left: 90px;        /* отступ слева */
-    z-index: 10;       /* поверх фона и кнопок */
-    max-width: 120px;  /* уменьшенный размер */
-    height: auto;      /* сохранение пропорций */
-    width: auto;
-    display: block;
-    pointer-events: none; /* чтобы точно не был кликабельным (опционально) */
-}
-
-/* Адаптивность для мобильных устройств */
-@media (max-width: 768px) {
-    .logo {
-        bottom: 20px;
-        left: 20px;
-        max-width: 90px;
-    }
-}
-
-@media (max-width: 480px) {
-    .logo {
-        bottom: 15px;
-        left: 15px;
-        max-width: 70px;
-    }
-}
