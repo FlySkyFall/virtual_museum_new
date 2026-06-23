@@ -4,30 +4,41 @@ const path = require('path');
 const mongoose = require('mongoose');
 const session = require('express-session');
 const methodOverride = require('method-override');
+const fs = require('fs');
 require('dotenv').config();
 
 const app = express();
 const PORT = process.env.PORT || 3000;
 
+// Создаём папки для загрузок, если их нет
+const uploadDirs = ['uploads', 'uploads/persons', 'uploads/buttons', 'uploads/artifacts'];
+uploadDirs.forEach(dir => {
+  const fullPath = path.join(__dirname, dir);
+  if (!fs.existsSync(fullPath)) {
+    fs.mkdirSync(fullPath, { recursive: true });
+    console.log(`📁 Создана папка: ${dir}`);
+  }
+});
+
 // Настройка Handlebars
 app.engine('handlebars', engine({
-    layoutsDir: path.join(__dirname, 'views', 'layouts'),
-    defaultLayout: 'main',
-    helpers: {
-        eq: function(a, b) { return a === b; },
-        add: function(a, b) { return a + b; },
-        gt: function(a, b) { return a > b; },
-        lt: function(a, b) { return a < b; },
-        split: function(str, separator) {
-            if (!str) return [];
-            return str.split(separator);
-        },
-        isString: function(str) {
-            return typeof str === 'string' && str.length > 0;
-        }
+  layoutsDir: path.join(__dirname, 'views', 'layouts'),
+  defaultLayout: 'main',
+  helpers: {
+    eq: function(a, b) { return a === b; },
+    add: function(a, b) { return a + b; },
+    gt: function(a, b) { return a > b; },
+    lt: function(a, b) { return a < b; },
+    split: function(str, separator) {
+      if (!str) return [];
+      return str.split(separator);
     },
-    allowProtoPropertiesByDefault: true,
-    allowProtoMethodsByDefault: true
+    isString: function(str) {
+      return typeof str === 'string' && str.length > 0;
+    }
+  },
+  allowProtoPropertiesByDefault: true,
+  allowProtoMethodsByDefault: true
 }));
 app.set('view engine', 'handlebars');
 app.set('views', path.join(__dirname, 'views'));
@@ -35,72 +46,26 @@ app.set('views', path.join(__dirname, 'views'));
 // Middleware
 app.use(methodOverride('_method'));
 app.use(session({
-    secret: process.env.SESSION_SECRET || 'your-secret-key',
-    resave: false,
-    saveUninitialized: false,
-    cookie: { secure: false, maxAge: 3600000 }
+  secret: process.env.SESSION_SECRET || 'your-secret-key',
+  resave: false,
+  saveUninitialized: false,
+  cookie: { secure: false, maxAge: 3600000 }
 }));
 
-// Маршрут для получения файлов из GridFS
-app.get('/uploads/:filename', async (req, res) => {
-    try {
-        const filename = req.params.filename;
-        console.log('📁 Запрос файла из GridFS:', filename);
-        
-        const bucket = new mongoose.mongo.GridFSBucket(mongoose.connection.db, {
-            bucketName: 'uploads'
-        });
-        
-        const downloadStream = bucket.openDownloadStreamByName(filename);
-        
-        downloadStream.on('error', (err) => {
-            console.error('❌ Ошибка при получении файла из GridFS:', err);
-            res.status(404).send('Файл не найден: ' + filename);
-        });
-        
-        // Устанавливаем правильный content-type
-        const ext = path.extname(filename).toLowerCase();
-        const contentTypes = {
-            '.jpg': 'image/jpeg',
-            '.jpeg': 'image/jpeg',
-            '.png': 'image/png',
-            '.gif': 'image/gif',
-            '.webp': 'image/webp',
-            '.svg': 'image/svg+xml'
-        };
-        res.set('Content-Type', contentTypes[ext] || 'application/octet-stream');
-        
-        downloadStream.pipe(res);
-    } catch (error) {
-        console.error('❌ Ошибка при получении файла из GridFS:', error);
-        res.status(404).send('Файл не найден');
-    }
-});
-
-app.get('/debug/gridfs-files', async (req, res) => {
-    try {
-        const bucket = new mongoose.mongo.GridFSBucket(mongoose.connection.db, {
-            bucketName: 'uploads'
-        });
-        const files = await bucket.find({}).toArray();
-        res.json(files.map(f => ({ filename: f.filename, id: f._id, length: f.length })));
-    } catch (error) {
-        res.status(500).json({ error: error.message });
-    }
-});
-
+// Статические файлы
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 app.use('/images', express.static(path.join(__dirname, 'public/images')));
 app.use('/css', express.static(path.join(__dirname, 'public/css')));
 app.use('/js', express.static(path.join(__dirname, 'public/js')));
-app.use(express.static(path.join(__dirname, 'public'))); // общий fallback
+app.use(express.static(path.join(__dirname, 'public')));
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 // Подключение к MongoDB
 mongoose.connect(process.env.MONGODB_URI)
-    .then(() => console.log('✅ MongoDB подключена'))
-    .catch(err => console.error('❌ Ошибка подключения к MongoDB:', err));
+  .then(() => console.log('✅ MongoDB подключена'))
+  .catch(err => console.error('❌ Ошибка подключения к MongoDB:', err));
 
 // Импорт маршрутов
 const indexRoutes = require('./routes/index');
@@ -114,42 +79,32 @@ app.use('/hall', hallRoutes);
 app.use('/hall', warHallRoutes);
 app.use('/admin', adminRoutes);
 
-// Обработка 404 - должна быть после всех маршрутов
+// Обработка 404
 app.use((req, res) => {
-    res.status(404).send(`
-        <!DOCTYPE html>
-        <html>
-        <head>
-            <meta charset="UTF-8">
-            <title>404 - Страница не найдена</title>
-            <style>
-                body {
-                    font-family: Arial, sans-serif;
-                    text-align: center;
-                    padding: 50px;
-                    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-                    color: white;
-                }
-                h1 { font-size: 72px; margin: 0; }
-                a { color: white; text-decoration: none; border: 2px solid white; padding: 10px 20px; border-radius: 25px; display: inline-block; margin-top: 20px; }
-                a:hover { background: white; color: #667eea; }
-            </style>
-        </head>
-        <body>
-            <h1>404</h1>
-            <p>Страница не найдена</p>
-            <a href="/">Вернуться на главную</a>
-        </body>
-        </html>
-    `);
+  res.status(404).send(`
+    <!DOCTYPE html>
+    <html>
+    <head><meta charset="UTF-8"><title>404</title>
+    <style>
+      body { font-family: Arial, sans-serif; text-align: center; padding: 50px;
+             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; }
+      h1 { font-size: 72px; margin: 0; }
+      a { color: white; text-decoration: none; border: 2px solid white; padding: 10px 20px;
+          border-radius: 25px; display: inline-block; margin-top: 20px; }
+      a:hover { background: white; color: #667eea; }
+    </style>
+    </head>
+    <body><h1>404</h1><p>Страница не найдена</p><a href="/">Вернуться на главную</a></body>
+    </html>
+  `);
 });
 
-// Обработка ошибок сервера
+// Обработка ошибок
 app.use((err, req, res, next) => {
-    console.error('Ошибка сервера:', err);
-    res.status(500).send('Внутренняя ошибка сервера');
+  console.error('Ошибка сервера:', err);
+  res.status(500).send('Внутренняя ошибка сервера');
 });
 
 app.listen(PORT, () => {
-    console.log(`✅ Сервер запущен на порту ${PORT}`);
+  console.log(`✅ Сервер запущен на порту ${PORT}`);
 });

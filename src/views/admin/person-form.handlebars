@@ -1,845 +1,352 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{title}}</title>
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-        
-        body {
-            font-family: 'Montserrat', sans-serif;
-            background: #f0f2f5;
-        }
-        
-        .admin-wrapper {
-            display: flex;
-            min-height: 100vh;
-        }
-        
-        .sidebar {
-            width: 280px;
-            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
-            color: white;
-            padding: 30px 0;
-            position: fixed;
-            height: 100vh;
-            overflow-y: auto;
-        }
-        
-        .sidebar-brand {
-            padding: 0 30px 30px;
-            border-bottom: 1px solid rgba(255,255,255,0.1);
-            margin-bottom: 30px;
-        }
-        
-        .sidebar-brand h2 {
-            font-size: 22px;
-            font-weight: 700;
-            margin-bottom: 5px;
-        }
-        
-        .sidebar-brand span {
-            font-size: 12px;
-            opacity: 0.7;
-            display: block;
-        }
-        
-        .sidebar-menu {
-            list-style: none;
-            padding: 0 15px;
-        }
-        
-        .sidebar-menu li {
-            margin-bottom: 5px;
-        }
-        
-        .sidebar-menu a {
-            display: flex;
-            align-items: center;
-            padding: 12px 20px;
-            color: rgba(255,255,255,0.7);
-            text-decoration: none;
-            border-radius: 10px;
-            transition: all 0.3s;
-            gap: 15px;
-        }
-        
-        .sidebar-menu a:hover,
-        .sidebar-menu a.active {
-            background: rgba(255,255,255,0.1);
-            color: white;
-        }
-        
-        .sidebar-menu a i {
-            width: 20px;
-            font-size: 18px;
-        }
-        
-        .sidebar-menu .logout {
-            margin-top: 30px;
-            border-top: 1px solid rgba(255,255,255,0.1);
-            padding-top: 20px;
-        }
-        
-        .sidebar-menu .logout a {
-            color: #ff6b6b;
-        }
-        
-        .sidebar-menu .logout a:hover {
-            background: rgba(255,107,107,0.1);
-        }
-        
-        .main-content {
-            margin-left: 280px;
-            flex: 1;
-            padding: 30px;
-        }
-        
-        .form-container {
-            background: white;
-            border-radius: 15px;
-            padding: 30px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
-        }
-        
-        .form-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 30px;
-        }
-        
-        .form-header h1 {
-            font-size: 28px;
-            color: #1a1a2e;
-        }
-        
-        .form-section {
-            margin-bottom: 35px;
-            padding-bottom: 25px;
-            border-bottom: 2px solid #f0f2f5;
-        }
-        
-        .form-section:last-child {
-            border-bottom: none;
-        }
-        
-        .form-section h2 {
-            font-size: 20px;
-            color: #1a1a2e;
-            margin-bottom: 20px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-        
-        .form-section h2 i {
-            color: #667eea;
-        }
-        
-        .form-row {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 20px;
-            margin-bottom: 20px;
-        }
-        
-        .form-group {
-            display: flex;
-            flex-direction: column;
-        }
-        
-        .form-group label {
-            font-weight: 600;
-            color: #333;
-            margin-bottom: 8px;
-            font-size: 14px;
-        }
-        
-        .form-group label .required {
-            color: #ff6b6b;
-        }
-        
-        .form-group input,
-        .form-group textarea,
-        .form-group select {
-            padding: 10px 15px;
-            border: 2px solid #e8ecf1;
-            border-radius: 10px;
-            font-size: 14px;
-            font-family: 'Montserrat', sans-serif;
-            transition: border-color 0.3s;
-        }
-        
-        .form-group input:focus,
-        .form-group textarea:focus,
-        .form-group select:focus {
-            outline: none;
-            border-color: #667eea;
-        }
-        
-        .form-group textarea {
-            resize: vertical;
-            min-height: 100px;
-        }
-        
-        .form-group .current-image {
-            margin-top: 10px;
-            padding: 10px;
-            background: #f8f9fa;
-            border-radius: 10px;
-            text-align: center;
-        }
-        
-        .form-group .current-image img {
-            max-width: 200px;
-            max-height: 200px;
-            border-radius: 10px;
-        }
-        
-        .form-group input[type="file"] {
-            padding: 10px;
-            border: 2px dashed #e8ecf1;
-            cursor: pointer;
-        }
-        
-        .form-group input[type="file"]:hover {
-            border-color: #667eea;
-        }
-        
-        .artifacts-list {
-            display: grid;
-            gap: 15px;
-        }
-        
-        .artifact-item {
-            background: #f8f9fa;
-            padding: 15px 20px;
-            border-radius: 10px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            transition: all 0.3s;
-        }
-        
-        .artifact-item:hover {
-            background: #e8ecf1;
-        }
-        
-        .artifact-item .artifact-info {
-            flex: 1;
-        }
-        
-        .artifact-item .artifact-info h4 {
-            font-size: 16px;
-            color: #1a1a2e;
-            margin-bottom: 5px;
-        }
-        
-        .artifact-item .artifact-info p {
-            font-size: 13px;
-            color: #666;
-        }
-        
-        .artifact-item .artifact-info .video-link {
-            font-size: 12px;
-            color: #667eea;
-        }
-        
-        .artifact-item .artifact-actions {
-            display: flex;
-            gap: 10px;
-        }
-        
-        .btn-add-artifact {
-            background: #667eea;
-            color: white;
-            padding: 12px 25px;
-            border: none;
-            border-radius: 10px;
-            cursor: pointer;
-            font-weight: 600;
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            transition: all 0.3s;
-        }
-        
-        .btn-add-artifact:hover {
-            background: #5a6fd6;
-            transform: translateY(-2px);
-        }
-        
-        .btn-edit-artifact {
-            background: #fdcb6e;
-            color: #333;
-            padding: 6px 15px;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-            font-weight: 600;
-            font-size: 13px;
-            transition: all 0.3s;
-        }
-        
-        .btn-edit-artifact:hover {
-            background: #f9ca24;
-        }
-        
-        .btn-delete-artifact {
-            background: #ff6b6b;
-            color: white;
-            padding: 6px 15px;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-            font-weight: 600;
-            font-size: 13px;
-            transition: all 0.3s;
-        }
-        
-        .btn-delete-artifact:hover {
-            background: #ee5a24;
-        }
-        
-        .form-actions {
-            display: flex;
-            gap: 15px;
-            justify-content: flex-end;
-            margin-top: 30px;
-        }
-        
-        .btn-save {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            padding: 14px 35px;
-            border: none;
-            border-radius: 10px;
-            cursor: pointer;
-            font-weight: 600;
-            font-size: 16px;
-            transition: all 0.3s;
-        }
-        
-        .btn-save:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 5px 20px rgba(102, 126, 234, 0.4);
-        }
-        
-        .btn-cancel {
-            background: #e8ecf1;
-            color: #333;
-            padding: 14px 35px;
-            border: none;
-            border-radius: 10px;
-            cursor: pointer;
-            font-weight: 600;
-            font-size: 16px;
-            text-decoration: none;
-            display: inline-flex;
-            align-items: center;
-            transition: all 0.3s;
-        }
-        
-        .btn-cancel:hover {
-            background: #d5d9e0;
-        }
-        
-        .modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0,0,0,0.5);
-            z-index: 1000;
-            align-items: center;
-            justify-content: center;
-        }
-        
-        .modal.active {
-            display: flex;
-        }
-        
-        .modal-content {
-            background: white;
-            padding: 30px;
-            border-radius: 20px;
-            max-width: 600px;
-            width: 90%;
-            max-height: 90vh;
-            overflow-y: auto;
-        }
-        
-        .modal-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 25px;
-        }
-        
-        .modal-header h2 {
-            font-size: 24px;
-            color: #1a1a2e;
-        }
-        
-        .modal-close {
-            font-size: 30px;
-            cursor: pointer;
-            color: #999;
-            transition: color 0.3s;
-        }
-        
-        .modal-close:hover {
-            color: #333;
-        }
-        
-        .no-artifacts {
-            text-align: center;
-            padding: 30px;
-            color: #999;
-        }
-        
-        @media (max-width: 768px) {
-            .sidebar {
-                width: 100%;
-                height: auto;
-                position: relative;
-            }
-            
-            .main-content {
-                margin-left: 0;
-            }
-            
-            .form-header {
-                flex-direction: column;
-                gap: 15px;
-                text-align: center;
-            }
-            
-            .form-row {
-                grid-template-columns: 1fr;
-            }
-            
-            .artifact-item {
-                flex-direction: column;
-                gap: 10px;
-                text-align: center;
-            }
-            
-            .form-actions {
-                flex-direction: column;
-            }
-            
-            .form-actions button,
-            .form-actions a {
-                width: 100%;
-                justify-content: center;
-            }
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{{title}}</title>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: 'Montserrat', sans-serif; background: #f0f2f5; }
+    .admin-wrapper { display: flex; min-height: 100vh; }
+    .sidebar {
+      width: 280px;
+      background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+      color: white; padding: 30px 0; position: fixed; height: 100vh; overflow-y: auto;
+    }
+    .sidebar-brand { padding: 0 30px 30px; border-bottom: 1px solid rgba(255,255,255,0.1); margin-bottom: 30px; }
+    .sidebar-brand h2 { font-size: 22px; font-weight: 700; margin-bottom: 5px; }
+    .sidebar-brand span { font-size: 12px; opacity: 0.7; display: block; }
+    .sidebar-menu { list-style: none; padding: 0 15px; }
+    .sidebar-menu li { margin-bottom: 5px; }
+    .sidebar-menu a {
+      display: flex; align-items: center; padding: 12px 20px;
+      color: rgba(255,255,255,0.7); text-decoration: none;
+      border-radius: 10px; transition: all 0.3s; gap: 15px;
+    }
+    .sidebar-menu a:hover, .sidebar-menu a.active { background: rgba(255,255,255,0.1); color: white; }
+    .sidebar-menu a i { width: 20px; font-size: 18px; }
+    .sidebar-menu .logout { margin-top: 30px; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 20px; }
+    .sidebar-menu .logout a { color: #ff6b6b; }
+    .sidebar-menu .logout a:hover { background: rgba(255,107,107,0.1); }
+    .main-content { margin-left: 280px; flex: 1; padding: 30px; }
+    .form-container { background: white; border-radius: 15px; padding: 30px; box-shadow: 0 2px 10px rgba(0,0,0,0.05); }
+    .form-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; }
+    .form-header h1 { font-size: 28px; color: #1a1a2e; }
+    .form-section { margin-bottom: 35px; padding-bottom: 25px; border-bottom: 2px solid #f0f2f5; }
+    .form-section:last-child { border-bottom: none; }
+    .form-section h2 { font-size: 20px; color: #1a1a2e; margin-bottom: 20px; display: flex; align-items: center; gap: 10px; }
+    .form-section h2 i { color: #667eea; }
+    .form-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; margin-bottom: 20px; }
+    .form-group { display: flex; flex-direction: column; }
+    .form-group label { font-weight: 600; color: #333; margin-bottom: 8px; font-size: 14px; }
+    .form-group label .required { color: #ff6b6b; }
+    .form-group input, .form-group textarea, .form-group select {
+      padding: 10px 15px; border: 2px solid #e8ecf1; border-radius: 10px;
+      font-size: 14px; font-family: 'Montserrat', sans-serif; transition: border-color 0.3s;
+    }
+    .form-group input:focus, .form-group textarea:focus, .form-group select:focus {
+      outline: none; border-color: #667eea;
+    }
+    .form-group textarea { resize: vertical; min-height: 100px; }
+    .form-group .current-image { margin-top: 10px; padding: 10px; background: #f8f9fa; border-radius: 10px; text-align: center; }
+    .form-group .current-image img { max-width: 200px; max-height: 200px; border-radius: 10px; }
+    .form-group input[type="file"] { padding: 10px; border: 2px dashed #e8ecf1; cursor: pointer; }
+    .form-group input[type="file"]:hover { border-color: #667eea; }
+    .artifacts-list { display: grid; gap: 15px; }
+    .artifact-item {
+      background: #f8f9fa; padding: 15px 20px; border-radius: 10px;
+      display: flex; justify-content: space-between; align-items: center;
+      transition: all 0.3s;
+    }
+    .artifact-item:hover { background: #e8ecf1; }
+    .artifact-item .artifact-info { flex: 1; }
+    .artifact-item .artifact-info h4 { font-size: 16px; color: #1a1a2e; margin-bottom: 5px; }
+    .artifact-item .artifact-info p { font-size: 13px; color: #666; }
+    .artifact-item .artifact-info .video-link { font-size: 12px; color: #667eea; }
+    .artifact-item .artifact-actions { display: flex; gap: 10px; }
+    .btn-add-artifact {
+      background: #667eea; color: white; padding: 12px 25px; border: none;
+      border-radius: 10px; cursor: pointer; font-weight: 600;
+      display: inline-flex; align-items: center; gap: 8px; transition: all 0.3s;
+    }
+    .btn-add-artifact:hover { background: #5a6fd6; transform: translateY(-2px); }
+    .btn-edit-artifact {
+      background: #fdcb6e; color: #333; padding: 6px 15px; border: none;
+      border-radius: 8px; cursor: pointer; font-weight: 600; font-size: 13px;
+      transition: all 0.3s;
+    }
+    .btn-edit-artifact:hover { background: #f9ca24; }
+    .btn-delete-artifact {
+      background: #ff6b6b; color: white; padding: 6px 15px; border: none;
+      border-radius: 8px; cursor: pointer; font-weight: 600; font-size: 13px;
+      transition: all 0.3s;
+    }
+    .btn-delete-artifact:hover { background: #ee5a24; }
+    .form-actions { display: flex; gap: 15px; justify-content: flex-end; margin-top: 30px; }
+    .btn-save {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white; padding: 14px 35px; border: none; border-radius: 10px;
+      cursor: pointer; font-weight: 600; font-size: 16px; transition: all 0.3s;
+    }
+    .btn-save:hover { transform: translateY(-2px); box-shadow: 0 5px 20px rgba(102,126,234,0.4); }
+    .btn-cancel {
+      background: #e8ecf1; color: #333; padding: 14px 35px; border: none;
+      border-radius: 10px; cursor: pointer; font-weight: 600; font-size: 16px;
+      text-decoration: none; display: inline-flex; align-items: center; transition: all 0.3s;
+    }
+    .btn-cancel:hover { background: #d5d9e0; }
+    .modal {
+      display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(0,0,0,0.5); z-index: 1000; align-items: center; justify-content: center;
+    }
+    .modal.active { display: flex; }
+    .modal-content {
+      background: white; padding: 30px; border-radius: 20px;
+      max-width: 600px; width: 90%; max-height: 90vh; overflow-y: auto;
+    }
+    .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; }
+    .modal-header h2 { font-size: 24px; color: #1a1a2e; }
+    .modal-close { font-size: 30px; cursor: pointer; color: #999; transition: color 0.3s; }
+    .modal-close:hover { color: #333; }
+    .no-artifacts { text-align: center; padding: 30px; color: #999; }
+    @media (max-width: 768px) {
+      .sidebar { width: 100%; height: auto; position: relative; }
+      .main-content { margin-left: 0; }
+      .form-header { flex-direction: column; gap: 15px; text-align: center; }
+      .form-row { grid-template-columns: 1fr; }
+      .artifact-item { flex-direction: column; gap: 10px; text-align: center; }
+      .form-actions { flex-direction: column; }
+      .form-actions button, .form-actions a { width: 100%; justify-content: center; }
+    }
+  </style>
 </head>
 <body>
-    <div class="admin-wrapper">
-        <nav class="sidebar">
-            <div class="sidebar-brand">
-                <h2>📚 Музей</h2>
-                <span>Панель управления</span>
+<div class="admin-wrapper">
+  <nav class="sidebar">
+    <div class="sidebar-brand"><h2>📚 Музей</h2><span>Панель управления</span></div>
+    <ul class="sidebar-menu">
+      <li><a href="/admin"><i class="fas fa-users"></i> Персоналии</a></li>
+      <li><a href="/admin/debug" target="_blank"><i class="fas fa-bug"></i> Отладка</a></li>
+      <li class="logout"><a href="/admin/logout"><i class="fas fa-sign-out-alt"></i> Выйти</a></li>
+    </ul>
+  </nav>
+  <main class="main-content">
+    <div class="form-container">
+      <div class="form-header">
+        <h1>{{title}}</h1>
+        <a href="/admin" class="btn-cancel" style="padding:10px 20px;"><i class="fas fa-arrow-left"></i> Назад</a>
+      </div>
+      <form id="personForm" enctype="multipart/form-data">
+        <input type="hidden" name="personData" id="personData">
+
+        <div class="form-section">
+          <h2><i class="fas fa-user"></i> Основная информация</h2>
+          <div class="form-group"><label>ФИО полностью <span class="required">*</span></label><input type="text" id="fullName" value="{{person.fullName}}" required></div>
+          <div class="form-row">
+            <div class="form-group"><label>Фамилия <span class="required">*</span></label><input type="text" id="lastName" value="{{person.lastName}}" required></div>
+            <div class="form-group"><label>Имя <span class="required">*</span></label><input type="text" id="firstName" value="{{person.firstName}}" required></div>
+            <div class="form-group"><label>Отчество</label><input type="text" id="patronymic" value="{{person.patronymic}}"></div>
+          </div>
+          <div class="form-row">
+            <div class="form-group"><label>Год рождения <span class="required">*</span></label><input type="number" id="birthYear" value="{{person.birthYear}}" required></div>
+            <div class="form-group"><label>Год смерти (если жив - оставить пустым)</label><input type="number" id="deathYear" value="{{person.deathYear}}"></div>
+          </div>
+          <div class="form-row">
+            <div class="form-group"><label>Порядок отображения <span class="required">*</span></label><input type="number" id="order" value="{{person.order}}" required></div>
+            <div class="form-group"><label>Активен</label>
+              <select id="isActive">
+                <option value="true" {{#if person.isActive}}selected{{/if}}>Да</option>
+                <option value="false" {{#unless person.isActive}}selected{{/unless}}>Нет</option>
+              </select>
             </div>
-            <ul class="sidebar-menu">
-                <li><a href="/admin"><i class="fas fa-users"></i> Персоналии</a></li>
-                <li><a href="/admin/debug" target="_blank"><i class="fas fa-bug"></i> Отладка</a></li>
-                <li class="logout"><a href="/admin/logout"><i class="fas fa-sign-out-alt"></i> Выйти</a></li>
-            </ul>
-        </nav>
-        
-        <main class="main-content">
-            <div class="form-container">
-                <div class="form-header">
-                    <h1>{{title}}</h1>
-                    <a href="/admin" class="btn-cancel" style="padding: 10px 20px;">
-                        <i class="fas fa-arrow-left"></i> Назад
-                    </a>
-                </div>
-                
-                <form id="personForm" enctype="multipart/form-data">
-                    <input type="hidden" name="personData" id="personData">
-                    
-                    <!-- Основная информация -->
-                    <div class="form-section">
-                        <h2><i class="fas fa-user"></i> Основная информация</h2>
-                        
-                        <div class="form-group">
-                            <label>ФИО полностью <span class="required">*</span></label>
-                            <input type="text" id="fullName" value="{{person.fullName}}" required>
-                        </div>
-                        
-                        <div class="form-row">
-                            <div class="form-group">
-                                <label>Фамилия <span class="required">*</span></label>
-                                <input type="text" id="lastName" value="{{person.lastName}}" required>
-                            </div>
-                            <div class="form-group">
-                                <label>Имя <span class="required">*</span></label>
-                                <input type="text" id="firstName" value="{{person.firstName}}" required>
-                            </div>
-                            <div class="form-group">
-                                <label>Отчество</label>
-                                <input type="text" id="patronymic" value="{{person.patronymic}}">
-                            </div>
-                        </div>
-                        
-                        <div class="form-row">
-                            <div class="form-group">
-                                <label>Год рождения <span class="required">*</span></label>
-                                <input type="number" id="birthYear" value="{{person.birthYear}}" required>
-                            </div>
-                            <div class="form-group">
-                                <label>Год смерти (если жив - оставить пустым)</label>
-                                <input type="number" id="deathYear" value="{{person.deathYear}}">
-                            </div>
-                        </div>
-                        
-                        <div class="form-row">
-                            <div class="form-group">
-                                <label>Порядок отображения <span class="required">*</span></label>
-                                <input type="number" id="order" value="{{person.order}}" required>
-                            </div>
-                            <div class="form-group">
-                                <label>Активен</label>
-                                <select id="isActive">
-                                    <option value="true" {{#if person.isActive}}selected{{/if}}>Да</option>
-                                    <option value="false" {{#unless person.isActive}}selected{{/unless}}>Нет</option>
-                                </select>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <!-- Изображения -->
-                    <div class="form-section">
-                        <h2><i class="fas fa-image"></i> Изображения</h2>
-                        
-                        <div class="form-row">
-                            <div class="form-group">
-                                <label>Фото человека</label>
-                                {{#if person.photoPath}}
-                                <div class="current-image">
-                                    <img src="{{person.photoPath}}" alt="Фото">
-                                </div>
-                                {{/if}}
-                                <input type="file" name="photo" accept="image/*">
-                            </div>
-                            
-                            <div class="form-group">
-                                <label>Изображение для кнопки (с ФИО)</label>
-                                {{#if person.buttonImagePath}}
-                                <div class="current-image">
-                                    <img src="{{person.buttonImagePath}}" alt="Кнопка">
-                                </div>
-                                {{/if}}
-                                <input type="file" name="buttonImage" accept="image/*">
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <!-- Биография -->
-                    <div class="form-section">
-                        <h2><i class="fas fa-align-left"></i> Биография</h2>
-                        
-                        <div class="form-group">
-                            <label>Краткая биография (для страницы персоналии) <span class="required">*</span></label>
-                            <textarea id="shortBio" rows="3" required>{{person.shortBio}}</textarea>
-                        </div>
-                        
-                        <div class="form-group">
-                            <label>Полная биография (HTML поддерживается) <span class="required">*</span></label>
-                            <textarea id="biography" rows="8" required>{{person.biography}}</textarea>
-                        </div>
-                    </div>
-                    
-                    <!-- Артефакты -->
-                    <div class="form-section">
-                        <h2><i class="fas fa-box"></i> Артефакты</h2>
-                        
-                        <div class="artifacts-list" id="artifactsList">
-                            {{#if person.artifacts.length}}
-                                {{#each person.artifacts}}
-                                <div class="artifact-item" data-id="{{this._id}}">
-                                    <div class="artifact-info">
-                                        <h4>{{this.name}}</h4>
-                                        <p>{{this.description}}</p>
-                                        {{#if this.videoUrl}}
-                                        <div class="video-link">
-                                            <i class="fab fa-youtube"></i> Видео: {{this.videoUrl}}
-                                        </div>
-                                        {{/if}}
-                                    </div>
-                                    <div class="artifact-actions">
-                                        <button type="button" class="btn-edit-artifact" data-id="{{this._id}}">
-                                            <i class="fas fa-edit"></i>
-                                        </button>
-                                        <button type="button" class="btn-delete-artifact" data-id="{{this._id}}">
-                                            <i class="fas fa-trash"></i>
-                                        </button>
-                                    </div>
-                                </div>
-                                {{/each}}
-                            {{else}}
-                                <div class="no-artifacts">
-                                    <p>Нет артефактов</p>
-                                </div>
-                            {{/if}}
-                        </div>
-                        
-                        <button type="button" class="btn-add-artifact" id="addArtifactBtn">
-                            <i class="fas fa-plus"></i> Добавить артефакт
-                        </button>
-                    </div>
-                    
-                    <!-- Кнопки -->
-                    <div class="form-actions">
-                        <a href="/admin" class="btn-cancel">Отмена</a>
-                        <button type="submit" class="btn-save">
-                            <i class="fas fa-save"></i> Сохранить
-                        </button>
-                    </div>
-                </form>
-            </div>
-        </main>
-    </div>
-    
-    <!-- Модальное окно для артефакта -->
-    <div class="modal" id="artifactModal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h2 id="modalTitle">Добавить артефакт</h2>
-                <span class="modal-close" id="modalClose">&times;</span>
-            </div>
-            <form id="artifactForm">
-                <input type="hidden" id="artifactId">
-                
-                <div class="form-group">
-                    <label>Название артефакта <span class="required">*</span></label>
-                    <input type="text" id="artifactName" required>
-                </div>
-                
-                <div class="form-group">
-                    <label>Описание <span class="required">*</span></label>
-                    <textarea id="artifactDescription" rows="3" required></textarea>
-                </div>
-                
-                <div class="form-row">
-                    <div class="form-group">
-                        <label>Год</label>
-                        <input type="number" id="artifactYear">
-                    </div>
-                    <div class="form-group">
-                        <label>Материал</label>
-                        <input type="text" id="artifactMaterial">
-                    </div>
-                </div>
-                
-                <div class="form-group">
-                    <label>Размеры</label>
-                    <input type="text" id="artifactDimensions">
-                </div>
-                
-                <div class="form-group">
-                    <label>Ссылка на видео (YouTube)</label>
-                    <input type="url" id="artifactVideoUrl" placeholder="https://www.youtube.com/watch?v=...">
-                    <small style="color: #666; margin-top: 5px;">Вставьте ссылку на видео с YouTube</small>
-                </div>
-                
-                <div class="form-group">
-                    <label>Изображение артефакта</label>
-                    <input type="file" id="artifactImage" accept="image/*">
-                </div>
-                
-                <button type="submit" class="btn-save" style="width: 100%; margin-top: 20px;">
-                    <i class="fas fa-save"></i> Сохранить артефакт
-                </button>
-            </form>
+          </div>
         </div>
+
+        <div class="form-section">
+          <h2><i class="fas fa-image"></i> Изображения</h2>
+          <div class="form-row">
+            <div class="form-group">
+              <label>Фото человека</label>
+              {{#if person.photoPath}}<div class="current-image"><img src="{{person.photoPath}}" alt="Фото"></div>{{/if}}
+              <input type="file" name="photo" accept="image/*">
+            </div>
+            <div class="form-group">
+              <label>Изображение для кнопки (с ФИО)</label>
+              {{#if person.buttonImagePath}}<div class="current-image"><img src="{{person.buttonImagePath}}" alt="Кнопка"></div>{{/if}}
+              <input type="file" name="buttonImage" accept="image/*">
+            </div>
+          </div>
+        </div>
+
+        <div class="form-section">
+          <h2><i class="fas fa-align-left"></i> Биография</h2>
+          <div class="form-group"><label>Краткая биография (для страницы персоналии) <span class="required">*</span></label><textarea id="shortBio" rows="3" required>{{person.shortBio}}</textarea></div>
+          <div class="form-group"><label>Полная биография (HTML поддерживается) <span class="required">*</span></label><textarea id="biography" rows="8" required>{{person.biography}}</textarea></div>
+        </div>
+
+        <div class="form-section">
+          <h2><i class="fas fa-box"></i> Артефакты</h2>
+          <div class="artifacts-list" id="artifactsList">
+            {{#if person.artifacts.length}}
+              {{#each person.artifacts}}
+              <div class="artifact-item" data-id="{{this._id}}">
+                <div class="artifact-info">
+                  <h4>{{this.name}}</h4>
+                  <p>{{this.description}}</p>
+                  {{#if this.videoUrl}}<div class="video-link"><i class="fab fa-youtube"></i> Видео: {{this.videoUrl}}</div>{{/if}}
+                </div>
+                <div class="artifact-actions">
+                  <button type="button" class="btn-edit-artifact" data-id="{{this._id}}"><i class="fas fa-edit"></i></button>
+                  <button type="button" class="btn-delete-artifact" data-id="{{this._id}}"><i class="fas fa-trash"></i></button>
+                </div>
+              </div>
+              {{/each}}
+            {{else}}
+              <div class="no-artifacts"><p>Нет артефактов</p></div>
+            {{/if}}
+          </div>
+          <button type="button" class="btn-add-artifact" id="addArtifactBtn"><i class="fas fa-plus"></i> Добавить артефакт</button>
+        </div>
+
+        <div class="form-actions">
+          <a href="/admin" class="btn-cancel">Отмена</a>
+          <button type="submit" class="btn-save"><i class="fas fa-save"></i> Сохранить</button>
+        </div>
+      </form>
     </div>
-    
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const form = document.getElementById('personForm');
-            const personId = '{{person._id}}';
-            const modal = document.getElementById('artifactModal');
-            const modalClose = document.getElementById('modalClose');
-            const addArtifactBtn = document.getElementById('addArtifactBtn');
-            const artifactForm = document.getElementById('artifactForm');
-            
-            console.log('=== ФОРМА РЕДАКТИРОВАНИЯ ===');
-            console.log('ID персоналии:', personId);
-            console.log('Имя персоналии:', '{{person.fullName}}');
-            console.log('Количество артефактов:', {{person.artifacts.length}});
-            
-            // Сохранение персоналии
-            form.addEventListener('submit', async function(e) {
-                e.preventDefault();
-                
-                const personData = {
-                    fullName: document.getElementById('fullName').value,
-                    lastName: document.getElementById('lastName').value,
-                    firstName: document.getElementById('firstName').value,
-                    patronymic: document.getElementById('patronymic').value,
-                    birthYear: parseInt(document.getElementById('birthYear').value),
-                    deathYear: document.getElementById('deathYear').value ? parseInt(document.getElementById('deathYear').value) : null,
-                    shortBio: document.getElementById('shortBio').value,
-                    biography: document.getElementById('biography').value,
-                    order: parseInt(document.getElementById('order').value),
-                    isActive: document.getElementById('isActive').value === 'true'
-                };
-                
-                document.getElementById('personData').value = JSON.stringify(personData);
-                
-                const formData = new FormData(form);
-                const method = personId ? 'POST' : 'POST';
-                const url = personId ? `/admin/person/${personId}` : '/admin/person';
-                
-                try {
-                    const response = await fetch(url, {
-                        method: method,
-                        body: formData
-                    });
-                    
-                    if (response.ok || response.redirected) {
-                        window.location.href = '/admin';
-                    } else {
-                        const error = await response.text();
-                        alert('Ошибка при сохранении: ' + error);
-                    }
-                } catch (error) {
-                    alert('Ошибка при сохранении');
-                }
-            });
-            
-            // Открытие модального окна для добавления артефакта
-            addArtifactBtn.addEventListener('click', function() {
-                document.getElementById('modalTitle').textContent = 'Добавить артефакт';
-                document.getElementById('artifactId').value = '';
-                artifactForm.reset();
-                modal.classList.add('active');
-            });
-            
-            // Закрытие модального окна
-            modalClose.addEventListener('click', function() {
-                modal.classList.remove('active');
-            });
-            
-            modal.addEventListener('click', function(e) {
-                if (e.target === modal) {
-                    modal.classList.remove('active');
-                }
-            });
-            
-            // Редактирование артефакта
-            document.querySelectorAll('.btn-edit-artifact').forEach(btn => {
-                btn.addEventListener('click', function() {
-                    const artifactItem = this.closest('.artifact-item');
-                    const artifactId = this.dataset.id;
-                    
-                    // Находим данные артефакта из DOM
-                    const name = artifactItem.querySelector('h4').textContent;
-                    const desc = artifactItem.querySelector('p').textContent;
-                    const videoElement = artifactItem.querySelector('.video-link');
-                    const videoUrl = videoElement ? videoElement.textContent.replace('🎥 Видео: ', '').trim() : '';
-                    
-                    document.getElementById('modalTitle').textContent = 'Редактировать артефакт';
-                    document.getElementById('artifactId').value = artifactId;
-                    document.getElementById('artifactName').value = name;
-                    document.getElementById('artifactDescription').value = desc;
-                    document.getElementById('artifactVideoUrl').value = videoUrl;
-                    document.getElementById('artifactYear').value = '';
-                    document.getElementById('artifactMaterial').value = '';
-                    document.getElementById('artifactDimensions').value = '';
-                    
-                    modal.classList.add('active');
-                });
-            });
-            
-            // Удаление артефакта
-            document.querySelectorAll('.btn-delete-artifact').forEach(btn => {
-                btn.addEventListener('click', async function() {
-                    const artifactId = this.dataset.id;
-                    if (confirm('Удалить этот артефакт?')) {
-                        try {
-                            const response = await fetch(`/admin/person/${personId}/artifact/${artifactId}`, {
-                                method: 'DELETE'
-                            });
-                            
-                            if (response.ok) {
-                                this.closest('.artifact-item').remove();
-                                // Проверяем, остались ли артефакты
-                                const remaining = document.querySelectorAll('.artifact-item');
-                                if (remaining.length === 0) {
-                                    document.getElementById('artifactsList').innerHTML = '<div class="no-artifacts"><p>Нет артефактов</p></div>';
-                                }
-                            } else {
-                                alert('Ошибка при удалении артефакта');
-                            }
-                        } catch (error) {
-                            alert('Ошибка при удалении артефакта');
-                        }
-                    }
-                });
-            });
-            
-            // Сохранение артефакта
-            artifactForm.addEventListener('submit', async function(e) {
-                e.preventDefault();
-                
-                const artifactId = document.getElementById('artifactId').value;
-                const formData = new FormData();
-                
-                const artifactData = {
-                    name: document.getElementById('artifactName').value,
-                    description: document.getElementById('artifactDescription').value,
-                    year: document.getElementById('artifactYear').value ? parseInt(document.getElementById('artifactYear').value) : null,
-                    material: document.getElementById('artifactMaterial').value || null,
-                    dimensions: document.getElementById('artifactDimensions').value || null,
-                    videoUrl: document.getElementById('artifactVideoUrl').value || null
-                };
-                
-                formData.append('artifactData', JSON.stringify(artifactData));
-                
-                const imageFile = document.getElementById('artifactImage').files[0];
-                if (imageFile) {
-                    formData.append('artifactImage', imageFile);
-                }
-                
-                const url = artifactId 
-                    ? `/admin/person/${personId}/artifact/${artifactId}`
-                    : `/admin/person/${personId}/artifact`;
-                
-                const method = artifactId ? 'PUT' : 'POST';
-                
-                try {
-                    const response = await fetch(url, {
-                        method: method,
-                        body: formData
-                    });
-                    
-                    if (response.ok || response.redirected) {
-                        window.location.reload();
-                    } else {
-                        alert('Ошибка при сохранении артефакта');
-                    }
-                } catch (error) {
-                    alert('Ошибка при сохранении артефакта');
-                }
-            });
-        });
-    </script>
+  </main>
+</div>
+
+<!-- Модальное окно для артефакта -->
+<div class="modal" id="artifactModal">
+  <div class="modal-content">
+    <div class="modal-header"><h2 id="modalTitle">Добавить артефакт</h2><span class="modal-close" id="modalClose">&times;</span></div>
+    <form id="artifactForm">
+      <input type="hidden" id="artifactId">
+      <div class="form-group"><label>Название <span class="required">*</span></label><input type="text" id="artifactName" required></div>
+      <div class="form-group"><label>Описание <span class="required">*</span></label><textarea id="artifactDescription" rows="3" required></textarea></div>
+      <div class="form-row">
+        <div class="form-group"><label>Год</label><input type="number" id="artifactYear"></div>
+        <div class="form-group"><label>Материал</label><input type="text" id="artifactMaterial"></div>
+      </div>
+      <div class="form-group"><label>Размеры</label><input type="text" id="artifactDimensions"></div>
+      <div class="form-group"><label>Ссылка на видео (YouTube)</label><input type="url" id="artifactVideoUrl" placeholder="https://www.youtube.com/watch?v=..."><small style="color:#666;margin-top:5px;">Вставьте ссылку на видео с YouTube</small></div>
+      <div class="form-group"><label>Изображение артефакта</label><input type="file" id="artifactImage" accept="image/*"></div>
+      <button type="submit" class="btn-save" style="width:100%;margin-top:20px;"><i class="fas fa-save"></i> Сохранить артефакт</button>
+    </form>
+  </div>
+</div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    const personId = '{{person._id}}';
+    const form = document.getElementById('personForm');
+    const modal = document.getElementById('artifactModal');
+    const modalClose = document.getElementById('modalClose');
+    const addBtn = document.getElementById('addArtifactBtn');
+    const artifactForm = document.getElementById('artifactForm');
+
+    // Сохранение персоналии
+    form.addEventListener('submit', async function(e) {
+      e.preventDefault();
+      const personData = {
+        fullName: document.getElementById('fullName').value,
+        lastName: document.getElementById('lastName').value,
+        firstName: document.getElementById('firstName').value,
+        patronymic: document.getElementById('patronymic').value,
+        birthYear: parseInt(document.getElementById('birthYear').value),
+        deathYear: document.getElementById('deathYear').value ? parseInt(document.getElementById('deathYear').value) : null,
+        shortBio: document.getElementById('shortBio').value,
+        biography: document.getElementById('biography').value,
+        order: parseInt(document.getElementById('order').value),
+        isActive: document.getElementById('isActive').value === 'true'
+      };
+      document.getElementById('personData').value = JSON.stringify(personData);
+
+      const formData = new FormData(form);
+      const url = personId ? `/admin/person/${personId}` : '/admin/person';
+      try {
+        const res = await fetch(url, { method: 'POST', body: formData });
+        if (res.ok || res.redirected) window.location.href = '/admin';
+        else alert('Ошибка сохранения');
+      } catch(e) { alert('Ошибка'); }
+    });
+
+    // Модальное окно: открыть
+    addBtn.addEventListener('click', function() {
+      document.getElementById('modalTitle').textContent = 'Добавить артефакт';
+      document.getElementById('artifactId').value = '';
+      artifactForm.reset();
+      modal.classList.add('active');
+    });
+    modalClose.addEventListener('click', () => modal.classList.remove('active'));
+    modal.addEventListener('click', (e) => { if (e.target === modal) modal.classList.remove('active'); });
+
+    // Редактирование артефакта
+    document.querySelectorAll('.btn-edit-artifact').forEach(btn => {
+      btn.addEventListener('click', function() {
+        const item = this.closest('.artifact-item');
+        const id = this.dataset.id;
+        const name = item.querySelector('h4').textContent;
+        const desc = item.querySelector('p').textContent;
+        const videoEl = item.querySelector('.video-link');
+        const videoUrl = videoEl ? videoEl.textContent.replace('🎥 Видео: ', '').trim() : '';
+        document.getElementById('modalTitle').textContent = 'Редактировать артефакт';
+        document.getElementById('artifactId').value = id;
+        document.getElementById('artifactName').value = name;
+        document.getElementById('artifactDescription').value = desc;
+        document.getElementById('artifactVideoUrl').value = videoUrl;
+        // Очищаем остальные поля (можно заполнить, если есть данные, но в текущей версии мы не храним year/material/dimensions в DOM)
+        document.getElementById('artifactYear').value = '';
+        document.getElementById('artifactMaterial').value = '';
+        document.getElementById('artifactDimensions').value = '';
+        modal.classList.add('active');
+      });
+    });
+
+    // Удаление артефакта
+    document.querySelectorAll('.btn-delete-artifact').forEach(btn => {
+      btn.addEventListener('click', async function() {
+        const id = this.dataset.id;
+        if (!confirm('Удалить артефакт?')) return;
+        try {
+          const res = await fetch(`/admin/person/${personId}/artifact/${id}`, { method: 'DELETE' });
+          if (res.ok) location.reload();
+          else alert('Ошибка удаления');
+        } catch(e) { alert('Ошибка'); }
+      });
+    });
+
+    // Сохранение артефакта (добавление/редактирование)
+    artifactForm.addEventListener('submit', async function(e) {
+      e.preventDefault();
+      const artifactId = document.getElementById('artifactId').value;
+      const formData = new FormData();
+      const artifactData = {
+        name: document.getElementById('artifactName').value,
+        description: document.getElementById('artifactDescription').value,
+        year: document.getElementById('artifactYear').value ? parseInt(document.getElementById('artifactYear').value) : null,
+        material: document.getElementById('artifactMaterial').value || null,
+        dimensions: document.getElementById('artifactDimensions').value || null,
+        videoUrl: document.getElementById('artifactVideoUrl').value || null
+      };
+      formData.append('artifactData', JSON.stringify(artifactData));
+      const imageFile = document.getElementById('artifactImage').files[0];
+      if (imageFile) formData.append('artifactImage', imageFile);
+
+      const url = artifactId
+        ? `/admin/person/${personId}/artifact/${artifactId}`
+        : `/admin/person/${personId}/artifact`;
+      const method = artifactId ? 'PUT' : 'POST';
+      try {
+        const res = await fetch(url, { method, body: formData });
+        if (res.ok || res.redirected) location.reload();
+        else alert('Ошибка сохранения артефакта');
+      } catch(e) { alert('Ошибка'); }
+    });
+  });
+</script>
 </body>
 </html>
