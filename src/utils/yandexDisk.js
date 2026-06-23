@@ -24,7 +24,6 @@ async function createFolder(folderPath) {
       console.log(`📁 Папка уже существует: ${folderPath}`);
       return;
     }
-    // Другие ошибки пробрасываем дальше
     throw error;
   }
 }
@@ -40,9 +39,8 @@ async function uploadAndPublish(fileBuffer, originalName, folder = 'others') {
 
     console.log(`📤 Загрузка на Яндекс.Диск: ${remotePath}`);
 
-    // Создаём корневую папку, если её нет
+    // Создаём корневую и вложенную папки
     await createFolder(`/${baseFolder}`);
-    // Создаём вложенную папку
     await createFolder(`/${baseFolder}/${cleanFolder}`);
 
     // 1. Получаем URL для загрузки
@@ -67,28 +65,32 @@ async function uploadAndPublish(fileBuffer, originalName, folder = 'others') {
 
     console.log(`✅ Файл загружен`);
 
-    // 3. Делаем файл публичным
-    await axios.put(`${YANDEX_DISK_API}/resources/publish`, null, {
+    // 3. Публикуем файл
+    const publishResponse = await axios.put(`${YANDEX_DISK_API}/resources/publish`, null, {
       headers: { Authorization: `OAuth ${token}` },
       params: { path: remotePath }
     });
 
     console.log(`✅ Файл опубликован`);
 
-    // Небольшая пауза для обновления метаданных
-    await new Promise(resolve => setTimeout(resolve, 1000));
+    // 4. Получаем публичную ссылку (страница)
+    const publicUrl = publishResponse.data.href; // например, https://yadi.sk/i/...
+    console.log(`📎 Публичная страница: ${publicUrl}`);
 
-    // 4. Получаем прямую ссылку на файл
-    const metaResponse = await axios.get(`${YANDEX_DISK_API}/resources`, {
-      headers: { Authorization: `OAuth ${token}` },
-      params: { path: remotePath, fields: 'file' }
+    // 5. Получаем прямую ссылку на файл через API публичных ресурсов
+    // Это даёт ссылку, доступную без авторизации
+    const publicResourcesResponse = await axios.get(`${YANDEX_DISK_API}/public/resources`, {
+      params: {
+        public_key: publicUrl
+      }
     });
 
-    const directLink = metaResponse.data.file;
+    const directLink = publicResourcesResponse.data.file;
     if (!directLink) {
       throw new Error('Не удалось получить прямую ссылку на файл');
     }
-    console.log(`✅ Прямая ссылка: ${directLink}`);
+
+    console.log(`✅ Прямая ссылка для img: ${directLink}`);
     return directLink;
   } catch (error) {
     console.error('❌ Ошибка при загрузке на Яндекс.Диск:');
