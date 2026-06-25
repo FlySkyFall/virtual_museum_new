@@ -1,11 +1,13 @@
 <div class="person-page">
-    <!-- Фоновое изображение -->
+    <!-- Фоновое изображение страницы -->
     <div class="person-background"></div>
     
     <!-- Левое верхнее изображение с ФИО поверх -->
     <div class="top-left-image">
         <div class="title-image-wrapper">
-            <img src="/images/literary-hall/person-title.png" alt="Литературное краеведение" class="title-image-bg">
+            <!-- Фоновое изображение через CSS -->
+            <div class="title-image-bg"></div>
+            <!-- Текст поверх -->
             <div class="person-name-overlay">
                 <span class="person-surname">{{person.lastName}}</span>
                 <span class="person-firstname">{{person.firstName}} {{person.patronymic}}</span>
@@ -53,7 +55,7 @@
         font-family: 'Montserrat', sans-serif;
     }
     
-    /* Фоновое изображение */
+    /* Фоновое изображение страницы */
     .person-background {
         position: fixed;
         top: 0;
@@ -73,21 +75,31 @@
         top: 20px;
         left: 20px;
         z-index: 2;
-        max-width: 35%;
+        width: 35%;
+        max-width: 450px;
         min-width: 180px;
     }
     
     .title-image-wrapper {
         position: relative;
-        display: inline-block;
         width: 100%;
+        padding-bottom: 50%; /* Соотношение сторон 2:1 (как у вашего изображения) */
+        overflow: visible;
     }
     
+    /* Фоновое изображение через CSS background - ИСПРАВЛЕНО */
     .title-image-bg {
-        display: block;
+        position: absolute;
+        top: 0;
+        left: 0;
         width: 100%;
-        height: auto;
-        max-width: 400px;
+        height: 100%;
+        background-image: url('/images/literary-hall/person-title.png');
+        background-size: 100% 100%; /* Растягиваем на весь контейнер */
+        background-position: center;
+        background-repeat: no-repeat;
+        border-radius: 0;
+        z-index: 1;
     }
     
     /* Текст с ФИО поверх изображения - ИСПРАВЛЕНО */
@@ -107,6 +119,7 @@
         align-items: baseline;
         justify-content: center;
         width: 85%;
+        z-index: 2;
     }
     
     /* Фамилия - жирным шрифтом и больше */
@@ -245,8 +258,9 @@
         .top-left-image {
             top: 15px;
             left: 15px;
-            max-width: 30%;
+            width: 30%;
             min-width: 150px;
+            max-width: 350px;
         }
         
         .person-content {
@@ -288,8 +302,9 @@
         .top-left-image {
             top: 10px;
             left: 10px;
-            max-width: 35%;
+            width: 35%;
             min-width: 120px;
+            max-width: 250px;
         }
         
         .person-content {
@@ -357,8 +372,9 @@
         .top-left-image {
             top: 8px;
             left: 8px;
-            max-width: 40%;
+            width: 40%;
             min-width: 80px;
+            max-width: 180px;
         }
         
         .short-bio {
@@ -393,8 +409,9 @@
     /* Для очень маленькой высоты экрана */
     @media (max-height: 600px) {
         .top-left-image {
-            max-width: 25%;
+            width: 25%;
             min-width: 100px;
+            max-width: 250px;
             top: 10px;
             left: 10px;
         }
