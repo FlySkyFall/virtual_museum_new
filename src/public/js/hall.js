@@ -1,13 +1,88 @@
 // JavaScript для зала "Литературное краеведение"
 
 document.addEventListener('DOMContentLoaded', () => {
-    // Находим все кнопки персоналий
-    const personButtons = document.querySelectorAll('.person-button');
+    // ПАГИНАЦИЯ
+    const personsContainer = document.getElementById('personsContainer');
+    const prevBtn = document.getElementById('prevPage');
+    const nextBtn = document.getElementById('nextPage');
+    const pageInfo = document.getElementById('pageInfo');
     
-    console.log(`Найдено ${personButtons.length} персоналий в зале "Литературное краеведение"`);
+    let currentPage = 1;
+    const itemsPerPage = 4;
+    let allPersons = [];
     
-    // Добавляем обработчики событий для каждой кнопки
-    personButtons.forEach((button) => {
+    // Функция для загрузки персоналий с сервера
+    async function loadPersons(page = 1) {
+        try {
+            // Показываем индикатор загрузки
+            personsContainer.innerHTML = '<div style="text-align:center;padding:20px;color:white;font-size:24px;">Загрузка...</div>';
+            
+            const response = await fetch('/hall/api/persons');
+            if (!response.ok) throw new Error('Ошибка загрузки данных');
+            
+            allPersons = await response.json();
+            currentPage = page;
+            
+            renderPage(currentPage);
+        } catch (error) {
+            console.error('Ошибка загрузки персоналий:', error);
+            personsContainer.innerHTML = '<div style="text-align:center;padding:20px;color:red;font-size:18px;">Ошибка загрузки данных</div>';
+        }
+    }
+    
+    // Функция для отображения страницы
+    function renderPage(page) {
+        const startIndex = (page - 1) * itemsPerPage;
+        const endIndex = startIndex + itemsPerPage;
+        const pageItems = allPersons.slice(startIndex, endIndex);
+        const totalPages = Math.ceil(allPersons.length / itemsPerPage);
+        
+        // Очищаем контейнер
+        personsContainer.innerHTML = '';
+        
+        // Добавляем кнопки
+        pageItems.forEach((person, index) => {
+            const button = createPersonButton(person, index);
+            personsContainer.appendChild(button);
+        });
+        
+        // Обновляем информацию о странице
+        pageInfo.textContent = `Страница ${page} из ${totalPages || 1}`;
+        
+        // Обновляем состояние кнопок
+        prevBtn.disabled = page <= 1;
+        nextBtn.disabled = page >= totalPages;
+        
+        // Добавляем/удаляем класс disabled для стилей
+        prevBtn.classList.toggle('disabled', page <= 1);
+        nextBtn.classList.toggle('disabled', page >= totalPages);
+        
+        // Сохраняем текущую страницу
+        currentPage = page;
+    }
+    
+    // Функция создания кнопки персоналии
+    function createPersonButton(person, index) {
+        const button = document.createElement('button');
+        button.className = 'person-button';
+        button.dataset.personId = person._id;
+        button.dataset.personName = person.fullName;
+        
+        // Добавляем задержку анимации
+        button.style.animationDelay = `${(index + 1) * 0.1}s`;
+        
+        // Внутренняя структура
+        button.innerHTML = `
+            <div class="person-button-bg" style="background-image: url('${person.buttonImagePath || '/images/default-person.png'}');"></div>
+            <div class="person-info">
+                <div class="person-name">
+                    <span class="person-surname">${person.lastName || ''}</span>
+                    <span class="person-name-rest">${person.firstName || ''} ${person.patronymic || ''}</span>
+                </div>
+            </div>
+        `;
+        
+        // Добавляем обработчик клика
         button.addEventListener('click', async (e) => {
             e.stopPropagation();
             const personId = button.dataset.personId;
@@ -22,9 +97,32 @@ document.addEventListener('DOMContentLoaded', () => {
                 window.location.href = `/hall/person/${personId}`;
             }, 500);
         });
-    });
+        
+        return button;
+    }
     
-    // Остальные функции остаются без изменений...
+    // Обработчики для кнопок пагинации
+    if (prevBtn) {
+        prevBtn.addEventListener('click', () => {
+            if (currentPage > 1) {
+                renderPage(currentPage - 1);
+            }
+        });
+    }
+    
+    if (nextBtn) {
+        nextBtn.addEventListener('click', () => {
+            const totalPages = Math.ceil(allPersons.length / itemsPerPage);
+            if (currentPage < totalPages) {
+                renderPage(currentPage + 1);
+            }
+        });
+    }
+    
+    // Загружаем персоналии
+    loadPersons(1);
+    
+    // Функция создания ripple эффекта
     function createRippleEffect(element, event) {
         const ripple = document.createElement('div');
         const rect = element.getBoundingClientRect();
@@ -52,6 +150,7 @@ document.addEventListener('DOMContentLoaded', () => {
         setTimeout(() => ripple.remove(), 600);
     }
     
+    // Функция добавления эффекта загрузки
     function addLoadingToButton(button) {
         const surnameElement = button.querySelector('.person-surname');
         const nameRestElement = button.querySelector('.person-name-rest');
@@ -73,6 +172,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }, 5000);
     }
     
+    // Функция показа уведомления
     function showNotification(message) {
         const existingNotification = document.querySelector('.hall-notification');
         if (existingNotification) existingNotification.remove();
