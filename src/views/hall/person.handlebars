@@ -75,16 +75,16 @@
         top: 0;
         left: 0;
         z-index: 2;
-        width: 55%;
-        max-width: 650px;
-        min-width: 200px;
+        width: 75%;
+        max-width: 900px;
+        min-width: 250px;
     }
     
     .title-image-wrapper {
         position: relative;
         width: 100%;
         /* Делаем плашку очень вытянутой горизонтально */
-        aspect-ratio: 8 / 1;
+        aspect-ratio: 12 / 1;
         overflow: visible;
     }
     
@@ -119,14 +119,14 @@
         gap: 15px;
         align-items: baseline;
         justify-content: center;
-        width: 90%;
+        width: 92%;
         z-index: 2;
     }
     
     /* Фамилия - жирным шрифтом и больше */
     .person-surname {
         font-weight: 800;
-        font-size: clamp(18px, 2.8vw, 42px);
+        font-size: clamp(18px, 2.8vw, 44px);
         text-transform: uppercase;
         letter-spacing: 1px;
         display: inline-block;
@@ -135,7 +135,7 @@
     /* Имя и отчество - обычным шрифтом */
     .person-firstname {
         font-weight: 400;
-        font-size: clamp(14px, 2vw, 28px);
+        font-size: clamp(14px, 2vw, 30px);
         display: inline-block;
         white-space: nowrap;
     }
@@ -259,9 +259,9 @@
         .top-left-image {
             top: 0;
             left: 0;
-            width: 50%;
-            max-width: 500px;
-            min-width: 160px;
+            width: 70%;
+            max-width: 700px;
+            min-width: 200px;
         }
         
         .person-content {
@@ -290,15 +290,15 @@
         }
         
         .person-surname {
-            font-size: clamp(16px, 2.5vw, 32px);
+            font-size: clamp(16px, 2.5vw, 34px);
         }
         
         .person-firstname {
-            font-size: clamp(12px, 1.8vw, 22px);
+            font-size: clamp(12px, 1.8vw, 24px);
         }
         
         .title-image-wrapper {
-            aspect-ratio: 7 / 1;
+            aspect-ratio: 10 / 1;
         }
     }
     
@@ -307,9 +307,9 @@
         .top-left-image {
             top: 0;
             left: 0;
-            width: 60%;
-            min-width: 130px;
-            max-width: 350px;
+            width: 80%;
+            min-width: 150px;
+            max-width: 500px;
         }
         
         .person-content {
@@ -372,7 +372,7 @@
         }
         
         .title-image-wrapper {
-            aspect-ratio: 6 / 1;
+            aspect-ratio: 8 / 1;
         }
     }
     
@@ -381,9 +381,9 @@
         .top-left-image {
             top: 0;
             left: 0;
-            width: 70%;
-            min-width: 90px;
-            max-width: 240px;
+            width: 90%;
+            min-width: 100px;
+            max-width: 350px;
         }
         
         .short-bio {
@@ -415,16 +415,16 @@
         }
         
         .title-image-wrapper {
-            aspect-ratio: 5 / 1;
+            aspect-ratio: 6 / 1;
         }
     }
     
     /* Для очень маленькой высоты экрана */
     @media (max-height: 600px) {
         .top-left-image {
-            width: 40%;
-            min-width: 140px;
-            max-width: 400px;
+            width: 60%;
+            min-width: 180px;
+            max-width: 600px;
             top: 0;
             left: 0;
         }
@@ -471,7 +471,7 @@
         }
         
         .title-image-wrapper {
-            aspect-ratio: 8 / 1;
+            aspect-ratio: 12 / 1;
         }
     }
 </style>
