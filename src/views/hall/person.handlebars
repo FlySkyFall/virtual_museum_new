@@ -67,15 +67,15 @@
         z-index: 0;
     }
     
-    /* ===== ПЛАШКА - НА ОСНОВЕ СТИЛЕЙ КНОПОК ИЗ HALL.CSS ===== */
+    /* ===== ПЛАШКА - УВЕЛИЧЕННАЯ ДЛИНА ===== */
     .top-left-image {
         position: absolute;
         top: 2%;
         left: 2%;
         z-index: 2;
-        width: 50%; /* Плашка занимает половину ширины экрана */
-        max-width: 800px;
-        min-width: 200px;
+        width: 70%; /* Увеличили с 50% до 70% */
+        max-width: 1000px; /* Увеличили максимальную ширину */
+        min-width: 250px; /* Увеличили минимальную ширину */
         height: auto;
     }
     
@@ -93,15 +93,15 @@
         width: 100%;
         height: auto;
         aspect-ratio: auto;
-        background-size: 100% 100%; /* Растягиваем как в hall.css */
+        background-size: 100% 100%;
         background-position: center;
         background-repeat: no-repeat;
         border-radius: 0;
-        padding-bottom: 25%; /* Соотношение сторон 4:1 под ваше изображение */
+        padding-bottom: 20%; /* Уменьшили с 25% до 20% (плашка стала ниже) */
         transition: transform 0.3s ease;
     }
     
-    /* Текст поверх изображения - как в hall.css */
+    /* Текст поверх изображения - УМЕНЬШЕННЫЙ */
     .person-name-overlay {
         position: absolute;
         top: 50%;
@@ -114,7 +114,7 @@
         pointer-events: none;
         text-align: right;
         display: flex;
-        gap: 15px;
+        gap: 12px; /* Уменьшили gap */
         align-items: baseline;
         justify-content: flex-end;
         z-index: 2;
@@ -123,16 +123,16 @@
     
     .person-surname {
         font-weight: 800;
-        font-size: clamp(16px, 3vw, 42px);
+        font-size: clamp(14px, 2.2vw, 32px); /* Уменьшили размер */
         text-transform: uppercase;
-        letter-spacing: 1px;
+        letter-spacing: 0.5px; /* Уменьшили интервал */
         display: inline-block;
         font-family: 'Comic Sans MS', 'Comic Sans', cursive;
     }
     
     .person-firstname {
         font-weight: 400;
-        font-size: clamp(12px, 2.2vw, 32px);
+        font-size: clamp(10px, 1.6vw, 24px); /* Уменьшили размер */
         display: inline-block;
         white-space: nowrap;
         font-family: 'Comic Sans MS', 'Comic Sans', cursive;
@@ -249,15 +249,15 @@
     
     @media (max-width: 1024px) {
         .top-left-image {
-            width: 55%;
-            max-width: 650px;
-            min-width: 180px;
+            width: 75%; /* Увеличили */
+            max-width: 850px;
+            min-width: 200px;
             top: 2%;
             left: 2%;
         }
         
         .title-image-bg {
-            padding-bottom: 28%;
+            padding-bottom: 22%;
         }
         
         .person-content {
@@ -286,30 +286,30 @@
         }
         
         .person-surname {
-            font-size: clamp(14px, 2.8vw, 34px);
+            font-size: clamp(12px, 2vw, 26px);
         }
         
         .person-firstname {
-            font-size: clamp(11px, 2vw, 26px);
+            font-size: clamp(10px, 1.4vw, 20px);
         }
         
         .person-name-overlay {
             right: 6%;
-            gap: 12px;
+            gap: 10px;
         }
     }
     
     @media (max-width: 768px) {
         .top-left-image {
-            width: 70%;
-            max-width: 450px;
-            min-width: 150px;
+            width: 85%; /* Еще увеличили для мобильных */
+            max-width: 550px;
+            min-width: 180px;
             top: 1.5%;
             left: 1.5%;
         }
         
         .title-image-bg {
-            padding-bottom: 30%;
+            padding-bottom: 25%;
         }
         
         .person-content {
@@ -358,30 +358,30 @@
         }
         
         .person-surname {
-            font-size: clamp(12px, 2.5vw, 20px);
+            font-size: clamp(11px, 2vw, 18px);
         }
         
         .person-firstname {
-            font-size: clamp(10px, 1.8vw, 16px);
+            font-size: clamp(9px, 1.4vw, 14px);
         }
         
         .person-name-overlay {
             right: 5%;
-            gap: 8px;
+            gap: 6px;
         }
     }
     
     @media (max-width: 480px) {
         .top-left-image {
-            width: 80%;
-            max-width: 350px;
-            min-width: 120px;
+            width: 90%; /* Почти на всю ширину для маленьких экранов */
+            max-width: 400px;
+            min-width: 140px;
             top: 1%;
             left: 1%;
         }
         
         .title-image-bg {
-            padding-bottom: 32%;
+            padding-bottom: 28%;
         }
         
         .short-bio {
@@ -400,30 +400,30 @@
         }
         
         .person-surname {
-            font-size: clamp(10px, 2.2vw, 16px);
+            font-size: clamp(10px, 1.8vw, 14px);
         }
         
         .person-firstname {
-            font-size: clamp(8px, 1.6vw, 12px);
+            font-size: clamp(8px, 1.3vw, 11px);
         }
         
         .person-name-overlay {
             right: 4%;
-            gap: 5px;
+            gap: 4px;
         }
     }
     
     @media (max-height: 600px) {
         .top-left-image {
-            width: 45%;
-            max-width: 600px;
-            min-width: 180px;
+            width: 60%;
+            max-width: 700px;
+            min-width: 200px;
             top: 1%;
             left: 1%;
         }
         
         .title-image-bg {
-            padding-bottom: 22%;
+            padding-bottom: 18%;
         }
         
         .person-content {
@@ -460,16 +460,16 @@
         }
         
         .person-surname {
-            font-size: clamp(12px, 2.5vw, 28px);
+            font-size: clamp(11px, 2vw, 22px);
         }
         
         .person-firstname {
-            font-size: clamp(10px, 1.8vw, 20px);
+            font-size: clamp(9px, 1.4vw, 16px);
         }
         
         .person-name-overlay {
             right: 7%;
-            gap: 10px;
+            gap: 8px;
         }
     }
 </style>
