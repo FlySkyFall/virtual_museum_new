@@ -29,8 +29,8 @@
     top: 20px;
     left: 20px;
     z-index: 10;
-    max-width: 400px;
-    height: auto;
+    width: 23%;
+    height: 28%;
     pointer-events: none;
 }
 

@@ -8,7 +8,7 @@ const halls = [
         name: 'Литературное краеведение',
         description: 'Знакомство с писателями и поэтами нашего края',
         route: '/hall/literary-local-history',
-        position: { top: '5%', left: '20%' }, // Левый верхний угол
+        position: { top: '5%', left: '19%' }, // Левый верхний угол
         width: '23%',
         height: '28%'
     },
