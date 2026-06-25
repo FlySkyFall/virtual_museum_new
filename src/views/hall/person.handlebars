@@ -69,22 +69,22 @@
         z-index: 0;
     }
     
-    /* Левое верхнее изображение - ИСПРАВЛЕНО */
+    /* Левое верхнее изображение - УЛУЧШЕНО */
     .top-left-image {
         position: absolute;
         top: 0;
         left: 0;
         z-index: 2;
-        width: 45%;
-        max-width: 550px;
+        width: 55%;
+        max-width: 650px;
         min-width: 200px;
     }
     
     .title-image-wrapper {
         position: relative;
         width: 100%;
-        /* Убираем padding-bottom, используем фиксированное соотношение через aspect-ratio */
-        aspect-ratio: 3.5 / 1;
+        /* Делаем плашку очень вытянутой горизонтально */
+        aspect-ratio: 8 / 1;
         overflow: visible;
     }
     
@@ -116,17 +116,17 @@
         pointer-events: none;
         text-align: center;
         display: flex;
-        gap: 10px;
+        gap: 15px;
         align-items: baseline;
         justify-content: center;
-        width: 85%;
+        width: 90%;
         z-index: 2;
     }
     
     /* Фамилия - жирным шрифтом и больше */
     .person-surname {
         font-weight: 800;
-        font-size: clamp(16px, 2.5vw, 36px);
+        font-size: clamp(18px, 2.8vw, 42px);
         text-transform: uppercase;
         letter-spacing: 1px;
         display: inline-block;
@@ -135,7 +135,7 @@
     /* Имя и отчество - обычным шрифтом */
     .person-firstname {
         font-weight: 400;
-        font-size: clamp(12px, 1.8vw, 24px);
+        font-size: clamp(14px, 2vw, 28px);
         display: inline-block;
         white-space: nowrap;
     }
@@ -259,8 +259,8 @@
         .top-left-image {
             top: 0;
             left: 0;
-            width: 40%;
-            max-width: 450px;
+            width: 50%;
+            max-width: 500px;
             min-width: 160px;
         }
         
@@ -290,15 +290,15 @@
         }
         
         .person-surname {
-            font-size: clamp(14px, 2.2vw, 28px);
+            font-size: clamp(16px, 2.5vw, 32px);
         }
         
         .person-firstname {
-            font-size: clamp(10px, 1.5vw, 20px);
+            font-size: clamp(12px, 1.8vw, 22px);
         }
         
         .title-image-wrapper {
-            aspect-ratio: 3.2 / 1;
+            aspect-ratio: 7 / 1;
         }
     }
     
@@ -307,9 +307,9 @@
         .top-left-image {
             top: 0;
             left: 0;
-            width: 45%;
+            width: 60%;
             min-width: 130px;
-            max-width: 300px;
+            max-width: 350px;
         }
         
         .person-content {
@@ -359,20 +359,20 @@
         }
         
         .person-surname {
-            font-size: clamp(12px, 2vw, 18px);
+            font-size: clamp(14px, 2.2vw, 20px);
         }
         
         .person-firstname {
-            font-size: clamp(10px, 1.5vw, 14px);
+            font-size: clamp(11px, 1.6vw, 15px);
         }
         
         .person-name-overlay {
-            width: 80%;
-            gap: 5px;
+            width: 85%;
+            gap: 8px;
         }
         
         .title-image-wrapper {
-            aspect-ratio: 3 / 1;
+            aspect-ratio: 6 / 1;
         }
     }
     
@@ -381,9 +381,9 @@
         .top-left-image {
             top: 0;
             left: 0;
-            width: 50%;
+            width: 70%;
             min-width: 90px;
-            max-width: 200px;
+            max-width: 240px;
         }
         
         .short-bio {
@@ -402,29 +402,29 @@
         }
         
         .person-surname {
-            font-size: clamp(10px, 1.8vw, 14px);
+            font-size: clamp(12px, 2vw, 16px);
         }
         
         .person-firstname {
-            font-size: clamp(8px, 1.2vw, 11px);
+            font-size: clamp(9px, 1.4vw, 12px);
         }
         
         .person-name-overlay {
-            width: 75%;
-            gap: 3px;
+            width: 80%;
+            gap: 5px;
         }
         
         .title-image-wrapper {
-            aspect-ratio: 2.8 / 1;
+            aspect-ratio: 5 / 1;
         }
     }
     
     /* Для очень маленькой высоты экрана */
     @media (max-height: 600px) {
         .top-left-image {
-            width: 30%;
-            min-width: 120px;
-            max-width: 300px;
+            width: 40%;
+            min-width: 140px;
+            max-width: 400px;
             top: 0;
             left: 0;
         }
@@ -463,15 +463,15 @@
         }
         
         .person-surname {
-            font-size: clamp(10px, 1.8vw, 20px);
+            font-size: clamp(14px, 2.2vw, 24px);
         }
         
         .person-firstname {
-            font-size: clamp(8px, 1.2vw, 14px);
+            font-size: clamp(10px, 1.5vw, 16px);
         }
         
         .title-image-wrapper {
-            aspect-ratio: 3.5 / 1;
+            aspect-ratio: 8 / 1;
         }
     }
 </style>
