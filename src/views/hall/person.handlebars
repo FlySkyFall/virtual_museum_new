@@ -69,22 +69,21 @@
         z-index: 0;
     }
     
-    /* Левое верхнее изображение - УЛУЧШЕНО */
+    /* Левое верхнее изображение - ИСПРАВЛЕНО */
     .top-left-image {
         position: absolute;
         top: 0;
         left: 0;
         z-index: 2;
         width: 85%;
-        max-width: 1000px;
-        min-width: 280px;
+        max-width: 1100px;
+        min-width: 300px;
     }
     
     .title-image-wrapper {
         position: relative;
         width: 100%;
-        /* Делаем плашку очень вытянутой горизонтально */
-        aspect-ratio: 14 / 1;
+        height: 70px; /* Фиксированная высота */
         overflow: visible;
     }
     
@@ -126,7 +125,7 @@
     /* Фамилия - жирным шрифтом и больше */
     .person-surname {
         font-weight: 800;
-        font-size: clamp(20px, 3vw, 48px);
+        font-size: clamp(20px, 2.8vw, 42px);
         text-transform: uppercase;
         letter-spacing: 1px;
         display: inline-block;
@@ -261,7 +260,11 @@
             left: 0;
             width: 80%;
             max-width: 800px;
-            min-width: 220px;
+            min-width: 250px;
+        }
+        
+        .title-image-wrapper {
+            height: 60px;
         }
         
         .person-content {
@@ -290,15 +293,11 @@
         }
         
         .person-surname {
-            font-size: clamp(18px, 2.7vw, 38px);
+            font-size: clamp(18px, 2.5vw, 34px);
         }
         
         .person-firstname {
             font-size: clamp(14px, 1.9vw, 26px);
-        }
-        
-        .title-image-wrapper {
-            aspect-ratio: 12 / 1;
         }
         
         .person-name-overlay {
@@ -312,8 +311,12 @@
             top: 0;
             left: 0;
             width: 90%;
-            min-width: 160px;
+            min-width: 180px;
             max-width: 550px;
+        }
+        
+        .title-image-wrapper {
+            height: 50px;
         }
         
         .person-content {
@@ -363,20 +366,16 @@
         }
         
         .person-surname {
-            font-size: clamp(16px, 2.4vw, 22px);
+            font-size: clamp(16px, 2.2vw, 20px);
         }
         
         .person-firstname {
-            font-size: clamp(12px, 1.8vw, 17px);
+            font-size: clamp(12px, 1.7vw, 16px);
         }
         
         .person-name-overlay {
             width: 88%;
             gap: 10px;
-        }
-        
-        .title-image-wrapper {
-            aspect-ratio: 9 / 1;
         }
     }
     
@@ -386,8 +385,12 @@
             top: 0;
             left: 0;
             width: 95%;
-            min-width: 120px;
+            min-width: 140px;
             max-width: 400px;
+        }
+        
+        .title-image-wrapper {
+            height: 40px;
         }
         
         .short-bio {
@@ -406,31 +409,31 @@
         }
         
         .person-surname {
-            font-size: clamp(14px, 2.2vw, 18px);
+            font-size: clamp(14px, 2vw, 16px);
         }
         
         .person-firstname {
-            font-size: clamp(10px, 1.6vw, 13px);
+            font-size: clamp(10px, 1.5vw, 12px);
         }
         
         .person-name-overlay {
             width: 85%;
             gap: 6px;
         }
-        
-        .title-image-wrapper {
-            aspect-ratio: 7 / 1;
-        }
     }
     
     /* Для очень маленькой высоты экрана */
     @media (max-height: 600px) {
         .top-left-image {
-            width: 70%;
-            min-width: 200px;
+            width: 75%;
+            min-width: 220px;
             max-width: 700px;
             top: 0;
             left: 0;
+        }
+        
+        .title-image-wrapper {
+            height: 55px;
         }
         
         .person-content {
@@ -467,15 +470,11 @@
         }
         
         .person-surname {
-            font-size: clamp(16px, 2.4vw, 28px);
+            font-size: clamp(16px, 2.2vw, 26px);
         }
         
         .person-firstname {
-            font-size: clamp(12px, 1.7vw, 18px);
-        }
-        
-        .title-image-wrapper {
-            aspect-ratio: 14 / 1;
+            font-size: clamp(12px, 1.6vw, 18px);
         }
         
         .person-name-overlay {
