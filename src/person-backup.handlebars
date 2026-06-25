@@ -67,34 +67,32 @@
         z-index: 0;
     }
     
-    /* Левое верхнее изображение - ИСПРАВЛЕНО */
+    
+    /* Левое верхнее изображение - вплотную к углу */
     .top-left-image {
         position: absolute;
-        top: 20px;
-        left: 20px;
+        top: 0;
+        left: 0;
         z-index: 2;
-        max-width: 35%;
-        min-width: 180px;
     }
     
     .title-image-wrapper {
         position: relative;
         display: inline-block;
-        width: 100%;
     }
     
     .title-image-bg {
         display: block;
-        width: 100%;
-        height: auto;
-        max-width: 400px;
+        width: 60%;
+        height: 50%;
     }
     
-    /* Текст с ФИО поверх изображения - ИСПРАВЛЕНО */
+    /* Текст с ФИО поверх изображения - увеличенный размер */
+        /* Текст с ФИО поверх изображения - увеличенный размер */
     .person-name-overlay {
         position: absolute;
         top: 50%;
-        left: 50%;
+        left: 45%;
         transform: translate(-50%, -50%);
         color: black;
         text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
@@ -105,14 +103,12 @@
         display: flex;
         gap: 10px;
         align-items: baseline;
-        justify-content: center;
-        width: 85%;
     }
     
     /* Фамилия - жирным шрифтом и больше */
     .person-surname {
         font-weight: 800;
-        font-size: clamp(16px, 2.5vw, 36px);
+        font-size: 32px;
         text-transform: uppercase;
         letter-spacing: 1px;
         display: inline-block;
@@ -121,9 +117,8 @@
     /* Имя и отчество - обычным шрифтом */
     .person-firstname {
         font-weight: 400;
-        font-size: clamp(12px, 1.8vw, 24px);
+        font-size: 20px;
         display: inline-block;
-        white-space: nowrap;
     }
     
     /* Основной контент */
@@ -147,12 +142,11 @@
         gap: 40px;
         align-items: flex-start;
         transform: translateY(60px);
-        padding-left: 20px;
     }
     
-    /* Краткая биография */
+    /* Краткая биография - просто текст без рамки */
     .short-bio {
-        font-size: clamp(14px, 1.2vw, 20px);
+        font-size: 18px;
         line-height: 1.6;
         color: #2c2c2c;
         text-align: justify;
@@ -160,19 +154,18 @@
         padding: 0;
         font-weight: 500;
         text-shadow: none;
-        max-width: 90%;
     }
     
-    /* Кнопка артефактов */
+    /* Кнопка артефактов (смещена правее) */
     .artifacts-button {
-        width: 65%;
-        max-width: 400px;
+        width: 75%;
+        height: 75%;
         border: none;
         cursor: pointer;
         background: transparent;
         padding: 0;
         transition: transform 0.3s ease;
-        margin-left: 100px;
+        margin-left: 150px;
     }
     
     .artifacts-button-img {
@@ -200,9 +193,10 @@
         margin: 0;
     }
     
+    /* Фото - без рамок и фона */
     .person-photo {
-        width: 100%;
-        max-height: 80vh;
+        width: 110%;
+        height: 110%;
         object-fit: contain;
         background: transparent;
         border: none;
@@ -214,11 +208,12 @@
     /* Кнопка назад в правом нижнем углу */
     .back-button {
         position: fixed;
-        bottom: 30px;
+        padding-top: 20px;
+        bottom: 0px;
         right: 120px;
         z-index: 10;
-        width: 180px;
-        height: auto;
+        width: 200px;
+        height: 200px;
         cursor: pointer;
         transition: transform 0.3s ease;
         display: block;
@@ -226,7 +221,8 @@
     
     .back-button-img {
         width: 100%;
-        height: auto;
+        height: 100%;
+        object-fit: contain;
         display: block;
     }
     
@@ -238,64 +234,52 @@
         transform: scale(0.98);
     }
     
-    /* ============= АДАПТИВНОСТЬ ============= */
-    
-    /* Планшеты */
+    /* Адаптивность для планшетов */
     @media (max-width: 1024px) {
-        .top-left-image {
-            top: 15px;
-            left: 15px;
-            max-width: 30%;
-            min-width: 150px;
-        }
-        
         .person-content {
-            gap: 40px;
-            padding: 0 40px;
+            gap: 50px;
+            padding: 0 50px;
         }
         
         .left-column {
             transform: translateY(40px);
-            gap: 30px;
         }
         
         .short-bio {
-            font-size: clamp(12px, 1.1vw, 16px);
+            font-size: 16px;
         }
         
         .artifacts-button {
-            width: 55%;
-            margin-left: 60px;
+            max-width: 240px;
+            margin-left: 20px;
         }
         
         .back-button {
-            width: 140px;
-            right: 80px;
-            bottom: 25px;
+            width: 80px;
+            height: 80px;
+            right: 100px;
+        }
+        
+        .title-image-bg {
+            max-width: 250px;
+            max-height: 120px;
         }
         
         .person-surname {
-            font-size: clamp(14px, 2.2vw, 28px);
+            font-size: 24px;
         }
         
         .person-firstname {
-            font-size: clamp(10px, 1.5vw, 20px);
+            font-size: 16px;
         }
     }
     
-    /* Мобильные устройства */
+    /* Адаптивность для мобильных устройств */
     @media (max-width: 768px) {
-        .top-left-image {
-            top: 10px;
-            left: 10px;
-            max-width: 35%;
-            min-width: 120px;
-        }
-        
         .person-content {
             flex-direction: column-reverse;
-            gap: 20px;
-            padding: 80px 20px 20px 20px;
+            gap: 30px;
+            padding: 100px 30px 30px 30px;
             justify-content: center;
         }
         
@@ -304,140 +288,78 @@
             align-items: center;
             text-align: center;
             transform: translateY(0);
-            gap: 20px;
-            padding-left: 0;
         }
         
         .short-bio {
             text-align: center;
-            font-size: clamp(12px, 1.8vw, 14px);
-            max-width: 100%;
-            padding: 0 10px;
+            font-size: 14px;
         }
         
         .right-column {
             width: 100%;
-            max-height: 45vh;
         }
         
         .person-photo {
             max-height: 40vh;
-            width: auto;
         }
         
         .artifacts-button {
-            width: 50%;
-            max-width: 280px;
+            max-width: 200px;
             margin-left: 0;
         }
         
         .back-button {
-            width: 100px;
-            height: auto;
-            bottom: 15px;
-            right: 15px;
+            width: 60px;
+            height: 60px;
+            bottom: 20px;
+            right: 20px;
+        }
+        
+        .title-image-bg {
+            max-width: 200px;
+            max-height: 100px;
         }
         
         .person-surname {
-            font-size: clamp(12px, 2vw, 18px);
+            font-size: 18px;
         }
         
         .person-firstname {
-            font-size: clamp(10px, 1.5vw, 14px);
+            font-size: 12px;
         }
         
         .person-name-overlay {
-            width: 80%;
-            gap: 5px;
+            white-space: normal;
+            width: 150px;
         }
     }
     
-    /* Очень маленькие экраны */
+    /* Для очень маленьких экранов */
     @media (max-width: 480px) {
-        .top-left-image {
-            top: 8px;
-            left: 8px;
-            max-width: 40%;
-            min-width: 80px;
-        }
-        
         .short-bio {
-            font-size: clamp(10px, 1.6vw, 12px);
+            font-size: 12px;
         }
         
         .artifacts-button {
-            width: 45%;
-            max-width: 200px;
+            max-width: 160px;
         }
         
         .back-button {
-            width: 70px;
-            bottom: 10px;
-            right: 10px;
+            width: 50px;
+            height: 50px;
+        }
+        
+        .title-image-bg {
+            max-width: 150px;
+            max-height: 80px;
         }
         
         .person-surname {
-            font-size: clamp(10px, 1.8vw, 14px);
+            font-size: 14px;
         }
         
         .person-firstname {
-            font-size: clamp(8px, 1.2vw, 11px);
-        }
-        
-        .person-name-overlay {
-            width: 75%;
-            gap: 3px;
-        }
-    }
-    
-    /* Для очень маленькой высоты экрана */
-    @media (max-height: 600px) {
-        .top-left-image {
-            max-width: 25%;
-            min-width: 100px;
-            top: 10px;
-            left: 10px;
-        }
-        
-        .person-content {
-            padding-top: 60px;
-            gap: 15px;
-        }
-        
-        .left-column {
-            gap: 10px;
-        }
-        
-        .short-bio {
-            font-size: clamp(10px, 1.5vw, 14px);
-        }
-        
-        .artifacts-button {
-            width: 40%;
-            max-width: 200px;
-            margin-left: 0;
-        }
-        
-        .right-column {
-            max-height: 50vh;
-        }
-        
-        .person-photo {
-            max-height: 50vh;
-        }
-        
-        .back-button {
-            width: 80px;
-            bottom: 10px;
-            right: 40px;
-        }
-        
-        .person-surname {
-            font-size: clamp(10px, 1.8vw, 20px);
-        }
-        
-        .person-firstname {
-            font-size: clamp(8px, 1.2vw, 14px);
+            font-size: 10px;
         }
     }
 </style>
