@@ -9,8 +9,8 @@ const halls = [
         description: 'Знакомство с писателями и поэтами нашего края',
         route: '/hall/literary-local-history',
         position: { top: '5%', left: '20%' }, // Левый верхний угол
-        width: '300px',
-        height: '220px'
+        width: '23%',
+        height: '28%'
     },
     {
         id: 2,
@@ -27,8 +27,8 @@ const halls = [
         description: 'Тайны Вселенной и космические приключения',
         route: '/hall/space',
         position: { top: '65%', left: '65%' }, // Правый нижний угол со смещением
-        width: '300px',
-        height: '220px'
+        width: '23%',
+        height: '28%'
     }
 ];
 
