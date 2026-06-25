@@ -69,26 +69,25 @@
         z-index: 0;
     }
     
-    /* Левое верхнее изображение - ИСПРАВЛЕНО */
+    /* ===== ИСПРАВЛЕННАЯ АДАПТИВНАЯ ПЛАШКА ===== */
     .top-left-image {
         position: absolute;
         top: 0;
         left: 0;
         z-index: 2;
-        width: 100%;
-        max-width: 800px;
-        min-width: 250px;
+        width: 50%; /* Плашка занимает половину ширины экрана */
+        max-width: 800px; /* Максимальная ширина */
+        min-width: 200px; /* Минимальная ширина */
     }
     
     .title-image-wrapper {
         position: relative;
         width: 100%;
-        height: 100%; /* Высота в процентах от родительского контейнера */
-        min-height: 50px;
+        padding-bottom: 25%; /* Соотношение сторон 4:1 (ширина:высота) */
         overflow: visible;
     }
     
-    /* Фоновое изображение через CSS background */
+    /* Фоновое изображение - теперь правильно заполняет контейнер */
     .title-image-bg {
         position: absolute;
         top: 0;
@@ -96,45 +95,44 @@
         width: 100%;
         height: 100%;
         background-image: url('/images/literary-hall/person-title.png');
-        background-size: 100% 100%;
+        background-size: cover; /* cover лучше для адаптивности */
         background-position: center;
         background-repeat: no-repeat;
         border-radius: 0;
         z-index: 1;
     }
     
-    /* Текст с ФИО поверх изображения - СМЕЩЕН ВПРАВО */
+    /* Текст с ФИО поверх изображения - адаптивное позиционирование */
     .person-name-overlay {
         position: absolute;
         top: 50%;
-        right: 8%; /* Смещаем вправо */
+        right: 8%;
         transform: translateY(-50%);
         color: black;
         text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
         white-space: nowrap;
         font-family: 'Comic Sans MS', 'Comic Sans', cursive;
         pointer-events: none;
-        text-align: right; /* Выравнивание по правому краю */
+        text-align: right;
         display: flex;
         gap: 15px;
         align-items: baseline;
-        justify-content: flex-end; /* Выравнивание по правому краю */
+        justify-content: flex-end;
         z-index: 2;
+        max-width: 90%; /* Ограничиваем ширину текста */
     }
     
-    /* Фамилия - жирным шрифтом и больше */
     .person-surname {
         font-weight: 800;
-        font-size: clamp(16px, 2.5vw, 38px);
+        font-size: clamp(14px, 3vw, 42px);
         text-transform: uppercase;
         letter-spacing: 1px;
         display: inline-block;
     }
     
-    /* Имя и отчество - обычным шрифтом */
     .person-firstname {
         font-weight: 400;
-        font-size: clamp(12px, 1.8vw, 28px);
+        font-size: clamp(11px, 2.2vw, 32px);
         display: inline-block;
         white-space: nowrap;
     }
@@ -152,7 +150,7 @@
         padding: 0 80px;
     }
     
-    /* Левая колонка - биография и кнопка (смещены ниже) */
+    /* Левая колонка - биография и кнопка */
     .left-column {
         flex: 1;
         display: flex;
@@ -163,7 +161,6 @@
         padding-left: 20px;
     }
     
-    /* Краткая биография */
     .short-bio {
         font-size: clamp(14px, 1.2vw, 20px);
         line-height: 1.6;
@@ -176,7 +173,6 @@
         max-width: 90%;
     }
     
-    /* Кнопка артефактов */
     .artifacts-button {
         width: 65%;
         max-width: 400px;
@@ -202,7 +198,6 @@
         transform: scale(0.98);
     }
     
-    /* Правая колонка - фото человека */
     .right-column {
         flex: 1;
         display: flex;
@@ -224,7 +219,6 @@
         border-radius: 0;
     }
     
-    /* Кнопка назад в правом нижнем углу */
     .back-button {
         position: fixed;
         bottom: 30px;
@@ -256,17 +250,13 @@
     /* Планшеты */
     @media (max-width: 1024px) {
         .top-left-image {
-            top: 0;
-            left: 0;
-            width: 60%;
+            width: 55%;
             max-width: 650px;
-            min-width: 200px;
+            min-width: 180px;
         }
         
         .title-image-wrapper {
-            height: 7%;
-            min-height: 45px;
-            max-height: 75px;
+            padding-bottom: 28%; /* Немного увеличиваем высоту для планшетов */
         }
         
         .person-content {
@@ -295,11 +285,11 @@
         }
         
         .person-surname {
-            font-size: clamp(14px, 2.2vw, 30px);
+            font-size: clamp(14px, 2.8vw, 34px);
         }
         
         .person-firstname {
-            font-size: clamp(11px, 1.6vw, 22px);
+            font-size: clamp(11px, 2vw, 26px);
         }
         
         .person-name-overlay {
@@ -311,17 +301,13 @@
     /* Мобильные устройства */
     @media (max-width: 768px) {
         .top-left-image {
-            top: 0;
-            left: 0;
             width: 70%;
-            min-width: 150px;
             max-width: 450px;
+            min-width: 150px;
         }
         
         .title-image-wrapper {
-            height: 6%;
-            min-height: 40px;
-            max-height: 60px;
+            padding-bottom: 30%; /* Увеличиваем высоту для мобильных */
         }
         
         .person-content {
@@ -371,11 +357,11 @@
         }
         
         .person-surname {
-            font-size: clamp(12px, 2vw, 18px);
+            font-size: clamp(12px, 2.5vw, 20px);
         }
         
         .person-firstname {
-            font-size: clamp(10px, 1.5vw, 14px);
+            font-size: clamp(10px, 1.8vw, 16px);
         }
         
         .person-name-overlay {
@@ -387,17 +373,13 @@
     /* Очень маленькие экраны */
     @media (max-width: 480px) {
         .top-left-image {
-            top: 0;
-            left: 0;
             width: 80%;
-            min-width: 120px;
             max-width: 350px;
+            min-width: 120px;
         }
         
         .title-image-wrapper {
-            height: 5%;
-            min-height: 35px;
-            max-height: 50px;
+            padding-bottom: 32%;
         }
         
         .short-bio {
@@ -416,11 +398,11 @@
         }
         
         .person-surname {
-            font-size: clamp(10px, 1.8vw, 14px);
+            font-size: clamp(10px, 2.2vw, 16px);
         }
         
         .person-firstname {
-            font-size: clamp(8px, 1.3vw, 11px);
+            font-size: clamp(8px, 1.6vw, 12px);
         }
         
         .person-name-overlay {
@@ -432,17 +414,13 @@
     /* Для очень маленькой высоты экрана */
     @media (max-height: 600px) {
         .top-left-image {
-            width: 55%;
-            min-width: 180px;
+            width: 45%;
             max-width: 600px;
-            top: 0;
-            left: 0;
+            min-width: 180px;
         }
         
         .title-image-wrapper {
-            height: 9%;
-            min-height: 45px;
-            max-height: 70px;
+            padding-bottom: 22%;
         }
         
         .person-content {
@@ -479,11 +457,11 @@
         }
         
         .person-surname {
-            font-size: clamp(14px, 2.2vw, 24px);
+            font-size: clamp(12px, 2.5vw, 28px);
         }
         
         .person-firstname {
-            font-size: clamp(10px, 1.5vw, 16px);
+            font-size: clamp(10px, 1.8vw, 20px);
         }
         
         .person-name-overlay {
