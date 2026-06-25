@@ -134,10 +134,11 @@
     display: flex;
     flex-direction: column;
     gap: 20px; /* отступ между кнопками */
-    padding: 0;
+    padding: 20px 0px 10px 0px;
     width: 100%;
     min-height: 0; /* разрешаем сжатие */
     margin-bottom: 10px;
+    overflow: visible;
 }
 
 /* КНОПКА - гибкая высота */
@@ -155,6 +156,8 @@
     transition: none;
     overflow: visible;
     border-radius: 0;
+    opacity: 0;
+    animation: slideInFromLeft 0.6s ease-out forwards;
 }
 
 /* Само изображение кнопки */
@@ -235,27 +238,28 @@
     display: none;
 }
 
-/* Анимация появления */
+/* Анимация появления - исправлена, чтобы не обрезать кнопку */
 @keyframes slideInFromLeft {
     from {
         opacity: 0;
-        transform: translateX(-100%);
+        transform: translateX(-100%) scale(0.95);
     }
     to {
         opacity: 1;
-        transform: translateX(0);
+        transform: translateX(0) scale(1);
     }
 }
+
+/* Задержки анимации */
+.person-button:nth-child(1) { animation-delay: 0.1s; }
+.person-button:nth-child(2) { animation-delay: 0.2s; }
+.person-button:nth-child(3) { animation-delay: 0.3s; }
+.person-button:nth-child(4) { animation-delay: 0.4s; }
 
 .person-button {
     opacity: 0;
     animation: slideInFromLeft 0.6s ease-out forwards;
 }
-
-.person-button:nth-child(1) { animation-delay: 0.1s; }
-.person-button:nth-child(2) { animation-delay: 0.2s; }
-.person-button:nth-child(3) { animation-delay: 0.3s; }
-.person-button:nth-child(4) { animation-delay: 0.4s; }
 
 /* СТИЛИ ДЛЯ ПАГИНАЦИИ */
 .pagination-container {
