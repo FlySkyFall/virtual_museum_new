@@ -18,8 +18,8 @@ const halls = [
         description: 'Знакомство с локальными и мировыми военными конфликтами',
         route: '/hall/war-history',
         position: { top: '6%', left: '69%' }, // Правый верхний угол со смещением
-        width: '25%',
-        height: '30%'
+        width: '23%',
+        height: '28%'
     },
     {
         id: 3,
