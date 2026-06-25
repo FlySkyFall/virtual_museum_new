@@ -5,7 +5,7 @@
     <!-- Левое верхнее изображение с ФИО поверх -->
     <div class="top-left-image">
         <div class="title-image-wrapper">
-            <img src="/images/literary-hall/person-title.png" alt="Заголовок" class="title-image">
+            <div class="title-image-bg" style="background-image: url('/images/literary-hall/person-title.png');"></div>
             <div class="person-name-overlay">
                 <span class="person-surname">{{person.lastName}}</span>
                 <span class="person-firstname">{{person.firstName}} {{person.patronymic}}</span>
@@ -67,33 +67,41 @@
         z-index: 0;
     }
     
-    /* ===== ПЛАШКА - ИСПРАВЛЕНА НА ОСНОВЕ ARTIFACTS.HANDLEBARS ===== */
+    /* ===== ПЛАШКА - НА ОСНОВЕ СТИЛЕЙ КНОПОК ИЗ HALL.CSS ===== */
     .top-left-image {
         position: absolute;
-        top: 0;
-        left: 0;
+        top: 2%;
+        left: 2%;
         z-index: 2;
         width: 50%; /* Плашка занимает половину ширины экрана */
         max-width: 800px;
         min-width: 200px;
+        height: auto;
     }
     
     .title-image-wrapper {
         position: relative;
-        display: inline-block;
-        width: 100%;
-        line-height: 0; /* Убираем лишние отступы */
-    }
-    
-    /* Изображение - полностью видно без обрезания */
-    .title-image {
-        display: block;
         width: 100%;
         height: auto;
+        overflow: visible;
         border-radius: 0;
     }
     
-    /* Текст поверх изображения */
+    /* Фоновое изображение - как у кнопок в hall.css */
+    .title-image-bg {
+        position: relative;
+        width: 100%;
+        height: auto;
+        aspect-ratio: auto;
+        background-size: 100% 100%; /* Растягиваем как в hall.css */
+        background-position: center;
+        background-repeat: no-repeat;
+        border-radius: 0;
+        padding-bottom: 25%; /* Соотношение сторон 4:1 под ваше изображение */
+        transition: transform 0.3s ease;
+    }
+    
+    /* Текст поверх изображения - как в hall.css */
     .person-name-overlay {
         position: absolute;
         top: 50%;
@@ -115,17 +123,19 @@
     
     .person-surname {
         font-weight: 800;
-        font-size: clamp(14px, 3vw, 42px);
+        font-size: clamp(16px, 3vw, 42px);
         text-transform: uppercase;
         letter-spacing: 1px;
         display: inline-block;
+        font-family: 'Comic Sans MS', 'Comic Sans', cursive;
     }
     
     .person-firstname {
         font-weight: 400;
-        font-size: clamp(11px, 2.2vw, 32px);
+        font-size: clamp(12px, 2.2vw, 32px);
         display: inline-block;
         white-space: nowrap;
+        font-family: 'Comic Sans MS', 'Comic Sans', cursive;
     }
     
     /* Основной контент */
@@ -242,6 +252,12 @@
             width: 55%;
             max-width: 650px;
             min-width: 180px;
+            top: 2%;
+            left: 2%;
+        }
+        
+        .title-image-bg {
+            padding-bottom: 28%;
         }
         
         .person-content {
@@ -288,6 +304,12 @@
             width: 70%;
             max-width: 450px;
             min-width: 150px;
+            top: 1.5%;
+            left: 1.5%;
+        }
+        
+        .title-image-bg {
+            padding-bottom: 30%;
         }
         
         .person-content {
@@ -354,6 +376,12 @@
             width: 80%;
             max-width: 350px;
             min-width: 120px;
+            top: 1%;
+            left: 1%;
+        }
+        
+        .title-image-bg {
+            padding-bottom: 32%;
         }
         
         .short-bio {
@@ -390,6 +418,12 @@
             width: 45%;
             max-width: 600px;
             min-width: 180px;
+            top: 1%;
+            left: 1%;
+        }
+        
+        .title-image-bg {
+            padding-bottom: 22%;
         }
         
         .person-content {
