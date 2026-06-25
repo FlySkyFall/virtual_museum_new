@@ -5,9 +5,7 @@
     <!-- Левое верхнее изображение с ФИО поверх -->
     <div class="top-left-image">
         <div class="title-image-wrapper">
-            <!-- Фоновое изображение через CSS -->
-            <div class="title-image-bg"></div>
-            <!-- Текст поверх -->
+            <img src="/images/literary-hall/person-title.png" alt="Заголовок" class="title-image">
             <div class="person-name-overlay">
                 <span class="person-surname">{{person.lastName}}</span>
                 <span class="person-firstname">{{person.firstName}} {{person.patronymic}}</span>
@@ -69,40 +67,33 @@
         z-index: 0;
     }
     
-    /* ===== ИСПРАВЛЕННАЯ АДАПТИВНАЯ ПЛАШКА ===== */
+    /* ===== ПЛАШКА - ИСПРАВЛЕНА НА ОСНОВЕ ARTIFACTS.HANDLEBARS ===== */
     .top-left-image {
         position: absolute;
         top: 0;
         left: 0;
         z-index: 2;
         width: 50%; /* Плашка занимает половину ширины экрана */
-        max-width: 800px; /* Максимальная ширина */
-        min-width: 200px; /* Минимальная ширина */
+        max-width: 800px;
+        min-width: 200px;
     }
     
     .title-image-wrapper {
         position: relative;
+        display: inline-block;
         width: 100%;
-        padding-bottom: 25%; /* Соотношение сторон 4:1 (ширина:высота) */
-        overflow: visible;
+        line-height: 0; /* Убираем лишние отступы */
     }
     
-    /* Фоновое изображение - теперь правильно заполняет контейнер */
-    .title-image-bg {
-        position: absolute;
-        top: 0;
-        left: 0;
+    /* Изображение - полностью видно без обрезания */
+    .title-image {
+        display: block;
         width: 100%;
-        height: 100%;
-        background-image: url('/images/literary-hall/person-title.png');
-        background-size: cover; /* cover лучше для адаптивности */
-        background-position: center;
-        background-repeat: no-repeat;
+        height: auto;
         border-radius: 0;
-        z-index: 1;
     }
     
-    /* Текст с ФИО поверх изображения - адаптивное позиционирование */
+    /* Текст поверх изображения */
     .person-name-overlay {
         position: absolute;
         top: 50%;
@@ -119,7 +110,7 @@
         align-items: baseline;
         justify-content: flex-end;
         z-index: 2;
-        max-width: 90%; /* Ограничиваем ширину текста */
+        max-width: 85%;
     }
     
     .person-surname {
@@ -150,7 +141,6 @@
         padding: 0 80px;
     }
     
-    /* Левая колонка - биография и кнопка */
     .left-column {
         flex: 1;
         display: flex;
@@ -247,16 +237,11 @@
     
     /* ============= АДАПТИВНОСТЬ ============= */
     
-    /* Планшеты */
     @media (max-width: 1024px) {
         .top-left-image {
             width: 55%;
             max-width: 650px;
             min-width: 180px;
-        }
-        
-        .title-image-wrapper {
-            padding-bottom: 28%; /* Немного увеличиваем высоту для планшетов */
         }
         
         .person-content {
@@ -298,16 +283,11 @@
         }
     }
     
-    /* Мобильные устройства */
     @media (max-width: 768px) {
         .top-left-image {
             width: 70%;
             max-width: 450px;
             min-width: 150px;
-        }
-        
-        .title-image-wrapper {
-            padding-bottom: 30%; /* Увеличиваем высоту для мобильных */
         }
         
         .person-content {
@@ -351,7 +331,6 @@
         
         .back-button {
             width: 100px;
-            height: auto;
             bottom: 15px;
             right: 15px;
         }
@@ -370,16 +349,11 @@
         }
     }
     
-    /* Очень маленькие экраны */
     @media (max-width: 480px) {
         .top-left-image {
             width: 80%;
             max-width: 350px;
             min-width: 120px;
-        }
-        
-        .title-image-wrapper {
-            padding-bottom: 32%;
         }
         
         .short-bio {
@@ -411,16 +385,11 @@
         }
     }
     
-    /* Для очень маленькой высоты экрана */
     @media (max-height: 600px) {
         .top-left-image {
             width: 45%;
             max-width: 600px;
             min-width: 180px;
-        }
-        
-        .title-image-wrapper {
-            padding-bottom: 22%;
         }
         
         .person-content {
