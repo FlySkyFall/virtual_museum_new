@@ -6,7 +6,7 @@
     <img class="hall-logo" src="/images/literary-hall/hall-logo.png" alt="Зал литературного краеведения">
     
     <!-- Контейнер с кнопками персоналий -->
-    <div class="persons-container">
+    <div class="persons-container" id="personsContainer">
         {{#each persons}}
         <button class="person-button" data-person-id="{{_id}}" data-person-name="{{fullName}}">
             <div class="person-button-bg" style="background-image: url('{{buttonImagePath}}');"></div>
