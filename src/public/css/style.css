@@ -210,3 +210,47 @@ main {
 .hall-button::-moz-focus-inner {
     border: 0;
 }
+
+/* Добавьте эти стили в конец вашего css/style.css */
+
+/* Адаптивные размеры кнопок в зависимости от размера экрана */
+@media (max-width: 1200px) {
+    .hall-button {
+        width: 18% !important;
+        height: 22% !important;
+    }
+}
+
+@media (max-width: 992px) {
+    .hall-button {
+        width: 16% !important;
+        height: 20% !important;
+    }
+}
+
+@media (max-width: 768px) {
+    .hall-button {
+        width: 15% !important;
+        height: 18% !important;
+    }
+}
+
+@media (max-width: 576px) {
+    .hall-button {
+        width: 12% !important;
+        height: 15% !important;
+    }
+}
+
+/* Убираем фиксированные трансформации для адаптивности */
+@media (max-width: 1024px) {
+    .hall-button {
+        transform: none !important;
+    }
+}
+
+@media (max-width: 768px) {
+    .hall-button {
+        transform: none !important;
+    }
+}
