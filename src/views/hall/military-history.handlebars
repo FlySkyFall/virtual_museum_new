@@ -1,0 +1,16 @@
+<div class="hall-container military-hall">
+    <!-- Фоновое изображение зала -->
+    <div class="hall-background"></div>
+
+    <!-- Логотип зала в левом верхнем углу -->
+    <img class="hall-logo" src="/images/military-hall/hall-logo.png" alt="Зал военно-исторического краеведения">
+    
+    <!-- Контейнер с кнопками войн -->
+    <div class="wars-container" id="warsContainer">
+        {{#each wars}}
+        <button class="war-button" data-war-id="{{_id}}" data-war-name="{{name}}" data-position="{{@index}}">
+            <div class="war-button-bg" style="background-image: url('{{buttonImagePath}}');"></div>
+        </button>
+        {{/each}}
+    </div>
+</div>

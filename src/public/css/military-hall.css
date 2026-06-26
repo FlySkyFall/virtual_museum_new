@@ -1,0 +1,203 @@
+/* Стили для военно-исторического зала */
+
+.military-hall {
+    position: relative;
+    width: 100%;
+    height: 100dvh;
+    overflow: hidden;
+    font-family: 'Montserrat', sans-serif;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Фоновое изображение зала */
+.military-hall .hall-background {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: url('/images/military-hall/hall-background.jpg');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    z-index: 1;
+}
+
+/* Логотип зала */
+.military-hall .hall-logo {
+    position: absolute;
+    top: 2%;
+    left: 2%;
+    z-index: 10;
+    width: 25%;
+    max-width: 400px;
+    min-width: 40px;
+    height: auto;
+    pointer-events: none;
+    transition: width 0.3s ease;
+}
+
+/* Контейнер с кнопками войн */
+.wars-container {
+    position: relative;
+    z-index: 2;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    padding: 20px 0;
+    width: 100%;
+    min-height: 0;
+    overflow: visible;
+}
+
+/* Кнопка войны */
+.war-button {
+    position: relative;
+    left: -15px;
+    width: 85%;
+    flex: 1 1 0;
+    min-height: 0;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    margin: 0;
+    background: none;
+    overflow: visible;
+    border-radius: 0;
+    opacity: 0;
+    animation: slideInFromLeft 0.6s ease-out forwards;
+    z-index: 2;
+}
+
+/* Первая кнопка с отступом */
+.war-button.first-btn {
+    margin-top: 20px;
+}
+
+/* Фоновое изображение кнопки */
+.war-button-bg {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-size: 100% 100%;
+    background-position: center;
+    background-repeat: no-repeat;
+    transition: transform 0.3s ease, filter 0.3s ease;
+    border-radius: 0 30px 30px 0;
+    pointer-events: none;
+    overflow: hidden;
+    max-width: 100%;
+    max-height: 100%;
+}
+
+/* При наведении увеличиваем изображение */
+.war-button:hover .war-button-bg {
+    transform: scale(1.03);
+    filter: brightness(1.1);
+}
+
+/* При клике уменьшаем */
+.war-button:active .war-button-bg {
+    transform: scale(0.97);
+}
+
+/* Анимация появления */
+@keyframes slideInFromLeft {
+    from {
+        opacity: 0;
+        transform: translateX(-100%) scale(0.95);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0) scale(1);
+    }
+}
+
+/* Задержки анимации */
+.war-button:nth-child(1) { animation-delay: 0.1s; }
+.war-button:nth-child(2) { animation-delay: 0.2s; }
+.war-button:nth-child(3) { animation-delay: 0.3s; }
+
+.war-button {
+    opacity: 0;
+    animation: slideInFromLeft 0.6s ease-out forwards;
+}
+
+/* Адаптивность */
+@media (max-width: 1024px) {
+    .wars-container {
+        gap: 12px;
+    }
+    
+    .war-button {
+        width: 90%;
+    }
+}
+
+@media (max-width: 768px) {
+    .wars-container {
+        gap: 10px;
+        padding: 15px 0;
+    }
+    
+    .war-button {
+        width: 95%;
+        left: -5px;
+    }
+    
+    .war-button.first-btn {
+        margin-top: 15px;
+    }
+    
+    .military-hall .hall-logo {
+        width: 20%;
+        max-width: 250px;
+        top: 1.5%;
+        left: 1.5%;
+    }
+}
+
+@media (max-width: 480px) {
+    .wars-container {
+        gap: 8px;
+        padding: 10px 0;
+    }
+    
+    .war-button.first-btn {
+        margin-top: 10px;
+    }
+    
+    .military-hall .hall-logo {
+        width: 15%;
+        max-width: 180px;
+        top: 1%;
+        left: 1%;
+    }
+}
+
+/* Для маленьких экранов по высоте */
+@media (max-height: 700px) {
+    .wars-container {
+        gap: 10px;
+        padding: 10px 0;
+    }
+    
+    .war-button.first-btn {
+        margin-top: 12px;
+    }
+}
+
+@media (max-height: 550px) {
+    .wars-container {
+        gap: 5px;
+        padding: 5px 0;
+    }
+    
+    .war-button.first-btn {
+        margin-top: 8px;
+    }
+}

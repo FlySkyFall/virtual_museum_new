@@ -70,13 +70,13 @@ mongoose.connect(process.env.MONGODB_URI)
 // Импорт маршрутов
 const indexRoutes = require('./routes/index');
 const hallRoutes = require('./routes/hall');
-const warHallRoutes = require('./routes/warHall');
+const militaryHallRoutes = require('./routes/military-hall');
 const adminRoutes = require('./routes/admin');
 
 // Использование маршрутов
 app.use('/', indexRoutes);
 app.use('/hall', hallRoutes);
-app.use('/hall', warHallRoutes);
+app.use('/military-hall', militaryHallRoutes);
 app.use('/admin', adminRoutes);
 
 // Обработка 404
