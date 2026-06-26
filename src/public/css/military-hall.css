@@ -46,7 +46,7 @@
     z-index: 2;
     display: flex;
     flex-direction: column;
-    gap: 15px;
+    gap: 16px;
     width: 85%;
     max-width: 900px; /* Максимальная ширина */
     height: 60vh; /* Занимает 60% высоты экрана */
