@@ -16,7 +16,7 @@ const halls = [
         id: 2,
         name: 'Военно исторический зал',
         description: 'Знакомство с локальными и мировыми военными конфликтами',
-        route: '/hall/war-history',
+        route: '/hall/military-history',
         position: { top: '6%', left: '69%' }, // Правый верхний угол со смещением
         width: '23%',
         height: '28%'

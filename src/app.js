@@ -76,7 +76,7 @@ const adminRoutes = require('./routes/admin');
 // Использование маршрутов
 app.use('/', indexRoutes);
 app.use('/hall', hallRoutes);
-app.use('/military-hall', militaryHallRoutes);
+app.use('/hall', militaryHallRoutes);
 app.use('/admin', adminRoutes);
 
 // Обработка 404
