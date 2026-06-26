@@ -183,7 +183,7 @@
 @media (max-height: 700px) {
     .wars-container {
         gap: 10px;
-        padding: 10px 0;
+        padding: 11px 0;
     }
     
     .war-button.first-btn {
