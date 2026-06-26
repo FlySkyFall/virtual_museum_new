@@ -8,6 +8,8 @@
     font-family: 'Montserrat', sans-serif;
     display: flex;
     flex-direction: column;
+    justify-content: center; /* Центрируем контент по вертикали */
+    align-items: center; /* Центрируем по горизонтали */
 }
 
 /* Фоновое изображение зала */
@@ -38,17 +40,19 @@
     transition: width 0.3s ease;
 }
 
-/* Контейнер с кнопками войн */
+/* Контейнер с кнопками войн - занимает центральную часть экрана */
 .military-wars-container {
     position: relative;
     z-index: 2;
-    flex: 1;
     display: flex;
     flex-direction: column;
     gap: 15px;
-    padding: 20px 0;
-    width: 100%;
-    min-height: 0;
+    width: 85%;
+    max-width: 900px; /* Максимальная ширина */
+    height: 60vh; /* Занимает 60% высоты экрана */
+    max-height: 600px; /* Максимальная высота */
+    min-height: 300px; /* Минимальная высота */
+    padding: 10px 0;
     overflow: visible;
 }
 
@@ -56,8 +60,8 @@
 .military-war-button {
     position: relative;
     left: -15px;
-    width: 85%;
-    flex: 1 1 0;
+    width: 100%;
+    flex: 1 1 0; /* Равномерное распределение */
     min-height: 0;
     border: none;
     cursor: pointer;
@@ -73,7 +77,7 @@
 
 /* Первая кнопка с отступом */
 .military-war-button.first-btn {
-    margin-top: 20px;
+    margin-top: 15px;
 }
 
 /* Фоновое изображение кнопки */
@@ -127,30 +131,33 @@
     animation: militarySlideInFromLeft 0.6s ease-out forwards;
 }
 
-/* Адаптивность */
+/* Адаптивность для планшетов */
 @media (max-width: 1024px) {
     .military-wars-container {
         gap: 12px;
-    }
-    
-    .military-war-button {
+        height: 55vh;
+        max-height: 500px;
         width: 90%;
     }
 }
 
+/* Адаптивность для мобильных устройств */
 @media (max-width: 768px) {
     .military-wars-container {
         gap: 10px;
-        padding: 15px 0;
+        height: 50vh;
+        max-height: 400px;
+        min-height: 250px;
+        width: 95%;
+        padding: 8px 0;
     }
     
     .military-war-button {
-        width: 95%;
-        left: -5px;
+        left: -8px;
     }
     
     .military-war-button.first-btn {
-        margin-top: 15px;
+        margin-top: 10px;
     }
     
     .military-hall-logo {
@@ -164,11 +171,14 @@
 @media (max-width: 480px) {
     .military-wars-container {
         gap: 8px;
-        padding: 10px 0;
+        height: 45vh;
+        max-height: 350px;
+        min-height: 200px;
+        padding: 5px 0;
     }
     
     .military-war-button.first-btn {
-        margin-top: 10px;
+        margin-top: 8px;
     }
     
     .military-hall-logo {
@@ -183,21 +193,36 @@
 @media (max-height: 700px) {
     .military-wars-container {
         gap: 10px;
-        padding: 10px 0;
+        height: 55vh;
+        max-height: 400px;
+        min-height: 200px;
+        padding: 5px 0;
     }
     
     .military-war-button.first-btn {
-        margin-top: 12px;
+        margin-top: 10px;
     }
 }
 
 @media (max-height: 550px) {
     .military-wars-container {
-        gap: 5px;
-        padding: 5px 0;
+        gap: 6px;
+        height: 50vh;
+        max-height: 300px;
+        min-height: 150px;
+        padding: 3px 0;
     }
     
     .military-war-button.first-btn {
-        margin-top: 8px;
+        margin-top: 5px;
+    }
+}
+
+/* Для очень больших экранов */
+@media (min-width: 1440px) {
+    .military-wars-container {
+        max-width: 1100px;
+        max-height: 700px;
+        gap: 20px;
     }
 }
