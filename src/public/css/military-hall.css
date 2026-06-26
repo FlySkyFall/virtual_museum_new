@@ -1,6 +1,6 @@
 /* Стили для военно-исторического зала */
 
-.military-hall {
+.military-hall-container {
     position: relative;
     width: 100%;
     height: 100dvh;
@@ -11,7 +11,7 @@
 }
 
 /* Фоновое изображение зала */
-.military-hall .hall-background {
+.military-hall-background {
     position: fixed;
     top: 0;
     left: 0;
@@ -25,7 +25,7 @@
 }
 
 /* Логотип зала */
-.military-hall .hall-logo {
+.military-hall-logo {
     position: absolute;
     top: 2%;
     left: 2%;
@@ -39,7 +39,7 @@
 }
 
 /* Контейнер с кнопками войн */
-.wars-container {
+.military-wars-container {
     position: relative;
     z-index: 2;
     flex: 1;
@@ -53,7 +53,7 @@
 }
 
 /* Кнопка войны */
-.war-button {
+.military-war-button {
     position: relative;
     left: -15px;
     width: 85%;
@@ -67,17 +67,17 @@
     overflow: visible;
     border-radius: 0;
     opacity: 0;
-    animation: slideInFromLeft 0.6s ease-out forwards;
+    animation: militarySlideInFromLeft 0.6s ease-out forwards;
     z-index: 2;
 }
 
 /* Первая кнопка с отступом */
-.war-button.first-btn {
+.military-war-button.first-btn {
     margin-top: 20px;
 }
 
 /* Фоновое изображение кнопки */
-.war-button-bg {
+.military-war-button-bg {
     position: absolute;
     top: 0;
     left: 0;
@@ -95,18 +95,18 @@
 }
 
 /* При наведении увеличиваем изображение */
-.war-button:hover .war-button-bg {
+.military-war-button:hover .military-war-button-bg {
     transform: scale(1.03);
     filter: brightness(1.1);
 }
 
 /* При клике уменьшаем */
-.war-button:active .war-button-bg {
+.military-war-button:active .military-war-button-bg {
     transform: scale(0.97);
 }
 
 /* Анимация появления */
-@keyframes slideInFromLeft {
+@keyframes militarySlideInFromLeft {
     from {
         opacity: 0;
         transform: translateX(-100%) scale(0.95);
@@ -118,42 +118,42 @@
 }
 
 /* Задержки анимации */
-.war-button:nth-child(1) { animation-delay: 0.1s; }
-.war-button:nth-child(2) { animation-delay: 0.2s; }
-.war-button:nth-child(3) { animation-delay: 0.3s; }
+.military-war-button:nth-child(1) { animation-delay: 0.1s; }
+.military-war-button:nth-child(2) { animation-delay: 0.2s; }
+.military-war-button:nth-child(3) { animation-delay: 0.3s; }
 
-.war-button {
+.military-war-button {
     opacity: 0;
-    animation: slideInFromLeft 0.6s ease-out forwards;
+    animation: militarySlideInFromLeft 0.6s ease-out forwards;
 }
 
 /* Адаптивность */
 @media (max-width: 1024px) {
-    .wars-container {
+    .military-wars-container {
         gap: 12px;
     }
     
-    .war-button {
+    .military-war-button {
         width: 90%;
     }
 }
 
 @media (max-width: 768px) {
-    .wars-container {
+    .military-wars-container {
         gap: 10px;
         padding: 15px 0;
     }
     
-    .war-button {
+    .military-war-button {
         width: 95%;
         left: -5px;
     }
     
-    .war-button.first-btn {
+    .military-war-button.first-btn {
         margin-top: 15px;
     }
     
-    .military-hall .hall-logo {
+    .military-hall-logo {
         width: 20%;
         max-width: 250px;
         top: 1.5%;
@@ -162,16 +162,16 @@
 }
 
 @media (max-width: 480px) {
-    .wars-container {
+    .military-wars-container {
         gap: 8px;
         padding: 10px 0;
     }
     
-    .war-button.first-btn {
+    .military-war-button.first-btn {
         margin-top: 10px;
     }
     
-    .military-hall .hall-logo {
+    .military-hall-logo {
         width: 15%;
         max-width: 180px;
         top: 1%;
@@ -181,23 +181,23 @@
 
 /* Для маленьких экранов по высоте */
 @media (max-height: 700px) {
-    .wars-container {
+    .military-wars-container {
         gap: 10px;
-        padding: 11px 0;
+        padding: 10px 0;
     }
     
-    .war-button.first-btn {
+    .military-war-button.first-btn {
         margin-top: 12px;
     }
 }
 
 @media (max-height: 550px) {
-    .wars-container {
+    .military-wars-container {
         gap: 5px;
         padding: 5px 0;
     }
     
-    .war-button.first-btn {
+    .military-war-button.first-btn {
         margin-top: 8px;
     }
 }
