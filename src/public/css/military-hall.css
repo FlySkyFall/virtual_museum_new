@@ -8,8 +8,8 @@
     font-family: 'Montserrat', sans-serif;
     display: flex;
     flex-direction: column;
-    justify-content: center; /* Центрируем контент по вертикали */
-    align-items: center; /* Центрируем по горизонтали */
+    justify-content: center; /* Центрируем по вертикали */
+    /* Убираем align-items: center - кнопки будут прижаты к левому краю */
 }
 
 /* Фоновое изображение зала */
@@ -40,26 +40,27 @@
     transition: width 0.3s ease;
 }
 
-/* Контейнер с кнопками войн - занимает центральную часть экрана */
+/* Контейнер с кнопками войн - прижат к левому краю */
 .military-wars-container {
     position: relative;
     z-index: 2;
     display: flex;
     flex-direction: column;
-    gap: 16px;
+    gap: 15px;
     width: 85%;
     max-width: 900px; /* Максимальная ширина */
     height: 60vh; /* Занимает 60% высоты экрана */
     max-height: 600px; /* Максимальная высота */
     min-height: 300px; /* Минимальная высота */
     padding: 10px 0;
+    margin-left: 0; /* Прижато к левому краю */
     overflow: visible;
 }
 
 /* Кнопка войны */
 .military-war-button {
     position: relative;
-    left: -15px;
+    left: -15px; /* Сдвигаем влево, чтобы край кнопки совпадал с краем экрана */
     width: 100%;
     flex: 1 1 0; /* Равномерное распределение */
     min-height: 0;
