@@ -46,10 +46,10 @@
     z-index: 2;
     display: flex;
     flex-direction: column;
-    gap: 15px;
+    gap: 25px;
     width: 85%;
     max-width: 900px; /* Максимальная ширина */
-    height: 60vh; /* Занимает 60% высоты экрана */
+    height: 70vh; /* Занимает 60% высоты экрана */
     max-height: 600px; /* Максимальная высота */
     min-height: 300px; /* Минимальная высота */
     padding: 10px 0;
@@ -74,11 +74,6 @@
     opacity: 0;
     animation: militarySlideInFromLeft 0.6s ease-out forwards;
     z-index: 2;
-}
-
-/* Первая кнопка с отступом */
-.military-war-button.first-btn {
-    margin-top: 25px;
 }
 
 /* Фоновое изображение кнопки */
