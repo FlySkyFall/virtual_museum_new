@@ -16,11 +16,10 @@
         font-family: 'Montserrat', sans-serif;
         min-height: 100vh;
         position: relative;
-        background: #0a0a1a;
     }
     
     /* Фоновое изображение */
-    .war-artifacts-background {
+    .artifacts-background {
         position: fixed;
         top: 0;
         left: 0;
@@ -33,7 +32,7 @@
         z-index: 0;
     }
 
-    /* Левое верхнее изображение - плашка с названием войны */
+    /* Левое верхнее изображение - вплотную к углу */
     .top-left-image {
         position: absolute;
         top: 0;
@@ -48,11 +47,8 @@
     
     .title-image-bg {
         display: block;
-        width: auto;
-        height: auto;
-        min-width: 350px;
-        max-width: 600px;
-        min-height: 80px;
+        width: 60%;
+        height: 50%;
     }
     
     /* Основной контент */
@@ -64,7 +60,7 @@
         flex-direction: column;
         align-items: center;
         justify-content: flex-start;
-        padding: 140px 60px 100px 60px;
+        padding: 120px 60px 100px 60px;
     }
     
     /* Контейнер для сетки с центрированием */
@@ -74,72 +70,24 @@
         align-items: center;
         width: 100%;
         flex: 1;
-        padding: 20px 0;
     }
     
-    /* Сетка артефактов - шахматный порядок */
+    /* Сетка артефактов - динамическая */
     .artifacts-grid {
         display: grid;
-        gap: 25px 30px;
+        gap: 20px 25px;
         width: 100%;
         max-width: 1200px;
         margin: 0 auto;
         justify-items: center;
         align-items: center;
-        grid-template-columns: repeat(3, 1fr);
-        grid-auto-rows: auto;
     }
     
-    /* Для 5 элементов - шахматный порядок (3 сверху, 2 снизу) */
-    .artifacts-grid.grid-5 {
-        grid-template-columns: repeat(3, 1fr);
-        grid-template-rows: auto auto;
-    }
-    
-    .artifacts-grid.grid-5 .artifact-card:nth-child(4) {
-        grid-column: 1 / 2;
-        justify-self: center;
-    }
-    
-    .artifacts-grid.grid-5 .artifact-card:nth-child(5) {
-        grid-column: 3 / 4;
-        justify-self: center;
-    }
-    
-    /* Для 4 элементов - 2x2 */
-    .artifacts-grid.grid-4 {
-        grid-template-columns: repeat(2, 1fr);
-        grid-template-rows: auto auto;
-        max-width: 800px;
-    }
-    
-    /* Для 3 элементов - 3 в ряд */
-    .artifacts-grid.grid-3 {
-        grid-template-columns: repeat(3, 1fr);
-        grid-template-rows: auto;
-        max-width: 900px;
-    }
-    
-    /* Для 2 элементов - 2 в ряд */
-    .artifacts-grid.grid-2 {
-        grid-template-columns: repeat(2, 1fr);
-        grid-template-rows: auto;
-        max-width: 600px;
-    }
-    
-    /* Для 1 элемента */
-    .artifacts-grid.grid-1 {
-        grid-template-columns: 1fr;
-        grid-template-rows: auto;
-        max-width: 400px;
-    }
-    
-    /* Карточка артефакта - только изображение без текста */
+    /* Карточка артефакта */
     .artifact-card {
         position: relative;
         width: 100%;
         max-width: 280px;
-        aspect-ratio: 1 / 1;
         margin: 0 auto;
         display: flex;
         align-items: center;
@@ -147,12 +95,11 @@
         border: none;
         cursor: pointer;
         background: transparent;
-        transition: transform 0.3s ease, box-shadow 0.3s ease;
-        border-radius: 15px;
-        overflow: hidden;
+        transition: transform 0.3s ease;
+        border-radius: 0;
+        overflow: visible;
+        box-shadow: none;
         outline: none;
-        box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
-        padding: 0;
     }
     
     .artifact-card:focus {
@@ -163,82 +110,49 @@
         border: 0;
     }
     
-    .artifact-card:hover {
-        transform: scale(1.05);
-        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
-        z-index: 5;
-    }
-    
-    .artifact-card:active {
-        transform: scale(0.97);
-    }
-    
     .artifact-image {
         width: 100%;
-        height: 100%;
-        background-size: cover;
+        height: auto;
+        background-size: contain;
         background-position: center;
         background-repeat: no-repeat;
-        border-radius: 15px;
+        border-radius: 0;
+        box-shadow: none;
+        border: none;
+        aspect-ratio: 1 / 1;
         transition: transform 0.3s ease;
     }
     
-    /* Иконка воспроизведения */
-    .play-icon {
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        width: 50px;
-        height: 50px;
-        background: rgba(255, 0, 0, 0.8);
-        border-radius: 50%;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        z-index: 2;
-        transition: transform 0.3s ease, background 0.3s ease;
-        pointer-events: none;
-        opacity: 0;
+    .artifact-card:hover {
+        transform: scale(1.05);
     }
     
-    .artifact-card:hover .play-icon {
-        opacity: 1;
-        transform: translate(-50%, -50%) scale(1.1);
-        background: rgba(255, 0, 0, 0.9);
-    }
-    
-    .play-icon svg {
-        width: 24px;
-        height: 24px;
-        fill: white;
-        margin-left: 3px;
+    .artifact-card:active {
+        transform: scale(0.98);
     }
     
     /* Навигационные кнопки */
     .nav-button {
         position: fixed;
-        bottom: 30px;
+        bottom: 20px;
         z-index: 10;
         width: 70px;
         height: 70px;
         cursor: pointer;
-        transition: transform 0.3s ease, opacity 0.3s ease;
+        transition: transform 0.3s ease;
         border: none;
         background: transparent;
         padding: 0;
         border-radius: 0;
         outline: none;
-        opacity: 0.9;
     }
     
     .nav-button:hover {
         transform: scale(1.05);
-        opacity: 1;
     }
     
     .nav-button:active {
-        transform: scale(0.95);
+        transform: scale(0.98);
     }
     
     .nav-button-img {
@@ -258,207 +172,80 @@
         right: 30px;
     }
     
-    /* Номер страницы */
+    /* Номер страницы - скрыт */
     .page-info {
-        position: fixed;
-        bottom: 45px;
-        left: 50%;
-        transform: translateX(-50%);
-        z-index: 10;
-        background: rgba(0, 0, 0, 0.7);
-        color: white;
-        padding: 8px 25px;
-        border-radius: 25px;
-        font-size: 14px;
-        font-weight: 600;
-        backdrop-filter: blur(10px);
-        border: 1px solid rgba(255, 255, 255, 0.1);
-        font-family: 'Montserrat', sans-serif;
+        display: none;
     }
     
     /* Сообщение если нет артефактов */
     .no-artifacts {
         text-align: center;
         padding: 60px;
-        background: rgba(0, 0, 0, 0.7);
+        background: rgba(255, 255, 255, 0.9);
         border-radius: 20px;
         max-width: 500px;
         margin: 0 auto;
-        backdrop-filter: blur(10px);
-        border: 1px solid rgba(255, 255, 255, 0.1);
     }
     
     .no-artifacts p {
         font-size: 18px;
-        color: #ccc;
+        color: #666;
         margin-bottom: 20px;
     }
     
     /* Адаптивность для планшетов */
     @media (max-width: 1024px) {
         .artifacts-content {
-            padding: 120px 40px 80px 40px;
+            padding: 100px 40px 80px 40px;
         }
         .artifacts-grid {
-            gap: 20px 25px;
+            gap: 15px 20px;
         }
-        .artifact-card {
-            max-width: 250px;
+        .artifact-image {
+            width: 90%;
         }
         .nav-button {
             width: 60px;
             height: 60px;
         }
-        .play-icon {
-            width: 40px;
-            height: 40px;
-        }
-        .play-icon svg {
-            width: 20px;
-            height: 20px;
-        }
-        .title-image-bg {
-            min-width: 280px;
-            max-width: 450px;
-            min-height: 70px;
-        }
     }
     
     @media (max-width: 768px) {
         .artifacts-content {
-            padding: 100px 20px 80px 20px;
+            padding: 80px 20px 80px 20px;
         }
         .artifacts-grid {
             gap: 15px 15px;
         }
-        .artifact-card {
-            max-width: 200px;
+        .artifact-image {
+            width: 90%;
         }
         .nav-button {
             width: 50px;
             height: 50px;
             bottom: 20px;
         }
-        .page-info {
-            bottom: 35px;
-            font-size: 12px;
-            padding: 6px 15px;
-        }
-        .title-image-bg {
-            min-width: 220px;
-            max-width: 350px;
-            min-height: 60px;
-        }
-        .play-icon {
-            width: 35px;
-            height: 35px;
-        }
-        .play-icon svg {
-            width: 18px;
-            height: 18px;
-        }
-        
-        /* Адаптация шахматного порядка для мобильных */
-        .artifacts-grid.grid-5 {
-            grid-template-columns: repeat(2, 1fr);
-            grid-template-rows: auto auto auto;
-        }
-        
-        .artifacts-grid.grid-5 .artifact-card:nth-child(1) {
-            grid-column: 1 / 3;
-            max-width: 300px;
-        }
-        
-        .artifacts-grid.grid-5 .artifact-card:nth-child(2) {
-            grid-column: 1 / 2;
-        }
-        
-        .artifacts-grid.grid-5 .artifact-card:nth-child(3) {
-            grid-column: 2 / 3;
-        }
-        
-        .artifacts-grid.grid-5 .artifact-card:nth-child(4) {
-            grid-column: 1 / 2;
-        }
-        
-        .artifacts-grid.grid-5 .artifact-card:nth-child(5) {
-            grid-column: 2 / 3;
-        }
     }
     
     @media (max-width: 480px) {
         .artifacts-content {
-            padding: 80px 10px 70px 10px;
+            padding: 70px 15px 70px 15px;
         }
         .artifacts-grid {
-            gap: 12px;
-        }
-        .artifact-card {
-            max-width: 160px;
-            border-radius: 10px;
+            gap: 15px;
         }
         .artifact-image {
-            border-radius: 10px;
+            width: 80%;
         }
         .nav-button {
             width: 40px;
             height: 40px;
-            bottom: 15px;
-        }
-        .back-button {
-            left: 15px;
-        }
-        .next-button {
-            right: 15px;
-        }
-        .page-info {
-            bottom: 25px;
-            font-size: 10px;
-            padding: 4px 12px;
-        }
-        .title-image-bg {
-            min-width: 160px;
-            max-width: 250px;
-            min-height: 50px;
-        }
-        .play-icon {
-            width: 30px;
-            height: 30px;
-        }
-        .play-icon svg {
-            width: 16px;
-            height: 16px;
-        }
-        
-        .artifacts-grid.grid-5 {
-            grid-template-columns: repeat(2, 1fr);
-            gap: 10px;
-        }
-        
-        .artifacts-grid.grid-5 .artifact-card:nth-child(1) {
-            grid-column: 1 / 3;
-            max-width: 250px;
-        }
-        
-        .artifacts-grid.grid-4 {
-            grid-template-columns: repeat(2, 1fr);
-            max-width: 350px;
-        }
-        
-        .artifacts-grid.grid-3 {
-            grid-template-columns: repeat(2, 1fr);
-            max-width: 350px;
-        }
-        
-        .artifacts-grid.grid-3 .artifact-card:last-child {
-            grid-column: 1 / 3;
-            max-width: 250px;
         }
     }
 </style>
 </head>
 <body>
-    <div class="war-artifacts-background"></div>
+    <div class="artifacts-background"></div>
 
     <!-- Левое верхнее изображение - плашка с названием войны -->
     <div class="top-left-image">
@@ -473,14 +260,8 @@
         <div class="artifacts-grid-container">
             <div class="artifacts-grid" id="artifactsGrid">
                 {{#each artifacts}}
-                <button class="artifact-card" data-artifact-index="{{@index}}" data-artifact-name="{{name}}" data-video-id="{{rutubeVideoId}}">
-                    <div class="artifact-image" style="background-image: url('{{imagePath}}');">
-                        <div class="play-icon">
-                            <svg viewBox="0 0 24 24">
-                                <path d="M8 5v14l11-7z"/>
-                            </svg>
-                        </div>
-                    </div>
+                <button class="artifact-card" data-artifact-index="{{@index}}" data-artifact-name="{{name}}">
+                    <div class="artifact-image" style="background-image: url('{{imagePath}}');"></div>
                 </button>
                 {{/each}}
             </div>
@@ -506,9 +287,6 @@
     </button>
     {{/if}}
     
-    <!-- Информация о странице -->
-    <div class="page-info">Страница {{currentPage}} из {{totalPages}}</div>
-    
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             // Обработчики для карточек артефактов
@@ -516,9 +294,6 @@
             const warId = '{{war._id}}';
             const currentPage = parseInt('{{currentPage}}');
             const totalPages = parseInt('{{totalPages}}');
-            
-            console.log('Текущая страница:', currentPage);
-            console.log('Всего страниц:', totalPages);
             
             artifactCards.forEach((card) => {
                 card.addEventListener('click', function() {
@@ -558,24 +333,79 @@
                 if (count === 0) return;
                 
                 // Удаляем предыдущие классы
-                grid.classList.remove('grid-1', 'grid-2', 'grid-3', 'grid-4', 'grid-5');
+                grid.classList.remove('grid-1', 'grid-2', 'grid-3', 'grid-4', 'grid-5', 'grid-6');
                 
-                // Добавляем класс в зависимости от количества
-                if (count <= 1) {
+                // Базовая настройка - по умолчанию 3 колонки
+                let cols = 3;
+                let rows = 2;
+                let cardMaxWidth = 280;
+                
+                // Настройка в зависимости от количества карточек
+                if (count === 1) {
+                    cols = 1;
+                    rows = 1;
+                    cardMaxWidth = 500;
                     grid.classList.add('grid-1');
                 } else if (count === 2) {
+                    cols = 2;
+                    rows = 1;
+                    cardMaxWidth = 400;
                     grid.classList.add('grid-2');
                 } else if (count === 3) {
+                    cols = 3;
+                    rows = 1;
+                    cardMaxWidth = 350;
                     grid.classList.add('grid-3');
                 } else if (count === 4) {
+                    cols = 2;
+                    rows = 2;
+                    cardMaxWidth = 300;
                     grid.classList.add('grid-4');
-                } else if (count >= 5) {
+                } else if (count === 5) {
+                    cols = 3;
+                    rows = 2;
+                    cardMaxWidth = 280;
                     grid.classList.add('grid-5');
+                } else if (count === 6) {
+                    cols = 3;
+                    rows = 2;
+                    cardMaxWidth = 280;
+                    grid.classList.add('grid-6');
+                }
+                
+                // Применяем настройки сетки
+                grid.style.gridTemplateColumns = `repeat(${cols}, 1fr)`;
+                grid.style.gridTemplateRows = `repeat(${rows}, auto)`;
+                
+                // Для 5 карточек делаем шахматный порядок (3 сверху, 2 снизу)
+                if (count === 5) {
+                    grid.style.gridAutoFlow = 'row';
+                }
+                
+                // Устанавливаем максимальную ширину карточек
+                cards.forEach(card => {
+                    card.style.maxWidth = cardMaxWidth + 'px';
+                });
+                
+                // Для 4 карточек центрируем по 2 в ряду
+                if (count === 4) {
+                    grid.style.justifyItems = 'center';
+                }
+                
+                // Для 5 карточек делаем 3 сверху, 2 снизу с центрированием
+                if (count === 5) {
+                    const existingPlaceholder = grid.querySelector('.grid-placeholder');
+                    if (!existingPlaceholder) {
+                        const placeholder = document.createElement('div');
+                        placeholder.className = 'grid-placeholder';
+                        placeholder.style.display = 'none';
+                        grid.appendChild(placeholder);
+                    }
                 }
             }
             
             // Вызываем функцию настройки после загрузки
-            setTimeout(setupGridLayout, 100);
+            setupGridLayout();
             
             // Добавляем обработчик изменения размера окна для адаптивности
             let resizeTimeout;
