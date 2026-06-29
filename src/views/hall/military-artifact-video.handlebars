@@ -14,219 +14,350 @@
         
         body {
             font-family: 'Montserrat', sans-serif;
-            min-height: 100vh;
-            background: #0a0a1a;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 20px;
-        }
-        
-        .video-container {
-            width: 100%;
-            max-width: 1000px;
-            background: rgba(255, 255, 255, 0.05);
-            border-radius: 20px;
-            padding: 30px;
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-        }
-        
-        .video-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 20px;
-        }
-        
-        .video-header h2 {
-            color: white;
-            font-size: 24px;
-            font-weight: 600;
-        }
-        
-        .back-btn {
-            background: rgba(255, 255, 255, 0.1);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            color: white;
-            padding: 10px 25px;
-            border-radius: 10px;
-            cursor: pointer;
-            font-family: 'Montserrat', sans-serif;
-            font-size: 14px;
-            font-weight: 600;
-            transition: all 0.3s ease;
-        }
-        
-        .back-btn:hover {
-            background: rgba(255, 255, 255, 0.2);
-            transform: translateX(-5px);
-        }
-        
-        .video-wrapper {
-            position: relative;
-            width: 100%;
-            padding-top: 56.25%;
-            background: #000;
-            border-radius: 15px;
+            height: 100vh;
             overflow: hidden;
+            position: relative;
         }
         
-        .video-wrapper iframe {
-            position: absolute;
+        /* Фоновое изображение для военного зала */
+        .video-background {
+            position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            border: none;
+            background-image: url('/images/military-hall/video-background.jpg');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            z-index: 0;
         }
         
-        .artifact-info {
-            margin-top: 20px;
-            color: white;
-        }
-        
-        .artifact-info h3 {
-            font-size: 20px;
-            margin-bottom: 10px;
-        }
-        
-        .artifact-info p {
-            color: rgba(255, 255, 255, 0.7);
-            font-size: 14px;
-            line-height: 1.6;
-        }
-        
-        .navigation {
+        /* Основной контент */
+        .video-content {
+            position: relative;
+            z-index: 2;
+            height: 100vh;
             display: flex;
-            justify-content: space-between;
-            margin-top: 20px;
-            gap: 15px;
+            align-items: center;
+            justify-content: center;
+            padding: 40px 80px;
+        }
+
+        /* Левое верхнее изображение - плашка с названием войны */
+        .top-left-image {
+            position: absolute;
+            top: 0;
+            left: 0;
+            z-index: 2;
         }
         
-        .nav-btn {
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            color: white;
-            padding: 12px 25px;
-            border-radius: 10px;
+        .title-image-wrapper {
+            position: relative;
+            display: inline-block;
+        }
+        
+        .title-image-bg {
+            display: block;
+            width: 60%;
+            height: 50%;
+        }
+        
+        /* Левая половина - кнопки */
+        .left-buttons {
+            flex: 0.8;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            justify-content: center;
+            gap: 40px;
+        }
+        
+        /* Стили для кнопок */
+        .nav-button {
+            width: 200px;
+            height: auto;
             cursor: pointer;
-            font-family: 'Montserrat', sans-serif;
+            transition: transform 0.3s ease;
+            border: none;
+            background: transparent;
+            padding: 0;
+            margin-left: 100px;
+        }
+        
+        .nav-button:hover {
+            transform: scale(1.05);
+        }
+        
+        .nav-button:active {
+            transform: scale(0.98);
+        }
+        
+        .nav-button-img {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+        
+        /* Правая половина - видео в рамке */
+        .right-video {
+            flex: 1.2;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-left: -40px;
+        }
+        
+        /* Контейнер для рамки и видео */
+        .frame-container {
+            position: relative;
+            width: 100%;
+            max-width: 950px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        /* Изображение-рамка */
+        .frame-image {
+            display: block;
+            width: 80%;
+            height: auto;
+            object-fit: contain;
+        }
+        
+        /* Видео контейнер - поверх рамки */
+        .video-overlay {
+            position: absolute;
+            top: 47%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 60%;
+            height: 81%;
+            background: #000;
+            overflow: hidden;
+        }
+        
+        /* Rutube видео элемент */
+        .video-element {
+            width: 100%;
+            height: 100%;
+            border: none;
+            background: #000;
+        }
+        
+        /* Заглушка если нет видео */
+        .video-placeholder {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
+            color: white;
+            text-align: center;
+        }
+        
+        .video-placeholder .icon {
+            font-size: 48px;
+            margin-bottom: 15px;
+        }
+        
+        .video-placeholder p {
+            font-size: 16px;
+            margin-bottom: 5px;
+        }
+        
+        .video-placeholder small {
+            font-size: 12px;
+            opacity: 0.8;
+        }
+        
+        /* Название артефакта в правом нижнем углу */
+        .artifact-name {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            z-index: 10;
+            background: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(5px);
+            color: white;
+            padding: 8px 16px;
+            border-radius: 20px;
             font-size: 14px;
-            font-weight: 600;
-            transition: all 0.3s ease;
-            flex: 1;
+            font-weight: 500;
         }
         
-        .nav-btn:hover:not(:disabled) {
-            background: rgba(255, 255, 255, 0.1);
-            transform: scale(1.02);
+        /* Адаптивность для планшетов */
+        @media (max-width: 1024px) {
+            .video-content {
+                padding: 40px 50px;
+            }
+            
+            .left-buttons {
+                flex: 0.7;
+                gap: 30px;
+            }
+            
+            .nav-button {
+                width: 220px;
+            }
+            
+            .right-video {
+                flex: 1.3;
+                margin-left: -20px;
+            }
+            
+            .frame-container {
+                max-width: 750px;
+            }
+            
+            .video-overlay {
+                width: 75%;
+                height: 75%;
+            }
         }
         
-        .nav-btn:disabled {
-            opacity: 0.3;
-            cursor: not-allowed;
-        }
-        
+        /* Адаптивность для мобильных устройств */
         @media (max-width: 768px) {
-            .video-container {
-                padding: 15px;
+            .video-content {
+                flex-direction: column;
+                justify-content: center;
+                gap: 40px;
+                padding: 60px 30px;
             }
             
-            .video-header h2 {
-                font-size: 18px;
+            .left-buttons {
+                flex: none;
+                flex-direction: row;
+                justify-content: center;
+                gap: 20px;
+                width: 100%;
             }
             
-            .back-btn {
-                padding: 8px 15px;
+            .nav-button {
+                width: 160px;
+                margin-left: 0;
+            }
+            
+            .right-video {
+                flex: none;
+                width: 100%;
+                margin-left: 0;
+            }
+            
+            .frame-container {
+                max-width: 600px;
+                margin: 0 auto;
+            }
+            
+            .video-overlay {
+                width: 72%;
+                height: 72%;
+            }
+            
+            .artifact-name {
+                bottom: 20px;
+                right: 20px;
+                font-size: 12px;
+                padding: 6px 12px;
+            }
+        }
+        
+        /* Адаптивность для маленьких телефонов */
+        @media (max-width: 480px) {
+            .left-buttons {
+                gap: 15px;
+            }
+            
+            .nav-button {
+                width: 130px;
+            }
+            
+            .frame-container {
+                max-width: 400px;
+            }
+            
+            .video-overlay {
+                width: 70%;
+                height: 70%;
+            }
+            
+            .video-placeholder .icon {
+                font-size: 36px;
+            }
+            
+            .video-placeholder p {
                 font-size: 12px;
             }
             
-            .artifact-info h3 {
-                font-size: 16px;
-            }
-            
-            .nav-btn {
-                padding: 10px 15px;
-                font-size: 12px;
+            .artifact-name {
+                font-size: 10px;
+                padding: 4px 10px;
             }
         }
     </style>
 </head>
 <body>
-    <div class="video-container">
-        <div class="video-header">
-            <h2>{{artifact.name}}</h2>
-            <button class="back-btn" onclick="window.close()">← Назад</button>
-        </div>
-        
-        <div class="video-wrapper">
-            <iframe 
-                src="https://rutube.ru/embed/{{artifact.rutubeVideoId}}?autoplay=1"
-                frameborder="0"
-                allow="autoplay; encrypted-media; fullscreen; picture-in-picture"
-                allowfullscreen
-                loading="lazy">
-            </iframe>
-        </div>
-        
-        <div class="artifact-info">
-            <h3>{{artifact.name}}</h3>
-            {{#if artifact.description}}
-            <p>{{artifact.description}}</p>
-            {{/if}}
-        </div>
-        
-        <div class="navigation">
-            {{#if (gt artifactIndex 0)}}
-            <button class="nav-btn" id="prevArtifact">← Предыдущий</button>
-            {{else}}
-            <button class="nav-btn" disabled>← Предыдущий</button>
-            {{/if}}
-            
-            {{#if (lt artifactIndex (subtract totalArtifacts 1))}}
-            <button class="nav-btn" id="nextArtifact">Следующий →</button>
-            {{else}}
-            <button class="nav-btn" disabled>Следующий →</button>
-            {{/if}}
+    <div class="video-background"></div>
+
+    <!-- Левое верхнее изображение - плашка с названием войны -->
+    <div class="top-left-image">
+        <div class="title-image-wrapper">
+            <img src="{{war.titleImagePath}}" alt="{{war.name}}" class="title-image-bg">
         </div>
     </div>
     
+    <div class="video-content">
+        <!-- Левая половина - две кнопки -->
+        <div class="left-buttons">
+            <!-- Кнопка "Вернуться на главную" -->
+            <a href="/" class="nav-button">
+                <img src="/images/back-to-main-button.png" alt="Вернуться на главную" class="nav-button-img">
+            </a>
+            
+            <!-- Кнопка "Вернуться к артефактам" -->
+            <a href="/hall/military-history/war/{{war._id}}?page={{#if currentPage}}{{currentPage}}{{else}}1{{/if}}" class="nav-button">
+                <img src="/images/back-to-artifacts-button.png" alt="Вернуться к артефактам" class="nav-button-img">
+            </a>
+        </div>
+        
+        <!-- Правая половина - видео в рамке -->
+        <div class="right-video">
+            <div class="frame-container">
+                <!-- Изображение-рамка -->
+                <img src="/images/video-frame.png" alt="Рамка плеера" class="frame-image">
+                
+                <!-- Видео поверх рамки -->
+                <div class="video-overlay">
+                    {{#if artifact.rutubeVideoId}}
+                    <iframe 
+                        class="video-element" 
+                        src="https://rutube.ru/embed/{{artifact.rutubeVideoId}}/?autoplay=1"
+                        allow="autoplay; encrypted-media; fullscreen"
+                        allowfullscreen>
+                    </iframe>
+                    {{else}}
+                    <div class="video-placeholder">
+                        <div class="icon">🎬</div>
+                        <p>Видео будет добавлено позже</p>
+                        <small>{{artifact.name}}</small>
+                    </div>
+                    {{/if}}
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Название артефакта -->
+    <div class="artifact-name">{{artifact.name}}</div>
+    
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const warId = '{{warId}}';
-            const currentIndex = {{artifactIndex}};
-            const total = {{totalArtifacts}};
-            
-            // Кнопка "Предыдущий"
-            const prevBtn = document.getElementById('prevArtifact');
-            if (prevBtn) {
-                prevBtn.addEventListener('click', function() {
-                    const newIndex = currentIndex - 1;
-                    window.location.href = `/hall/military-history/war/${warId}/artifact/${newIndex}`;
-                });
-            }
-            
-            // Кнопка "Следующий"
-            const nextBtn = document.getElementById('nextArtifact');
-            if (nextBtn) {
-                nextBtn.addEventListener('click', function() {
-                    const newIndex = currentIndex + 1;
-                    window.location.href = `/hall/military-history/war/${warId}/artifact/${newIndex}`;
-                });
-            }
-            
-            // Обработка клавиш
-            document.addEventListener('keydown', function(e) {
-                if (e.key === 'ArrowLeft' && prevBtn && !prevBtn.disabled) {
-                    prevBtn.click();
-                } else if (e.key === 'ArrowRight' && nextBtn && !nextBtn.disabled) {
-                    nextBtn.click();
-                } else if (e.key === 'Escape') {
-                    window.close();
-                }
-            });
-        });
+        // Переменные для навигации (если понадобятся)
+        const warId = '{{war._id}}';
+        const artifactIndex = {{artifactIndex}};
+        const currentPage = {{#if currentPage}}{{currentPage}}{{else}}1{{/if}};
     </script>
 </body>
 </html>
