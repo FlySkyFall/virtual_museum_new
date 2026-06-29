@@ -48,10 +48,11 @@
     
     .title-image-bg {
         display: block;
-        width: 50%;
+        width: auto;
         height: auto;
-        min-width: 200px;
-        max-width: 400px;
+        min-width: 350px;
+        max-width: 600px;
+        min-height: 80px;
     }
     
     /* Основной контент */
@@ -63,7 +64,7 @@
         flex-direction: column;
         align-items: center;
         justify-content: flex-start;
-        padding: 120px 60px 100px 60px;
+        padding: 140px 60px 100px 60px;
     }
     
     /* Контейнер для сетки с центрированием */
@@ -296,7 +297,7 @@
     /* Адаптивность для планшетов */
     @media (max-width: 1024px) {
         .artifacts-content {
-            padding: 100px 40px 80px 40px;
+            padding: 120px 40px 80px 40px;
         }
         .artifacts-grid {
             gap: 20px 25px;
@@ -316,11 +317,16 @@
             width: 20px;
             height: 20px;
         }
+        .title-image-bg {
+            min-width: 280px;
+            max-width: 450px;
+            min-height: 70px;
+        }
     }
     
     @media (max-width: 768px) {
         .artifacts-content {
-            padding: 80px 20px 80px 20px;
+            padding: 100px 20px 80px 20px;
         }
         .artifacts-grid {
             gap: 15px 15px;
@@ -339,8 +345,9 @@
             padding: 6px 15px;
         }
         .title-image-bg {
-            min-width: 150px;
-            max-width: 300px;
+            min-width: 220px;
+            max-width: 350px;
+            min-height: 60px;
         }
         .play-icon {
             width: 35px;
@@ -381,7 +388,7 @@
     
     @media (max-width: 480px) {
         .artifacts-content {
-            padding: 60px 10px 70px 10px;
+            padding: 80px 10px 70px 10px;
         }
         .artifacts-grid {
             gap: 12px;
@@ -410,8 +417,9 @@
             padding: 4px 12px;
         }
         .title-image-bg {
-            min-width: 120px;
-            max-width: 200px;
+            min-width: 160px;
+            max-width: 250px;
+            min-height: 50px;
         }
         .play-icon {
             width: 30px;
@@ -445,17 +453,6 @@
         .artifacts-grid.grid-3 .artifact-card:last-child {
             grid-column: 1 / 3;
             max-width: 250px;
-        }
-    }
-    
-    /* Для очень маленьких экранов */
-    @media (max-width: 360px) {
-        .artifact-card {
-            max-width: 130px;
-        }
-        .title-image-bg {
-            min-width: 100px;
-            max-width: 150px;
         }
     }
 </style>
@@ -517,16 +514,17 @@
             // Обработчики для карточек артефактов
             const artifactCards = document.querySelectorAll('.artifact-card');
             const warId = '{{war._id}}';
-            const currentPage = {{currentPage}};
-            const totalPages = {{totalPages}};
+            const currentPage = parseInt('{{currentPage}}');
+            const totalPages = parseInt('{{totalPages}}');
+            
+            console.log('Текущая страница:', currentPage);
+            console.log('Всего страниц:', totalPages);
             
             artifactCards.forEach((card) => {
                 card.addEventListener('click', function() {
                     const artifactIndex = card.dataset.artifactIndex;
                     const artifactName = card.dataset.artifactName;
                     console.log(`Переход к видео артефакта: ${artifactName} (индекс: ${artifactIndex})`);
-                    
-                    // Открываем страницу с видео артефакта
                     window.location.href = `/hall/military-history/war/${warId}/artifact/${artifactIndex}`;
                 });
             });
@@ -573,18 +571,6 @@
                     grid.classList.add('grid-4');
                 } else if (count >= 5) {
                     grid.classList.add('grid-5');
-                }
-                
-                // Для 5+ элементов используем шахматный порядок
-                if (count >= 5) {
-                    const itemsToShow = Math.min(count, 5);
-                    cards.forEach((card, idx) => {
-                        if (idx >= 5) {
-                            card.style.display = 'none';
-                        } else {
-                            card.style.display = 'flex';
-                        }
-                    });
                 }
             }
             

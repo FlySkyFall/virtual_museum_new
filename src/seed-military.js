@@ -8,14 +8,14 @@ const militaryData = {
             nameKey: 'wow',
             order: 1,
             isActive: true,
-            buttonImagePath: '/images/military-hall/wow-button-bg.jpg',
+            buttonImagePath: '/images/military-hall/wow-button-bg.png',
             titleImagePath: '/images/military-hall/titles/wow-title.png', // Плашка для ВОВ
             artifacts: [
                 {
                     name: 'Артефакт 1',
                     description: '',
                     rutubeVideoId: 'VIDEO_ID_1',
-                    imagePath: '/images/military-hall/artifacts/wow/artifact1.jpg',
+                    imagePath: '/images/military-hall/artifacts/wow/artifact1.png',
                     isActive: true,
                     order: 1
                 },
@@ -23,7 +23,7 @@ const militaryData = {
                     name: 'Артефакт 2',
                     description: '',
                     rutubeVideoId: 'VIDEO_ID_2',
-                    imagePath: '/images/military-hall/artifacts/wow/artifact2.jpg',
+                    imagePath: '/images/military-hall/artifacts/wow/artifact2.png',
                     isActive: true,
                     order: 2
                 },
@@ -31,7 +31,7 @@ const militaryData = {
                     name: 'Артефакт 3',
                     description: '',
                     rutubeVideoId: 'VIDEO_ID_3',
-                    imagePath: '/images/military-hall/artifacts/wow/artifact3.jpg',
+                    imagePath: '/images/military-hall/artifacts/wow/artifact3.png',
                     isActive: true,
                     order: 3
                 },
@@ -39,7 +39,7 @@ const militaryData = {
                     name: 'Артефакт 4',
                     description: '',
                     rutubeVideoId: 'VIDEO_ID_4',
-                    imagePath: '/images/military-hall/artifacts/wow/artifact4.jpg',
+                    imagePath: '/images/military-hall/artifacts/wow/artifact4.png',
                     isActive: true,
                     order: 4
                 },
@@ -47,7 +47,7 @@ const militaryData = {
                     name: 'Артефакт 5',
                     description: '',
                     rutubeVideoId: 'VIDEO_ID_5',
-                    imagePath: '/images/military-hall/artifacts/wow/artifact5.jpg',
+                    imagePath: '/images/military-hall/artifacts/wow/artifact5.png',
                     isActive: true,
                     order: 5
                 },
@@ -55,7 +55,7 @@ const militaryData = {
                     name: 'Артефакт 6',
                     description: '',
                     rutubeVideoId: 'VIDEO_ID_6',
-                    imagePath: '/images/military-hall/artifacts/wow/artifact6.jpg',
+                    imagePath: '/images/military-hall/artifacts/wow/artifact6.png',
                     isActive: true,
                     order: 6
                 },
@@ -63,7 +63,7 @@ const militaryData = {
                     name: 'Артефакт 7',
                     description: '',
                     rutubeVideoId: 'VIDEO_ID_7',
-                    imagePath: '/images/military-hall/artifacts/wow/artifact7.jpg',
+                    imagePath: '/images/military-hall/artifacts/wow/artifact7.png',
                     isActive: true,
                     order: 7
                 },
@@ -71,7 +71,7 @@ const militaryData = {
                     name: 'Артефакт 8',
                     description: '',
                     rutubeVideoId: 'VIDEO_ID_8',
-                    imagePath: '/images/military-hall/artifacts/wow/artifact8.jpg',
+                    imagePath: '/images/military-hall/artifacts/wow/artifact8.png',
                     isActive: true,
                     order: 8
                 },
@@ -79,7 +79,7 @@ const militaryData = {
                     name: 'Артефакт 9',
                     description: '',
                     rutubeVideoId: 'VIDEO_ID_9',
-                    imagePath: '/images/military-hall/artifacts/wow/artifact9.jpg',
+                    imagePath: '/images/military-hall/artifacts/wow/artifact9.png',
                     isActive: true,
                     order: 9
                 },
@@ -87,7 +87,7 @@ const militaryData = {
                     name: 'Артефакт 10',
                     description: '',
                     rutubeVideoId: 'VIDEO_ID_10',
-                    imagePath: '/images/military-hall/artifacts/wow/artifact10.jpg',
+                    imagePath: '/images/military-hall/artifacts/wow/artifact10.png',
                     isActive: true,
                     order: 10
                 }
@@ -98,7 +98,7 @@ const militaryData = {
             nameKey: 'local',
             order: 2,
             isActive: true,
-            buttonImagePath: '/images/military-hall/local-button-bg.jpg',
+            buttonImagePath: '/images/military-hall/local-button-bg.png',
             titleImagePath: '/images/military-hall/titles/local-title.png', // Плашка для локальных конфликтов
             artifacts: [
                 // Здесь будут артефакты локальных конфликтов
@@ -109,7 +109,7 @@ const militaryData = {
             nameKey: 'svo',
             order: 3,
             isActive: true,
-            buttonImagePath: '/images/military-hall/svo-button-bg.jpg',
+            buttonImagePath: '/images/military-hall/svo-button-bg.png',
             titleImagePath: '/images/military-hall/titles/svo-title.png', // Плашка для СВО
             artifacts: [
                 // Здесь будут артефакты СВО

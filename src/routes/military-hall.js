@@ -28,33 +28,6 @@ router.get('/military-history', async (req, res) => {
     }
 });
 
-// Страница с артефактами конкретной войны
-router.get('/military-history/war/:warId', async (req, res) => {
-    try {
-        const warId = req.params.warId;
-        
-        const war = await War.findById(warId).lean();
-        
-        if (!war) {
-            return res.status(404).send('Война не найдена');
-        }
-        
-        const activeArtifacts = war.artifacts.filter(a => a.isActive);
-        
-        console.log(`Загружена война: ${war.name}, артефактов: ${activeArtifacts.length}`);
-        
-        res.render('hall/war-artifacts', {
-            layout: false,
-            title: `${war.name} | Виртуальный музей`,
-            war: war,
-            artifacts: activeArtifacts
-        });
-    } catch (error) {
-        console.error('Ошибка при загрузке артефактов войны:', error);
-        res.status(500).send('Ошибка при загрузке страницы');
-    }
-});
-
 // Страница с артефактами войны (с пагинацией)
 router.get('/military-history/war/:warId', async (req, res) => {
     try {
@@ -62,23 +35,30 @@ router.get('/military-history/war/:warId', async (req, res) => {
         const page = parseInt(req.query.page) || 1;
         const limit = 5; // 5 артефактов на страницу
         
+        console.log(`Запрос артефактов для войны ID: ${warId}, страница: ${page}`);
+        
         const war = await War.findById(warId).lean();
         
         if (!war) {
+            console.log('Война не найдена');
             return res.status(404).send('Война не найдена');
         }
         
         // Фильтруем активные артефакты
         const activeArtifacts = war.artifacts.filter(a => a.isActive);
         const totalArtifacts = activeArtifacts.length;
-        const totalPages = Math.ceil(totalArtifacts / limit);
+        const totalPages = Math.ceil(totalArtifacts / limit) || 1;
         
         // Пагинация
         const startIndex = (page - 1) * limit;
         const endIndex = Math.min(startIndex + limit, totalArtifacts);
         const paginatedArtifacts = activeArtifacts.slice(startIndex, endIndex);
         
-        console.log(`Загружены артефакты для: ${war.name}, страница ${page} из ${totalPages}, показано ${paginatedArtifacts.length} артефактов`);
+        console.log(`Война: ${war.name}`);
+        console.log(`Всего артефактов: ${totalArtifacts}`);
+        console.log(`Всего страниц: ${totalPages}`);
+        console.log(`Текущая страница: ${page}`);
+        console.log(`Показано артефактов: ${paginatedArtifacts.length}`);
         
         res.render('hall/war-artifacts', {
             layout: false,
@@ -86,8 +66,7 @@ router.get('/military-history/war/:warId', async (req, res) => {
             war: war,
             artifacts: paginatedArtifacts,
             currentPage: page,
-            totalPages: totalPages || 1,
-            personId: warId // Для совместимости с шаблоном
+            totalPages: totalPages
         });
     } catch (error) {
         console.error('Ошибка при загрузке артефактов войны:', error);
