@@ -1,7 +1,6 @@
 const mongoose = require('mongoose');
 
 const warSchema = new mongoose.Schema({
-    // Информация о войне/конфликте
     name: {
         type: String,
         required: true,
@@ -23,14 +22,14 @@ const warSchema = new mongoose.Schema({
         type: Boolean,
         default: true
     },
-    
-    // Фоновое изображение для кнопки
     buttonImagePath: {
         type: String,
         required: true
     },
-    
-    // Предметы, относящиеся к этой войне
+    titleImagePath: {
+        type: String,
+        required: true // Путь к плашке с названием войны
+    },
     artifacts: [{
         name: {
             type: String,
@@ -40,10 +39,13 @@ const warSchema = new mongoose.Schema({
             type: String,
             default: ''
         },
-        // Rutube Video ID
         rutubeVideoId: {
             type: String,
             required: true
+        },
+        imagePath: {
+            type: String,
+            required: true // Путь к изображению артефакта
         },
         isActive: {
             type: Boolean,

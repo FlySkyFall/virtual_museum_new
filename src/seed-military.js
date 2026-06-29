@@ -1,7 +1,6 @@
 const mongoose = require('mongoose');
 const War = require('./models/War');
 
-// Данные для военно-исторического зала
 const militaryData = {
     wars: [
         {
@@ -9,42 +8,88 @@ const militaryData = {
             nameKey: 'wow',
             order: 1,
             isActive: true,
-            buttonImagePath: '/images/military-hall/wow-button-bg.png',
+            buttonImagePath: '/images/military-hall/wow-button-bg.jpg',
+            titleImagePath: '/images/military-hall/titles/wow-title.png', // Плашка для ВОВ
             artifacts: [
                 {
-                    name: 'Солдатский медальон',
-                    description: 'Личный медальон солдата Великой Отечественной войны. В таких медальонах хранили записки с именем и адресом бойца.',
-                    rutubeVideoId: 'dQw4w9WgXcQ', // Замените на реальный ID видео с Rutube
+                    name: 'Артефакт 1',
+                    description: '',
+                    rutubeVideoId: 'VIDEO_ID_1',
+                    imagePath: '/images/military-hall/artifacts/wow/artifact1.jpg',
                     isActive: true,
                     order: 1
                 },
                 {
-                    name: 'Фронтовая фляжка',
-                    description: 'Алюминиевая фляжка красноармейца образца 1941 года. Незаменимый атрибут солдата на фронте.',
-                    rutubeVideoId: 'dQw4w9WgXcQ', // Замените на реальный ID видео с Rutube
+                    name: 'Артефакт 2',
+                    description: '',
+                    rutubeVideoId: 'VIDEO_ID_2',
+                    imagePath: '/images/military-hall/artifacts/wow/artifact2.jpg',
                     isActive: true,
                     order: 2
                 },
                 {
-                    name: 'Письмо с фронта',
-                    description: 'Письмо-треугольник солдата родным. Такие письма складывали особым образом без конвертов.',
-                    rutubeVideoId: 'dQw4w9WgXcQ', // Замените на реальный ID видео с Rutube
+                    name: 'Артефакт 3',
+                    description: '',
+                    rutubeVideoId: 'VIDEO_ID_3',
+                    imagePath: '/images/military-hall/artifacts/wow/artifact3.jpg',
                     isActive: true,
                     order: 3
                 },
                 {
-                    name: 'Орден Красной Звезды',
-                    description: 'Боевая награда Великой Отечественной войны. Орденом награждали за мужество и отвагу.',
-                    rutubeVideoId: 'dQw4w9WgXcQ', // Замените на реальный ID видео с Rutube
+                    name: 'Артефакт 4',
+                    description: '',
+                    rutubeVideoId: 'VIDEO_ID_4',
+                    imagePath: '/images/military-hall/artifacts/wow/artifact4.jpg',
                     isActive: true,
                     order: 4
                 },
                 {
-                    name: 'Котелок солдатский',
-                    description: 'Походный котелок красноармейца. В нем варили кашу и кипятили воду.',
-                    rutubeVideoId: 'dQw4w9WgXcQ', // Замените на реальный ID видео с Rutube
+                    name: 'Артефакт 5',
+                    description: '',
+                    rutubeVideoId: 'VIDEO_ID_5',
+                    imagePath: '/images/military-hall/artifacts/wow/artifact5.jpg',
                     isActive: true,
                     order: 5
+                },
+                {
+                    name: 'Артефакт 6',
+                    description: '',
+                    rutubeVideoId: 'VIDEO_ID_6',
+                    imagePath: '/images/military-hall/artifacts/wow/artifact6.jpg',
+                    isActive: true,
+                    order: 6
+                },
+                {
+                    name: 'Артефакт 7',
+                    description: '',
+                    rutubeVideoId: 'VIDEO_ID_7',
+                    imagePath: '/images/military-hall/artifacts/wow/artifact7.jpg',
+                    isActive: true,
+                    order: 7
+                },
+                {
+                    name: 'Артефакт 8',
+                    description: '',
+                    rutubeVideoId: 'VIDEO_ID_8',
+                    imagePath: '/images/military-hall/artifacts/wow/artifact8.jpg',
+                    isActive: true,
+                    order: 8
+                },
+                {
+                    name: 'Артефакт 9',
+                    description: '',
+                    rutubeVideoId: 'VIDEO_ID_9',
+                    imagePath: '/images/military-hall/artifacts/wow/artifact9.jpg',
+                    isActive: true,
+                    order: 9
+                },
+                {
+                    name: 'Артефакт 10',
+                    description: '',
+                    rutubeVideoId: 'VIDEO_ID_10',
+                    imagePath: '/images/military-hall/artifacts/wow/artifact10.jpg',
+                    isActive: true,
+                    order: 10
                 }
             ]
         },
@@ -53,29 +98,10 @@ const militaryData = {
             nameKey: 'local',
             order: 2,
             isActive: true,
-            buttonImagePath: '/images/military-hall/local-button-bg.png',
+            buttonImagePath: '/images/military-hall/local-button-bg.jpg',
+            titleImagePath: '/images/military-hall/titles/local-title.png', // Плашка для локальных конфликтов
             artifacts: [
-                {
-                    name: 'Артефакт конфликта 1',
-                    description: 'Описание артефакта времен локальных конфликтов. Здесь будет представлен уникальный экспонат.',
-                    rutubeVideoId: 'dQw4w9WgXcQ', // Замените на реальный ID видео с Rutube
-                    isActive: true,
-                    order: 1
-                },
-                {
-                    name: 'Артефакт конфликта 2',
-                    description: 'Еще один важный артефакт, рассказывающий о локальных конфликтах.',
-                    rutubeVideoId: 'dQw4w9WgXcQ', // Замените на реальный ID видео с Rutube
-                    isActive: true,
-                    order: 2
-                },
-                {
-                    name: 'Артефакт конфликта 3',
-                    description: 'Третий экспонат, демонстрирующий быт и технику того времени.',
-                    rutubeVideoId: 'dQw4w9WgXcQ', // Замените на реальный ID видео с Rutube
-                    isActive: true,
-                    order: 3
-                }
+                // Здесь будут артефакты локальных конфликтов
             ]
         },
         {
@@ -83,80 +109,42 @@ const militaryData = {
             nameKey: 'svo',
             order: 3,
             isActive: true,
-            buttonImagePath: '/images/military-hall/svo-button-bg.png',
+            buttonImagePath: '/images/military-hall/svo-button-bg.jpg',
+            titleImagePath: '/images/military-hall/titles/svo-title.png', // Плашка для СВО
             artifacts: [
-                {
-                    name: 'Артефакт СВО 1',
-                    description: 'Современный артефакт специальной военной операции, показывающий реалии сегодняшнего дня.',
-                    rutubeVideoId: 'dQw4w9WgXcQ', // Замените на реальный ID видео с Rutube
-                    isActive: true,
-                    order: 1
-                },
-                {
-                    name: 'Артефакт СВО 2',
-                    description: 'Еще один важный экспонат, отражающий современные военные конфликты.',
-                    rutubeVideoId: 'dQw4w9WgXcQ', // Замените на реальный ID видео с Rutube
-                    isActive: true,
-                    order: 2
-                },
-                {
-                    name: 'Артефакт СВО 3',
-                    description: 'Третий артефакт, показывающий различные аспекты СВО.',
-                    rutubeVideoId: 'dQw4w9WgXcQ', // Замените на реальный ID видео с Rutube
-                    isActive: true,
-                    order: 3
-                },
-                {
-                    name: 'Артефакт СВО 4',
-                    description: 'Четвертый экспонат, рассказывающий о современной военной технике.',
-                    rutubeVideoId: 'dQw4w9WgXcQ', // Замените на реальный ID видео с Rutube
-                    isActive: true,
-                    order: 4
-                }
+                // Здесь будут артефакты СВО
             ]
         }
     ]
 };
 
-// Функция для заполнения БД
 async function seedMilitaryHall() {
     try {
-        // Подключаемся к MongoDB
         await mongoose.connect('mongodb+srv://museum_admin:danchik2282271@cluster0.bsclqmy.mongodb.net/?appName=Cluster0/virtual_museum');
-
         console.log('✅ Подключено к MongoDB');
 
-        // Очищаем коллекцию War
         await War.deleteMany({});
         console.log('🗑️  Старые данные удалены');
 
-        // Вставляем новые данные
         const result = await War.insertMany(militaryData.wars);
         console.log(`✅ Добавлено ${result.length} войн:`);
         
-        // Выводим информацию о добавленных данных
         result.forEach((war, index) => {
             console.log(`\n📌 ${index + 1}. ${war.name}`);
-            console.log(`   - Артефактов: ${war.artifacts.length}`);
-            console.log(`   - ID: ${war._id}`);
-            war.artifacts.forEach((artifact, i) => {
-                console.log(`     ${i + 1}. ${artifact.name}`);
-            });
+            console.log(`   Артефактов: ${war.artifacts.length}`);
         });
 
         console.log('\n🎉 База данных военно-исторического зала успешно заполнена!');
         
-        // Закрываем соединение
         await mongoose.connection.close();
-        console.log('🔌 Соединение с БД закрыто');
-        
         process.exit(0);
     } catch (error) {
-        console.error('❌ Ошибка при заполнении БД:', error);
-        await mongoose.connection.close();
+        console.error('❌ Ошибка:', error);
+        if (mongoose.connection) {
+            await mongoose.connection.close();
+        }
         process.exit(1);
     }
 }
 
-// Запускаем скрипт
 seedMilitaryHall();

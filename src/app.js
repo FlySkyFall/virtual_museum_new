@@ -35,7 +35,10 @@ app.engine('handlebars', engine({
     },
     isString: function(str) {
       return typeof str === 'string' && str.length > 0;
-    }
+    },
+    subtract: function(a, b) {
+      return a - b;
+    },
   },
   allowProtoPropertiesByDefault: true,
   allowProtoMethodsByDefault: true
