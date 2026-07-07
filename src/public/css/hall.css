@@ -265,11 +265,11 @@
 
 /* Кнопка "Назад" (используем те же стили что и для пагинации) */
 .back-btn {
-    position: fixed;
-    bottom: 30px;
-    right: 120px;
+    position: relative;
     width: 180px;
     height: auto;
+    bottom: 30px;
+    right: 120px;
     border: none;
     cursor: pointer;
     padding: 0;
