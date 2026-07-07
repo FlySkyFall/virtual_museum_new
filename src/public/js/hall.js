@@ -46,9 +46,6 @@ document.addEventListener('DOMContentLoaded', () => {
             personsContainer.appendChild(button);
         });
         
-        // Обновляем информацию о странице
-        pageInfo.textContent = `Страница ${page} из ${totalPages || 1}`;
-        
         // Обновляем состояние кнопок
         prevBtn.disabled = page <= 1;
         nextBtn.disabled = page >= totalPages;
