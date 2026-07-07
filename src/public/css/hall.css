@@ -251,20 +251,20 @@
     animation: slideInFromLeft 0.6s ease-out forwards;
 }
 
-/* СТИЛИ ДЛЯ ПАГИНАЦИИ */
-.pagination-container {
+/* Контейнер для кнопки "Назад" */
+.back-container {
     position: relative;
     z-index: 10;
     display: flex;
-    justify-content: space-between;
+    justify-content: flex-end; /* Выравнивание вправо */
     align-items: center;
     padding: 10px 30px;
-    gap: 20px;
     flex-shrink: 0;
     margin-top: auto;
 }
 
-.pagination-btn {
+/* Кнопка "Назад" (используем те же стили что и для пагинации) */
+.back-btn {
     position: relative;
     width: 120px;
     height: 60px;
@@ -276,83 +276,46 @@
     opacity: 1;
 }
 
-.pagination-btn:hover {
+.back-btn:hover {
     transform: scale(1.05);
 }
 
-.pagination-btn:active {
+.back-btn:active {
     transform: scale(0.95);
 }
 
-.pagination-btn.disabled {
-    opacity: 0.4;
-    cursor: not-allowed;
-    pointer-events: none;
-}
-
-.pagination-btn .pagination-bg {
+.back-btn .back-bg {
     position: absolute;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
+    background-image: url('/images/back-button.png');
     background-size: contain;
     background-position: center;
     background-repeat: no-repeat;
 }
 
-.pagination-btn.prev-btn .pagination-bg {
-    background-image: url('/images/back-button.png');
-}
-
-.pagination-btn.next-btn .pagination-bg {
-    background-image: url('/images/next-button.png');
-}
-
-.pagination-info {
-    color: white;
-    font-size: 18px;
-    font-weight: 600;
-    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
-    background: rgba(0, 0, 0, 0.5);
-    padding: 8px 20px;
-    border-radius: 20px;
-    backdrop-filter: blur(5px);
-    font-family: 'Montserrat', sans-serif;
-}
-
-/* Адаптивность для пагинации */
+/* Адаптивность для кнопки "Назад" */
 @media (max-width: 768px) {
-    .pagination-btn {
+    .back-btn {
         width: 80px;
         height: 40px;
     }
     
-    .pagination-info {
-        font-size: 14px;
+    .back-container {
         padding: 5px 15px;
-    }
-    
-    .pagination-container {
-        padding: 5px 15px;
-        gap: 10px;
     }
 }
 
 @media (max-width: 480px) {
-    .pagination-btn {
+    .back-btn {
         width: 60px;
         height: 30px;
     }
     
-    .pagination-info {
-        font-size: 12px;
-        padding: 4px 10px;
-    }
-    
-    .pagination-container {
+    .back-container {
         padding: 5px 10px;
-        gap: 5px;
     }
 }
 

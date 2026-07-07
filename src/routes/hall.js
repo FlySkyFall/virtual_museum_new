@@ -13,17 +13,10 @@ router.get('/literary-local-history', async (req, res) => {
         
         console.log(`Загружено ${persons.length} персоналий из БД`);
         
-        const totalPages = Math.ceil(persons.length / 4);
-        const currentPage = 1;
-        
         res.render('hall/literary-local-history', {
             layout: 'main',
             title: 'Литературное краеведение | Виртуальный музей',
-            persons: persons.slice(0, 4), // Первые 4 для начальной загрузки
-            currentPage: currentPage,
-            totalPages: totalPages || 1,
-            hasPrev: false,
-            hasNext: totalPages > 1
+            persons: persons // Теперь показываем всех персоналий сразу
         });
     } catch (error) {
         console.error('Ошибка при загрузке из БД:', error);

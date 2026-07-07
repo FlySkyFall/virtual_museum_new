@@ -20,16 +20,10 @@
         {{/each}}
     </div>
 
-     <!-- Пагинация -->
-    <div class="pagination-container">
-        <button class="pagination-btn prev-btn" id="prevPage" {{#unless hasPrev}}disabled{{/unless}}>
-            <div class="pagination-bg"></div>
-        </button>
-        
-        <span class="pagination-info" id="pageInfo">Страница {{currentPage}} из {{totalPages}}</span>
-        
-        <button class="pagination-btn next-btn" id="nextPage" {{#unless hasNext}}disabled{{/unless}}>
-            <div class="pagination-bg"></div>
+    <!-- Кнопка "Назад" вместо пагинации -->
+    <div class="back-container">
+        <button class="back-btn" id="backToMain">
+            <div class="back-bg"></div>
         </button>
     </div>
 </div>
