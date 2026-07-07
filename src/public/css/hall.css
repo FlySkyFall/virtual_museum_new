@@ -124,7 +124,7 @@
     padding: 0;
     width: 100%;
     min-height: 0; /* разрешаем сжатие */
-    margin-bottom: 2%;
+    margin-bottom: 1%;
     overflow: visible;
 }
 
@@ -258,7 +258,7 @@
     display: flex;
     justify-content: flex-end; /* Выравнивание вправо */
     align-items: center;
-    padding: 10px 30px;
+    padding: 10px 50px;
     flex-shrink: 0;
     margin-top: auto; /* Прижимает кнопку вниз */
     width: 100%;
