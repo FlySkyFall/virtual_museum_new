@@ -251,73 +251,63 @@
     animation: slideInFromLeft 0.6s ease-out forwards;
 }
 
-/* Контейнер для кнопки "Назад" */
-.back-container {
-    position: relative;
-    z-index: 10;
-    display: flex;
-    justify-content: flex-end; /* Выравнивание вправо */
-    align-items: center;
-    padding: 10px 30px;
-    flex-shrink: 0;
-    margin-top: auto;
-}
-
-/* Кнопка "Назад" (используем те же стили что и для пагинации) */
-.back-btn {
-    position: relative;
-    width: 180px;
-    height: auto;
+/* Кнопка "Назад" - как на странице person */
+.back-button {
+    position: fixed;
     bottom: 30px;
     right: 120px;
-    border: none;
+    z-index: 10;
+    width: 180px;
+    height: auto;
     cursor: pointer;
-    padding: 0;
-    background: none;
-    transition: transform 0.3s ease, opacity 0.3s ease;
-    opacity: 1;
+    transition: transform 0.3s ease;
+    display: block;
 }
 
-.back-btn:hover {
+.back-button-img {
+    width: 100%;
+    height: auto;
+    display: block;
+}
+
+.back-button:hover {
     transform: scale(1.05);
 }
 
-.back-btn:active {
-    transform: scale(0.95);
-}
-
-.back-btn .back-bg {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-image: url('/images/back-button.png');
-    background-size: contain;
-    background-position: center;
-    background-repeat: no-repeat;
+.back-button:active {
+    transform: scale(0.98);
 }
 
 /* Адаптивность для кнопки "Назад" */
-@media (max-width: 768px) {
-    .back-btn {
-        width: 80px;
-        height: 40px;
+@media (max-width: 1024px) {
+    .back-button {
+        width: 140px;
+        right: 80px;
+        bottom: 25px;
     }
-    
-    .back-container {
-        padding: 5px 15px;
+}
+
+@media (max-width: 768px) {
+    .back-button {
+        width: 100px;
+        bottom: 15px;
+        right: 15px;
     }
 }
 
 @media (max-width: 480px) {
-    .back-btn {
-        width: 60px;
-        height: 30px;
+    .back-button {
+        width: 70px;
+        bottom: 10px;
+        right: 10px;
     }
-    
-    .back-container {
-        padding: 5px 10px;
+}
+
+@media (max-height: 600px) {
+    .back-button {
+        width: 80px;
+        bottom: 10px;
+        right: 40px;
     }
 }
 
