@@ -12,9 +12,9 @@ const militaryData = {
             titleImagePath: '/images/military-hall/titles/wow-title.png', // Плашка для ВОВ
             artifacts: [
                 {
-                    name: 'Артефакт 1',
+                    name: 'Солдатский медальон',
                     description: '',
-                    rutubeVideoId: 'VIDEO_ID_1',
+                    rutubeVideoId: '631eac1b407969aa6b9ea3c1ccf2b2b5',
                     imagePath: '/images/military-hall/artifacts/wow/artifact1.png',
                     isActive: true,
                     order: 1

@@ -133,7 +133,7 @@
     flex: 1; /* растягивается на всю оставшуюся высоту */
     display: flex;
     flex-direction: column;
-    gap: 20px; /* отступ между кнопками */
+    gap: 15px; /* отступ между кнопками */
     padding: 0;
     width: 100%;
     min-height: 0; /* разрешаем сжатие */
@@ -144,8 +144,9 @@
 /* КНОПКА - гибкая высота */
 .person-button {
     position: relative;
+    top: 0;
     left: -15px;
-    width: 85%;
+    width: 80%;
     flex: 1 1 0; /* равномерное распределение */
     min-height: 0; /* разрешаем сжатие */
     border: none;
