@@ -110,17 +110,12 @@
     transform: scale(0.97);
 }
 
-/* ===== Кнопка "Назад" (добавлена по аналогии с литературным залом) ===== */
+/* ===== Кнопка "Назад" ===== */
 .military-back-container {
-    position: relative;
+    position: absolute; /* Абсолютное позиционирование */
+    bottom: 30px;       /* Отступ снизу */
+    right: 100px;        /* Отступ справа */
     z-index: 10;
-    display: flex;
-    justify-content: flex-end; /* Выравнивание вправо */
-    align-items: center;
-    padding: 0 100px 30px 0;
-    flex-shrink: 0;
-    margin-top: auto; /* Прижимает кнопку вниз */
-    width: 100%;
 }
 
 .military-back-button {
@@ -151,7 +146,8 @@
         width: 140px;
     }
     .military-back-container {
-        padding: 8px 25px;
+        bottom: 25px;
+        right: 25px;
     }
 }
 
@@ -160,7 +156,8 @@
         width: 100px;
     }
     .military-back-container {
-        padding: 5px 15px;
+        bottom: 20px;
+        right: 20px;
     }
 }
 
@@ -169,7 +166,8 @@
         width: 70px;
     }
     .military-back-container {
-        padding: 5px 10px;
+        bottom: 15px;
+        right: 15px;
     }
 }
 
@@ -178,7 +176,8 @@
         width: 80px;
     }
     .military-back-container {
-        padding: 5px 20px;
+        bottom: 15px;
+        right: 20px;
     }
 }
 
