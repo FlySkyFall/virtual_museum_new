@@ -116,19 +116,19 @@
         /* Рамка – шире и ниже (за счёт ширины 85% и автоматической высоты) */
         .frame-image {
             display: block;
-            width: 85%;         /* было 80% – сделали шире */
-            height: auto;
+            width: 100%;         /* было 80% – сделали шире */
+            height: 100;
             object-fit: contain;
         }
         
         /* Видео поверх рамки – шире и ниже (чтобы убрать чёрные полосы) */
         .video-overlay {
             position: absolute;
-            top: 50%;
+            top: 47%;
             left: 50%;
             transform: translate(-50%, -50%);
-            width: 75%;         /* было 60% – шире */
-            height: 60%;        /* было 81% – ниже */
+            width: 80%;         /* было 60% – шире */
+            height: 80%;        /* было 81% – ниже */
             background: #000;
             overflow: hidden;
         }
