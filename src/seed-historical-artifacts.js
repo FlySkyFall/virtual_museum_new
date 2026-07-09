@@ -20,28 +20,12 @@ function getRandomImage() {
 // Данные для артефактов
 const artifactData = [
     {
-        name: 'Древняя монета',
+        name: 'Горельеф с портретом Л. Добычина',
         videoUrl: 'https://rutube.ru/embed/1234567890' // Замените на реальную ссылку
     },
     {
         name: 'Археологическая находка',
         videoUrl: 'https://rutube.ru/embed/0987654321' // Замените на реальную ссылку
-    },
-    {
-        name: 'Историческая карта',
-        videoUrl: 'https://rutube.ru/embed/1122334455' // Замените на реальную ссылку
-    },
-    {
-        name: 'Старинная книга',
-        videoUrl: 'https://rutube.ru/embed/5544332211' // Замените на реальную ссылку
-    },
-    {
-        name: 'Предмет быта',
-        videoUrl: 'https://rutube.ru/embed/9988776655' // Замените на реальную ссылку
-    },
-    {
-        name: 'Исторический документ',
-        videoUrl: 'https://rutube.ru/embed/6677889900' // Замените на реальную ссылку
     }
 ];
 
