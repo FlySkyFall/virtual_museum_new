@@ -6,7 +6,6 @@
   <title>{{title}}</title>
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800&display=swap" rel="stylesheet">
   <style>
-    /* === Полностью копируем стили из literary-hall/artifacts.handlebars === */
     * { margin: 0; padding: 0; box-sizing: border-box; }
     body {
       font-family: 'Montserrat', sans-serif;
@@ -19,7 +18,7 @@
       left: 0;
       width: 100%;
       height: 100%;
-      background-image: url('/images/historical-hall/artifacts-background.jpg'); /* ← новый фон */
+      background-image: url('/images/historical-hall/artifacts-background.jpg');
       background-size: cover;
       background-position: center;
       background-repeat: no-repeat;
@@ -47,7 +46,7 @@
       width: 100%;
       height: auto;
       aspect-ratio: auto;
-      background-image: url('/images/historical-hall/title-bg.png'); /* ← новый фон плашки */
+      background-image: url('/images/historical-hall/title-bg.png');
       background-size: 100% 100%;
       background-position: center;
       background-repeat: no-repeat;
@@ -246,7 +245,6 @@
 <body>
   <div class="artifacts-background"></div>
 
-  <!-- Плашка в левом верхнем углу -->
   <div class="top-left-image">
     <div class="title-image-wrapper">
       <div class="title-image-bg"></div>
@@ -276,7 +274,6 @@
     {{/if}}
   </div>
 
-  <!-- Кнопки пагинации -->
   <button class="nav-button back-button" id="prevPageBtn">
     <img src="/images/historical-hall/back-button.png" alt="Назад" class="nav-button-img">
   </button>
@@ -291,7 +288,6 @@
       const currentPage = parseInt('{{currentPage}}', 10) || 1;
       const totalPages = parseInt('{{totalPages}}', 10) || 1;
 
-      // Клик по карточке артефакта → переход на видео
       document.querySelectorAll('.artifact-card').forEach((card) => {
         card.addEventListener('click', function() {
           const artifactId = this.dataset.artifactId;
@@ -299,7 +295,6 @@
         });
       });
 
-      // Пагинация
       const prevBtn = document.getElementById('prevPageBtn');
       const nextBtn = document.getElementById('nextPageBtn');
 
@@ -323,7 +318,6 @@
 
       setPaginationState();
 
-      // Динамическая сетка
       function setupGridLayout() {
         const grid = document.getElementById('artifactsGrid');
         if (!grid) return;
@@ -347,7 +341,6 @@
 
         cards.forEach(card => card.style.maxWidth = cardMaxWidth + 'px');
 
-        // Для 5 карточек – невидимый плейсхолдер
         if (count === 5) {
           if (!grid.querySelector('.grid-placeholder')) {
             const placeholder = document.createElement('div');

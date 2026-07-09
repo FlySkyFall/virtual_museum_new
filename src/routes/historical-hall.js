@@ -24,7 +24,7 @@ router.get('/historical-artifacts', async (req, res) => {
       imagePath: a.image.startsWith('/') ? a.image : '/' + a.image
     }));
 
-    res.render('historical-hall/artifacts', {
+    res.render('hall/historical-artifacts', {  // ← путь к шаблону в папке hall
       layout: 'main',
       title: 'Историческое краеведение',
       artifacts: artifactsWithPath,
@@ -44,7 +44,7 @@ router.get('/historical-artifact-video/:id', async (req, res) => {
     if (!artifact) {
       return res.status(404).send('Артефакт не найден');
     }
-    res.render('historical-hall/video', {
+    res.render('hall/historical-video', {  // ← путь к шаблону в папке hall
       layout: 'main',
       title: artifact.name,
       artifact: artifact
