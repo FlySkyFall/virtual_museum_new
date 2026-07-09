@@ -6,6 +6,7 @@
   <title>{{title}}</title>
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800&display=swap" rel="stylesheet">
   <style>
+    /* ... все стили как были ... */
     * { margin: 0; padding: 0; box-sizing: border-box; }
     body {
       font-family: 'Montserrat', sans-serif;
@@ -147,8 +148,7 @@
       border-radius: 0;
       border: none;
       transition: transform 0.3s ease;
-      /* Временный фон, чтобы видеть область, если изображение не загрузится */
-      background-color: #2c3e50;
+      background-color: #2c3e50; /* временный фон для отладки */
     }
     
     .artifact-name-overlay {
@@ -295,7 +295,12 @@
       const currentPage = parseInt('{{currentPage}}', 10) || 1;
       const totalPages = parseInt('{{totalPages}}', 10) || 1;
 
-      // Расширенная отладка
+      // ОТЛАДКА: выводим данные, переданные из сервера
+      console.log('=== Данные из сервера ===');
+      console.log('Текущая страница:', currentPage);
+      console.log('Всего страниц:', totalPages);
+      // Артефакты уже встроены в DOM, их можно получить через data-атрибуты
+
       const cards = document.querySelectorAll('.artifact-card');
       console.log('🔍 Найдено карточек:', cards.length);
       cards.forEach((card, index) => {

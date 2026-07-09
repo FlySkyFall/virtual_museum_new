@@ -4,7 +4,6 @@ const HistoricalArtifact = require('../models/HistoricalArtifact');
 
 const ITEMS_PER_PAGE = 2;
 
-// Список артефактов с пагинацией
 router.get('/historical-artifacts', async (req, res) => {
   try {
     const page = parseInt(req.query.page) || 1;
@@ -13,20 +12,27 @@ router.get('/historical-artifacts', async (req, res) => {
     const total = await HistoricalArtifact.countDocuments();
     const totalPages = Math.ceil(total / ITEMS_PER_PAGE) || 1;
 
+    // ВАЖНО: добавляем .lean() для получения простых объектов
     const artifacts = await HistoricalArtifact.find()
       .sort({ createdAt: -1 })
       .skip(skip)
-      .limit(ITEMS_PER_PAGE);
+      .limit(ITEMS_PER_PAGE)
+      .lean();
 
-    // Логируем для отладки
     console.log('📦 Найдено артефактов:', artifacts.length);
     artifacts.forEach((a, i) => {
       console.log(`   Артефакт ${i+1}:`, {
         name: a.name,
         imagePath: a.imagePath,
-        videoUrl: a.videoUrl
+        videoUrl: a.videoUrl,
+        _id: a._id
       });
     });
+
+    // Проверяем, что поля не undefined
+    if (artifacts.length > 0) {
+      console.log('Первый артефакт (проверка):', JSON.stringify(artifacts[0]));
+    }
 
     res.render('hall/historical-artifacts', {
       layout: 'main',
@@ -41,10 +47,9 @@ router.get('/historical-artifacts', async (req, res) => {
   }
 });
 
-// Страница просмотра видео
 router.get('/historical-artifact-video/:id', async (req, res) => {
   try {
-    const artifact = await HistoricalArtifact.findById(req.params.id);
+    const artifact = await HistoricalArtifact.findById(req.params.id).lean();
     if (!artifact) {
       return res.status(404).send('Артефакт не найден');
     }
