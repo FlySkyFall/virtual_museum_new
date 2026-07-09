@@ -18,7 +18,16 @@ router.get('/historical-artifacts', async (req, res) => {
       .skip(skip)
       .limit(ITEMS_PER_PAGE);
 
-    // imagePath уже есть в модели, просто передаём как есть
+    // Логируем для отладки
+    console.log('📦 Найдено артефактов:', artifacts.length);
+    artifacts.forEach((a, i) => {
+      console.log(`   Артефакт ${i+1}:`, {
+        name: a.name,
+        imagePath: a.imagePath,
+        videoUrl: a.videoUrl
+      });
+    });
+
     res.render('hall/historical-artifacts', {
       layout: 'main',
       title: 'Историческое краеведение',
@@ -27,7 +36,7 @@ router.get('/historical-artifacts', async (req, res) => {
       totalPages: totalPages,
     });
   } catch (error) {
-    console.error(error);
+    console.error('❌ Ошибка загрузки артефактов:', error);
     res.status(500).send('Ошибка загрузки артефактов');
   }
 });
@@ -45,7 +54,7 @@ router.get('/historical-artifact-video/:id', async (req, res) => {
       artifact: artifact
     });
   } catch (error) {
-    console.error(error);
+    console.error('❌ Ошибка загрузки видео:', error);
     res.status(500).send('Ошибка загрузки видео');
   }
 });

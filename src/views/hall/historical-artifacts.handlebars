@@ -143,6 +143,8 @@
       border: none;
       aspect-ratio: 1 / 1;
       transition: transform 0.3s ease;
+      min-height: 200px; /* Добавим минимальную высоту, чтобы карточка была видна */
+      background-color: #f0f0f0; /* Временный фон для отладки */
     }
     .artifact-name-overlay {
       position: absolute;
@@ -154,7 +156,7 @@
       font-size: 18px;
       font-weight: 600;
       font-family: 'Montserrat', sans-serif;
-      text-shadow: none;
+      text-shadow: 2px 2px 4px rgba(0,0,0,0.8); /* Добавим тень для читаемости */
       background: transparent;
       padding: 0;
       width: 80%;
@@ -220,7 +222,7 @@
       .artifacts-content { padding: 100px 40px 80px 40px; }
       .artifacts-grid { gap: 15px 20px; }
       .artifact-name-overlay { font-size: 14px; }
-      .artifact-image { width: 90%; }
+      .artifact-image { width: 90%; min-height: 150px; }
       .nav-button { width: 60px; height: 60px; }
       .artifacts-grid.grid-2 { gap: 20px 80px; }
     }
@@ -228,7 +230,7 @@
       .artifacts-content { padding: 80px 20px 80px 20px; }
       .artifacts-grid { gap: 15px 15px; }
       .artifact-name-overlay { font-size: 12px; }
-      .artifact-image { width: 90%; }
+      .artifact-image { width: 90%; min-height: 120px; }
       .nav-button { width: 50px; height: 50px; bottom: 20px; }
       .artifacts-grid.grid-2 { gap: 15px 40px; }
     }
@@ -236,7 +238,7 @@
       .artifacts-content { padding: 70px 15px 70px 15px; }
       .artifacts-grid { gap: 15px; }
       .artifact-name-overlay { font-size: 14px; }
-      .artifact-image { width: 80%; }
+      .artifact-image { width: 80%; min-height: 100px; }
       .nav-button { width: 40px; height: 40px; }
       .artifacts-grid.grid-2 { gap: 15px 20px; }
     }
@@ -248,6 +250,10 @@
   <div class="top-left-image">
     <div class="title-image-wrapper">
       <div class="title-image-bg"></div>
+      <div class="person-name-overlay">
+        <span class="person-surname">Историческое</span>
+        <span class="person-firstname">краеведение</span>
+      </div>
     </div>
   </div>
 
@@ -255,11 +261,10 @@
     {{#if artifacts.length}}
     <div class="artifacts-grid-container">
       <div class="artifacts-grid" id="artifactsGrid">
-        <!-- Внутри цикла artifacts -->
         {{#each artifacts}}
         <button class="artifact-card" data-artifact-id="{{_id}}" data-artifact-name="{{name}}">
-            <div class="artifact-image" style="background-image: url('{{imagePath}}');"></div>
-            <div class="artifact-name-overlay">{{name}}</div>
+          <div class="artifact-image" style="background-image: url('{{imagePath}}');"></div>
+          <div class="artifact-name-overlay">{{name}}</div>
         </button>
         {{/each}}
       </div>
@@ -272,10 +277,10 @@
   </div>
 
   <button class="nav-button back-button" id="prevPageBtn">
-    <img src="/images/back-button.png" alt="Назад" class="nav-button-img">
+    <img src="/images/historical-hall/back-button.png" alt="Назад" class="nav-button-img">
   </button>
   <button class="nav-button next-button" id="nextPageBtn">
-    <img src="/images/next-button.png" alt="Далее" class="nav-button-img">
+    <img src="/images/historical-hall/next-button.png" alt="Далее" class="nav-button-img">
   </button>
 
   <div class="page-info">Страница {{currentPage}} из {{totalPages}}</div>
@@ -285,9 +290,22 @@
       const currentPage = parseInt('{{currentPage}}', 10) || 1;
       const totalPages = parseInt('{{totalPages}}', 10) || 1;
 
+      // Для отладки - выводим информацию об артефактах
+      const cards = document.querySelectorAll('.artifact-card');
+      console.log('🔍 Найдено карточек:', cards.length);
+      cards.forEach((card, index) => {
+        const img = card.querySelector('.artifact-image');
+        const style = img ? img.getAttribute('style') : 'нет стиля';
+        console.log(`   Карточка ${index+1}:`, {
+          name: card.dataset.artifactName,
+          style: style
+        });
+      });
+
       document.querySelectorAll('.artifact-card').forEach((card) => {
         card.addEventListener('click', function() {
           const artifactId = this.dataset.artifactId;
+          console.log('🖱️ Клик по артефакту:', artifactId);
           window.location.href = `/hall/historical-artifact-video/${artifactId}`;
         });
       });
