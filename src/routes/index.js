@@ -23,9 +23,9 @@ const halls = [
     },
     {
         id: 3,
-        name: 'Зал Космоса',
-        description: 'Тайны Вселенной и космические приключения',
-        route: '/hall/space',
+        name: 'Историческое краеведение',
+        description: 'Знакомство с историческими артефактами',
+        route: '/hall/historical-artifacts',
         position: { top: '65%', left: '65%' }, // Правый нижний угол со смещением
         width: '23%',
         height: '28%'
