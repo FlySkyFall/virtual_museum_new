@@ -6,7 +6,6 @@
   <title>{{title}}</title>
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800&display=swap" rel="stylesheet">
   <style>
-    /* ... все стили как были ... */
     * { margin: 0; padding: 0; box-sizing: border-box; }
     body {
       font-family: 'Montserrat', sans-serif;
@@ -148,7 +147,6 @@
       border-radius: 0;
       border: none;
       transition: transform 0.3s ease;
-      background-color: #2c3e50; /* временный фон для отладки */
     }
     
     .artifact-name-overlay {
@@ -295,34 +293,12 @@
       const currentPage = parseInt('{{currentPage}}', 10) || 1;
       const totalPages = parseInt('{{totalPages}}', 10) || 1;
 
-      // ОТЛАДКА: выводим данные, переданные из сервера
-      console.log('=== Данные из сервера ===');
-      console.log('Текущая страница:', currentPage);
-      console.log('Всего страниц:', totalPages);
-      // Артефакты уже встроены в DOM, их можно получить через data-атрибуты
-
-      const cards = document.querySelectorAll('.artifact-card');
-      console.log('🔍 Найдено карточек:', cards.length);
-      cards.forEach((card, index) => {
-        const imgDiv = card.querySelector('.artifact-image');
-        const style = imgDiv ? imgDiv.getAttribute('style') : 'нет элемента';
-        const computedStyle = imgDiv ? window.getComputedStyle(imgDiv).backgroundImage : 'нет';
-        console.log(`   Карточка ${index+1}:`, {
-          name: card.dataset.artifactName,
-          id: card.dataset.artifactId,
-          inlineStyle: style,
-          computedBg: computedStyle
-        });
-      });
-
       // Клик по карточке
       document.querySelectorAll('.artifact-card').forEach((card) => {
         card.addEventListener('click', function() {
           const artifactId = this.dataset.artifactId;
           if (artifactId) {
             window.location.href = `/hall/historical-artifact-video/${artifactId}`;
-          } else {
-            console.warn('❌ Нет ID артефакта');
           }
         });
       });
