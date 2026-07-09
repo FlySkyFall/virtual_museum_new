@@ -259,10 +259,11 @@
     {{#if artifacts.length}}
     <div class="artifacts-grid-container">
       <div class="artifacts-grid" id="artifactsGrid">
+        <!-- Внутри цикла artifacts -->
         {{#each artifacts}}
         <button class="artifact-card" data-artifact-id="{{_id}}" data-artifact-name="{{name}}">
-          <div class="artifact-image" style="background-image: url('{{imagePath}}');"></div>
-          <div class="artifact-name-overlay">{{name}}</div>
+            <div class="artifact-image" style="background-image: url('{{imagePath}}');"></div>
+            <div class="artifact-name-overlay">{{name}}</div>
         </button>
         {{/each}}
       </div>
@@ -275,10 +276,10 @@
   </div>
 
   <button class="nav-button back-button" id="prevPageBtn">
-    <img src="/images/historical-hall/back-button.png" alt="Назад" class="nav-button-img">
+    <img src="/images/back-button.png" alt="Назад" class="nav-button-img">
   </button>
   <button class="nav-button next-button" id="nextPageBtn">
-    <img src="/images/historical-hall/next-button.png" alt="Далее" class="nav-button-img">
+    <img src="/images/next-button.png" alt="Далее" class="nav-button-img">
   </button>
 
   <div class="page-info">Страница {{currentPage}} из {{totalPages}}</div>

@@ -18,16 +18,11 @@ router.get('/historical-artifacts', async (req, res) => {
       .skip(skip)
       .limit(ITEMS_PER_PAGE);
 
-    // Добавляем поле imagePath для отображения в шаблоне
-    const artifactsWithPath = artifacts.map(a => ({
-      ...a._doc,
-      imagePath: a.image.startsWith('/') ? a.image : '/' + a.image
-    }));
-
-    res.render('hall/historical-artifacts', {  // ← путь к шаблону в папке hall
+    // imagePath уже есть в модели, просто передаём как есть
+    res.render('hall/historical-artifacts', {
       layout: 'main',
       title: 'Историческое краеведение',
-      artifacts: artifactsWithPath,
+      artifacts: artifacts,
       currentPage: page,
       totalPages: totalPages,
     });
@@ -44,7 +39,7 @@ router.get('/historical-artifact-video/:id', async (req, res) => {
     if (!artifact) {
       return res.status(404).send('Артефакт не найден');
     }
-    res.render('hall/historical-video', {  // ← путь к шаблону в папке hall
+    res.render('hall/historical-video', {
       layout: 'main',
       title: artifact.name,
       artifact: artifact
