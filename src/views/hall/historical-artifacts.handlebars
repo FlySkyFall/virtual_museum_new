@@ -117,6 +117,7 @@
       position: relative;
       width: 100%;
       max-width: 280px;
+      aspect-ratio: 1 / 1;
       margin: 0 auto;
       display: flex;
       align-items: center;
@@ -126,26 +127,30 @@
       background: transparent;
       transition: transform 0.3s ease;
       border-radius: 0;
-      overflow: visible;
+      overflow: hidden;
       box-shadow: none;
       outline: none;
+      padding: 0;
     }
     .artifact-card:focus { outline: none; }
     .artifact-card::-moz-focus-inner { border: 0; }
+    
     .artifact-image {
+      position: absolute;
+      top: 0;
+      left: 0;
       width: 100%;
-      height: auto;
+      height: 100%;
       background-size: contain;
       background-position: center;
       background-repeat: no-repeat;
       border-radius: 0;
-      box-shadow: none;
       border: none;
-      aspect-ratio: 1 / 1;
       transition: transform 0.3s ease;
-      min-height: 200px; /* Добавим минимальную высоту, чтобы карточка была видна */
-      background-color: #f0f0f0; /* Временный фон для отладки */
+      /* Временный фон, чтобы видеть область, если изображение не загрузится */
+      background-color: #2c3e50;
     }
+    
     .artifact-name-overlay {
       position: absolute;
       top: 50%;
@@ -156,14 +161,14 @@
       font-size: 18px;
       font-weight: 600;
       font-family: 'Montserrat', sans-serif;
-      text-shadow: 2px 2px 4px rgba(0,0,0,0.8); /* Добавим тень для читаемости */
-      background: transparent;
+      text-shadow: 2px 2px 4px rgba(0,0,0,0.8);
       padding: 0;
       width: 80%;
       word-wrap: break-word;
       white-space: normal;
       line-height: 1.3;
       pointer-events: none;
+      z-index: 1;
     }
     .artifact-card:hover { transform: scale(1.05); }
     .artifact-card:active { transform: scale(0.98); }
@@ -222,7 +227,7 @@
       .artifacts-content { padding: 100px 40px 80px 40px; }
       .artifacts-grid { gap: 15px 20px; }
       .artifact-name-overlay { font-size: 14px; }
-      .artifact-image { width: 90%; min-height: 150px; }
+      .artifact-card { max-width: 220px; }
       .nav-button { width: 60px; height: 60px; }
       .artifacts-grid.grid-2 { gap: 20px 80px; }
     }
@@ -230,7 +235,7 @@
       .artifacts-content { padding: 80px 20px 80px 20px; }
       .artifacts-grid { gap: 15px 15px; }
       .artifact-name-overlay { font-size: 12px; }
-      .artifact-image { width: 90%; min-height: 120px; }
+      .artifact-card { max-width: 180px; }
       .nav-button { width: 50px; height: 50px; bottom: 20px; }
       .artifacts-grid.grid-2 { gap: 15px 40px; }
     }
@@ -238,7 +243,7 @@
       .artifacts-content { padding: 70px 15px 70px 15px; }
       .artifacts-grid { gap: 15px; }
       .artifact-name-overlay { font-size: 14px; }
-      .artifact-image { width: 80%; min-height: 100px; }
+      .artifact-card { max-width: 140px; }
       .nav-button { width: 40px; height: 40px; }
       .artifacts-grid.grid-2 { gap: 15px 20px; }
     }
@@ -277,10 +282,10 @@
   </div>
 
   <button class="nav-button back-button" id="prevPageBtn">
-    <img src="/images/historical-hall/back-button.png" alt="Назад" class="nav-button-img">
+    <img src="/images/back-button.png" alt="Назад" class="nav-button-img">
   </button>
   <button class="nav-button next-button" id="nextPageBtn">
-    <img src="/images/historical-hall/next-button.png" alt="Далее" class="nav-button-img">
+    <img src="/images/next-button.png" alt="Далее" class="nav-button-img">
   </button>
 
   <div class="page-info">Страница {{currentPage}} из {{totalPages}}</div>
@@ -290,26 +295,34 @@
       const currentPage = parseInt('{{currentPage}}', 10) || 1;
       const totalPages = parseInt('{{totalPages}}', 10) || 1;
 
-      // Для отладки - выводим информацию об артефактах
+      // Расширенная отладка
       const cards = document.querySelectorAll('.artifact-card');
       console.log('🔍 Найдено карточек:', cards.length);
       cards.forEach((card, index) => {
-        const img = card.querySelector('.artifact-image');
-        const style = img ? img.getAttribute('style') : 'нет стиля';
+        const imgDiv = card.querySelector('.artifact-image');
+        const style = imgDiv ? imgDiv.getAttribute('style') : 'нет элемента';
+        const computedStyle = imgDiv ? window.getComputedStyle(imgDiv).backgroundImage : 'нет';
         console.log(`   Карточка ${index+1}:`, {
           name: card.dataset.artifactName,
-          style: style
+          id: card.dataset.artifactId,
+          inlineStyle: style,
+          computedBg: computedStyle
         });
       });
 
+      // Клик по карточке
       document.querySelectorAll('.artifact-card').forEach((card) => {
         card.addEventListener('click', function() {
           const artifactId = this.dataset.artifactId;
-          console.log('🖱️ Клик по артефакту:', artifactId);
-          window.location.href = `/hall/historical-artifact-video/${artifactId}`;
+          if (artifactId) {
+            window.location.href = `/hall/historical-artifact-video/${artifactId}`;
+          } else {
+            console.warn('❌ Нет ID артефакта');
+          }
         });
       });
 
+      // Пагинация
       const prevBtn = document.getElementById('prevPageBtn');
       const nextBtn = document.getElementById('nextPageBtn');
 
@@ -333,6 +346,7 @@
 
       setPaginationState();
 
+      // Настройка сетки
       function setupGridLayout() {
         const grid = document.getElementById('artifactsGrid');
         if (!grid) return;
