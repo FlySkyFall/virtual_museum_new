@@ -1,69 +1,409 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>{{title}}</title>
-  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800&display=swap" rel="stylesheet">
-  <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-    body {
-      font-family: 'Montserrat', sans-serif;
-      background: #1a1a2e;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      min-height: 100vh;
-      padding: 20px;
-    }
-    .video-container {
-      max-width: 800px;
-      width: 100%;
-      background: #16213e;
-      border-radius: 20px;
-      padding: 30px;
-      box-shadow: 0 20px 40px rgba(0,0,0,0.6);
-      text-align: center;
-    }
-    .video-container h1 {
-      color: #fff;
-      margin-bottom: 20px;
-      font-size: 28px;
-    }
-    .video-wrapper {
-      position: relative;
-      padding-bottom: 56.25%;
-      height: 0;
-      overflow: hidden;
-      border-radius: 12px;
-      margin-bottom: 20px;
-    }
-    .video-wrapper iframe {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      border: none;
-    }
-    .back-link {
-      display: inline-block;
-      color: #e94560;
-      text-decoration: none;
-      font-weight: 600;
-      font-size: 18px;
-      transition: color 0.3s;
-    }
-    .back-link:hover { color: #fff; }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{title}}</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Montserrat', sans-serif;
+            height: 100vh;
+            overflow: hidden;
+            position: relative;
+        }
+        
+        /* Фоновое изображение для исторического зала */
+        .video-background {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url('/images/historical-hall/video-background.jpg');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            z-index: 0;
+        }
+        
+        /* Основной контент */
+        .video-content {
+            position: relative;
+            z-index: 2;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 40px 80px;
+            gap: 20px;
+        }
+
+        .top-left-image {
+            position: absolute;
+            top: 0;
+            left: 0;
+            z-index: 2;
+            width: 78%;
+            max-width: 1400px;
+            min-width: 250px;
+            height: auto;
+        }
+        
+        .title-image-wrapper {
+            position: relative;
+            width: 100%;
+            height: auto;
+            overflow: visible;
+            border-radius: 0;
+        }
+        
+        /* Фоновое изображение плашки для исторического зала */
+        .title-image-bg {
+            position: relative;
+            width: 100%;
+            height: auto;
+            aspect-ratio: auto;
+            background-image: url('/images/historical-hall/title-bg-video.png');
+            background-size: 100% 100%;
+            background-position: center;
+            background-repeat: no-repeat;
+            border-radius: 0;
+            padding-bottom: 10%;
+            transition: transform 0.3s ease;
+        }
+        
+        /* Текст поверх изображения */
+        .person-name-overlay {
+            position: absolute;
+            top: 50%;
+            right: 8%;
+            transform: translateY(-50%);
+            color: black;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+            white-space: nowrap;
+            font-family: 'Comic Sans MS', 'Comic Sans', cursive;
+            pointer-events: none;
+            text-align: right;
+            display: flex;
+            gap: 17px;
+            align-items: baseline;
+            justify-content: flex-end;
+            z-index: 2;
+            max-width: 85%;
+        }
+        
+        .person-surname {
+            font-weight: 800;
+            font-size: clamp(14px, 4vw, 35px);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            display: inline-block;
+            font-family: 'Comic Sans MS', 'Comic Sans', cursive;
+        }
+        
+        .person-firstname {
+            font-weight: 400;
+            font-size: clamp(10px, 3vw, 25px);
+            display: inline-block;
+            white-space: nowrap;
+            font-family: 'Comic Sans MS', 'Comic Sans', cursive;
+        }
+        
+        /* ===== ЛЕВАЯ ЧАСТЬ – ВИДЕО ===== */
+        .left-video {
+            flex: 1.2;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        /* Контейнер для рамки и видео */
+        .frame-container {
+            position: relative;
+            width: 100%;
+            max-width: 1000px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        /* Рамка */
+        .frame-image {
+            display: block;
+            width: 100%;
+            height: 100;
+            object-fit: contain;
+        }
+        
+        /* Видео поверх рамки */
+        .video-overlay {
+            position: absolute;
+            top: 47%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 80%;
+            height: 80%;
+            background: #000;
+            overflow: hidden;
+        }
+        
+        .video-element {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            background: #000;
+            border: none;
+        }
+        
+        /* Заглушка если нет видео */
+        .video-placeholder {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            text-align: center;
+        }
+        
+        .video-placeholder .icon {
+            font-size: 48px;
+            margin-bottom: 15px;
+        }
+        
+        .video-placeholder p {
+            font-size: 16px;
+            margin-bottom: 5px;
+        }
+        
+        .video-placeholder small {
+            font-size: 12px;
+            opacity: 0.8;
+        }
+        
+        /* ===== ПРАВАЯ ЧАСТЬ – КНОПКИ ===== */
+        .right-buttons {
+            flex: 0.8;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            justify-content: center;
+            gap: 40px;
+        }
+        
+        .nav-button {
+            width: 200px;
+            height: auto;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+            border: none;
+            background: transparent;
+            padding: 0;
+            margin-left: 100px;
+        }
+        
+        .nav-button:hover {
+            transform: scale(1.05);
+        }
+        
+        .nav-button:active {
+            transform: scale(0.98);
+        }
+        
+        .nav-button-img {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+        
+        /* Название артефакта в правом нижнем углу */
+        .artifact-name {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            z-index: 10;
+            background: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(5px);
+            color: white;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 500;
+        }
+        
+        /* ===== АДАПТИВНОСТЬ ===== */
+        @media (max-width: 1024px) {
+            .video-content {
+                padding: 40px 50px;
+                gap: 15px;
+            }
+            
+            .left-video {
+                flex: 1.3;
+            }
+            
+            .right-buttons {
+                flex: 0.7;
+                gap: 30px;
+            }
+            
+            .nav-button {
+                width: 180px;
+                margin-left: 60px;
+            }
+            
+            .frame-container {
+                max-width: 800px;
+            }
+            
+            .video-overlay {
+                width: 72%;
+                height: 58%;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .video-content {
+                flex-direction: column-reverse;
+                justify-content: center;
+                gap: 30px;
+                padding: 60px 30px;
+            }
+            
+            .left-video {
+                flex: none;
+                width: 100%;
+            }
+            
+            .right-buttons {
+                flex: none;
+                flex-direction: row;
+                justify-content: center;
+                gap: 20px;
+                width: 100%;
+            }
+            
+            .nav-button {
+                width: 160px;
+                margin-left: 0;
+            }
+            
+            .frame-container {
+                max-width: 600px;
+                margin: 0 auto;
+            }
+            
+            .video-overlay {
+                width: 72%;
+                height: 55%;
+            }
+            
+            .artifact-name {
+                bottom: 20px;
+                right: 20px;
+                font-size: 12px;
+                padding: 6px 12px;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .right-buttons {
+                gap: 15px;
+            }
+            
+            .nav-button {
+                width: 130px;
+            }
+            
+            .frame-container {
+                max-width: 400px;
+            }
+            
+            .video-overlay {
+                width: 70%;
+                height: 50%;
+            }
+            
+            .video-placeholder .icon {
+                font-size: 36px;
+            }
+            
+            .video-placeholder p {
+                font-size: 12px;
+            }
+            
+            .artifact-name {
+                font-size: 10px;
+                padding: 4px 10px;
+            }
+        }
+    </style>
 </head>
 <body>
-  <div class="video-container">
-    <h1>{{artifact.name}}</h1>
-    <div class="video-wrapper">
-      <iframe src="{{artifact.videoUrl}}" allowfullscreen></iframe>
+    <div class="video-background"></div>
+
+    <!-- Левое верхнее изображение с названием зала -->
+    <div class="top-left-image">
+        <div class="title-image-wrapper">
+            <div class="title-image-bg"></div>
+            <div class="person-name-overlay">
+                <span class="person-surname">Историческое</span>
+                <span class="person-firstname">краеведение</span>
+            </div>
+        </div>
     </div>
-    <a href="/hall/historical-artifacts" class="back-link">← Вернуться к артефактам</a>
-  </div>
+    
+    <div class="video-content">
+        <!-- Левая половина – видео -->
+        <div class="left-video">
+            <div class="frame-container">
+                <!-- Изображение-рамка -->
+                <img src="/images/video-frame.png" alt="Рамка плеера" class="frame-image">
+                
+                <!-- Видео поверх рамки -->
+                <div class="video-overlay">
+                    {{#if artifact.videoUrl}}
+                    <iframe 
+                        class="video-element" 
+                        src="{{artifact.videoUrl}}"
+                        allow="autoplay; encrypted-media; fullscreen"
+                        allowfullscreen>
+                    </iframe>
+                    {{else}}
+                    <div class="video-placeholder">
+                        <div class="icon">📹</div>
+                        <p>Видео будет добавлено позже</p>
+                        <small>{{artifact.name}}</small>
+                    </div>
+                    {{/if}}
+                </div>
+            </div>
+        </div>
+        
+        <!-- Правая половина – кнопки -->
+        <div class="right-buttons">
+            <!-- Кнопка "Вернуться на главную" -->
+            <a href="/" class="nav-button">
+                <img src="/images/back-to-main-button.png" alt="Вернуться на главную" class="nav-button-img">
+            </a>
+            
+            <!-- Кнопка "Вернуться к артефактам" -->
+            <a href="/hall/historical-artifacts" class="nav-button">
+                <img src="/images/back-to-artifacts-button.png" alt="Вернуться к артефактам" class="nav-button-img">
+            </a>
+        </div>
+    </div>
+    
+    <!-- Название артефакта в правом нижнем углу -->
+    <div class="artifact-name">{{artifact.name}}</div>
 </body>
 </html>
