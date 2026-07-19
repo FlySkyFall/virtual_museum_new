@@ -36,7 +36,7 @@ main {
     right: 0;
     bottom: 0;
     background-image: url('/images/background-placeholder.jpg');
-    background-size: cover;
+    background-size: contain;
     background-position: center;
     background-repeat: no-repeat;
     z-index: 1;
