@@ -83,7 +83,7 @@
     
     .person-surname {
         font-weight: 800;
-        font-size: clamp(14px, 4vw, 35px); /* Уменьшили размер */
+        font-size: clamp(14px, 4vw, 45px); /* Уменьшили размер */
         text-transform: uppercase;
         letter-spacing: 2px; /* Уменьшили интервал */
         display: inline-block;
@@ -92,7 +92,7 @@
     
     .person-firstname {
         font-weight: 400;
-        font-size: clamp(10px, 3vw, 25px); /* Уменьшили размер */
+        font-size: clamp(10px, 3vw, 35px); /* Уменьшили размер */
         display: inline-block;
         white-space: nowrap;
         font-family: 'Comic Sans MS', 'Comic Sans', cursive;
@@ -386,7 +386,7 @@
           cols = 1; rows = 1; cardMaxWidth = 500;
           grid.classList.add('grid-1');
         } else if (count === 2) {
-          cols = 2; rows = 1; cardMaxWidth = 600;
+          cols = 2; rows = 1; cardMaxWidth = 800;
           grid.classList.add('grid-2');  // <- активируем увеличенный gap для 2 карточек
         } else if (count === 3) {
           cols = 3; rows = 1; cardMaxWidth = 350;
