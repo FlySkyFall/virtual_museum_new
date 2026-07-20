@@ -47,7 +47,7 @@
     flex-direction: column;
     gap: 15px;
     width: 90%; /* Увеличил ширину */
-    max-width: 1000px; /* Увеличил максимальную ширину */
+    max-width: 1200px; /* Увеличил максимальную ширину */
     height: 70vh; /* Немного уменьшил высоту */
     max-height: 550px; /* Немного уменьшил */
     min-height: 280px;
