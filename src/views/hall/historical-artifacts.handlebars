@@ -34,6 +34,63 @@
       min-width: 250px;
       height: auto;
     }
+
+    /* АДАПТИВНЫЙ ЛОГОТИП - используем относительные единицы */
+    .hall-logo {
+        position: absolute;
+        top: 2%;
+        left: 2%;
+        z-index: 10;
+        width: 25%; /* Используем проценты вместо фиксированных пикселей */
+        max-width: 400px; /* Максимальный размер */
+        min-width: 40px; /* Минимальный размер */
+        height: auto;
+        pointer-events: none;
+        transition: width 0.3s ease; /* Плавное изменение размера */
+    }
+
+    /* Адаптивные размеры для разных экранов */
+    @media (max-width: 1200px) {
+        .hall-logo {
+            width: 22%;
+            max-width: 350px;
+        }
+    }
+
+    @media (max-width: 992px) {
+        .hall-logo {
+            width: 20%;
+            max-width: 300px;
+        }
+    }
+
+    @media (max-width: 768px) {
+        .hall-logo {
+            width: 18%;
+            max-width: 250px;
+            top: 1.5%;
+            left: 1.5%;
+        }
+    }
+
+    @media (max-width: 576px) {
+        .hall-logo {
+            width: 15%;
+            max-width: 180px;
+            top: 1%;
+            left: 1%;
+        }
+    }
+
+    @media (max-width: 480px) {
+        .hall-logo {
+            width: 12%;
+            max-width: 120px;
+            top: 1%;
+            left: 1%;
+        }
+    }
+
     .title-image-wrapper {
       position: relative;
       width: 100%;
@@ -249,6 +306,9 @@
 </head>
 <body>
   <div class="artifacts-background"></div>
+
+  <!-- Логотип зала в левом верхнем углу -->
+    <img class="hall-logo" src="/images/historical-hall/hall-logo.png" alt="Зал литературного краеведения">
 
   <div class="top-left-image">
     <div class="title-image-wrapper">
