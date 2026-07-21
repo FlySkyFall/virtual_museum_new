@@ -28,7 +28,7 @@
 /* Логотип зала */
 .military-hall-logo {
     position: absolute;
-    top: 2%;
+    top: 0%;
     left: 2%;
     z-index: 10;
     width: 25%;
