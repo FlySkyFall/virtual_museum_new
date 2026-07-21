@@ -1,10 +1,10 @@
 <div class="museum-container">
-    <img class="museum-background" src="/images/background-placeholder.jpg" alt="Фон музея">
+    <img class="museum-background" src="/images/background-placeholder.jpg" alt="Фон музея" style="object-fit: contain;">
     
     <div class="halls-container">
         {{#each halls}}
         <button class="hall-button" data-hall-id="{{id}}" data-hall-route="{{route}}"
-                style="top: {{position.top}}; left: {{position.left}}; width: {{width}}; height: {{height}}; object-fit: contain;">
+                style="top: {{position.top}}; left: {{position.left}}; width: {{width}}; height: {{height}};">
             <div class="button-image" style="background-image: url('/images/hall{{id}}.png');"></div>
             <!-- Текст удален, так как надпись есть на изображении -->
         </button>
