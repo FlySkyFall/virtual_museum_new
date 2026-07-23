@@ -65,12 +65,6 @@ document.addEventListener('DOMContentLoaded', () => {
         // Внутренняя структура
         button.innerHTML = `
             <div class="person-button-bg" style="background-image: url('${person.buttonImagePath || '/images/default-person.png'}');"></div>
-            <div class="person-info">
-                <div class="person-name">
-                    <span class="person-surname">${person.lastName || ''}</span>
-                    <span class="person-name-rest">${person.firstName || ''} ${person.patronymic || ''}</span>
-                </div>
-            </div>
         `;
         
         // Добавляем обработчик клика
