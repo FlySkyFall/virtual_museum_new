@@ -28,7 +28,7 @@
 /* Логотип зала */
 .military-hall-logo {
     position: absolute;
-    top: 2%;
+    top: 0%;
     left: 2%;
     z-index: 10;
     width: 25%;
@@ -298,7 +298,7 @@
 /* Для очень больших экранов */
 @media (min-width: 1440px) {
     .military-wars-container {
-        max-width: 1200px;
+        max-width: 1500px;
         max-height: 650px;
         gap: 20px;
         margin-top: -6vh;

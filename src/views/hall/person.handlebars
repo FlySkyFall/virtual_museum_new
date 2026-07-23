@@ -105,10 +105,9 @@
     .person-name-overlay {
         position: absolute;
         top: 50%;
-        right: 8%;
+        right: 4%;
         transform: translateY(-50%);
         color: black;
-        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
         white-space: nowrap;
         font-family: 'Comic Sans MS', 'Comic Sans', cursive;
         pointer-events: none;
@@ -123,7 +122,7 @@
     
     .person-surname {
         font-weight: 800;
-        font-size: clamp(14px, 4vw, 45px); /* Уменьшили размер */
+        font-size: clamp(14px, 4vw, 50px); /* Уменьшили размер */
         text-transform: uppercase;
         letter-spacing: 2px; /* Уменьшили интервал */
         display: inline-block;
@@ -131,8 +130,8 @@
     }
     
     .person-firstname {
-        font-weight: 400;
-        font-size: clamp(10px, 3vw, 35px); /* Уменьшили размер */
+        font-weight: 300;
+        font-size: clamp(10px, 3vw, 50px); /* Уменьшили размер */
         display: inline-block;
         white-space: nowrap;
         font-family: 'Comic Sans MS', 'Comic Sans', cursive;
@@ -162,7 +161,7 @@
     }
     
     .short-bio {
-        font-size: clamp(14px, 1.2vw, 20px);
+        font-size: clamp(14px, 1.5vw, 32px);
         line-height: 1.6;
         color: black;
         text-align: justify;
@@ -170,7 +169,7 @@
         padding: 0;
         font-weight: 500;
         text-shadow: none;
-        max-width: 90%;
+        max-width: 100%;
     }
     
     .artifacts-button {

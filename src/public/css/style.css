@@ -40,6 +40,7 @@ main {
     background-position: center;
     background-repeat: no-repeat;
     z-index: 1;
+    object-fit: contain;
 }
 
 .halls-container {

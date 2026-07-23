@@ -27,7 +27,7 @@
 /* АДАПТИВНЫЙ ЛОГОТИП - используем относительные единицы */
 .hall-logo {
     position: absolute;
-    top: 2%;
+    top: 0%;
     left: 2%;
     z-index: 10;
     width: 25%; /* Используем проценты вместо фиксированных пикселей */
@@ -412,11 +412,11 @@
     }
     
     .person-surname {
-        font-size: 44px;
+        font-size: 50px;
     }
     
     .person-name-rest {
-        font-size: 32px;
+        font-size: 50px;
     }
     
     .person-name {

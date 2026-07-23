@@ -82,10 +82,9 @@
     .person-name-overlay {
         position: absolute;
         top: 50%;
-        right: 8%;
+        right: 4%;
         transform: translateY(-50%);
         color: black;
-        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
         white-space: nowrap;
         font-family: 'Comic Sans MS', 'Comic Sans', cursive;
         pointer-events: none;
@@ -100,7 +99,7 @@
     
     .person-surname {
         font-weight: 800;
-        font-size: clamp(14px, 4vw, 45px); /* Уменьшили размер */
+        font-size: clamp(14px, 4vw, 50px); /* Уменьшили размер */
         text-transform: uppercase;
         letter-spacing: 2px; /* Уменьшили интервал */
         display: inline-block;
@@ -109,7 +108,7 @@
     
     .person-firstname {
         font-weight: 400;
-        font-size: clamp(10px, 3vw, 35px); /* Уменьшили размер */
+        font-size: clamp(10px, 3vw, 50px); /* Уменьшили размер */
         display: inline-block;
         white-space: nowrap;
         font-family: 'Comic Sans MS', 'Comic Sans', cursive;
@@ -121,6 +120,7 @@
             display: flex;
             align-items: center;
             justify-content: center;
+            margin-top: 10%;
         }
         
         /* Контейнер для рамки и видео – увеличен по ширине */
@@ -196,7 +196,9 @@
             flex-direction: column;
             align-items: flex-start;
             justify-content: center;
-            gap: 40px;
+            gap: 60px;
+            margin-top: 10%;
+            margin-right: 5%;
         }
         
         .nav-button {
@@ -219,7 +221,7 @@
         }
         
         .nav-button-img {
-            width: 100%;
+            width: 140%;
             height: auto;
             display: block;
         }
