@@ -23,6 +23,15 @@ const halls = [
     },
     {
         id: 3,
+        name: 'Коллекция автографов',
+        description: 'Дарственные книги',
+        route: '/hall/autograf-artifacts',
+        position: { top: '67%', left: '15%' }, // Правый нижний угол со смещением
+        width: '23%',
+        height: '28%'
+    },
+    {
+        id: 4,
         name: 'Историческое краеведение',
         description: 'Знакомство с историческими артефактами',
         route: '/hall/historical-artifacts',
