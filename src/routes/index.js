@@ -26,7 +26,7 @@ const halls = [
         name: 'Коллекция автографов',
         description: 'Дарственные книги',
         route: '/hall/autograf-artifacts',
-        position: { top: '67%', left: '15%' }, // Правый нижний угол со смещением
+        position: { top: '70%', left: '12%' }, // Правый нижний угол со смещением
         width: '23%',
         height: '28%'
     },
