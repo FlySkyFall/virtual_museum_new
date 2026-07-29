@@ -75,6 +75,7 @@ const indexRoutes = require('./routes/index');
 const hallRoutes = require('./routes/hall');
 const militaryHallRoutes = require('./routes/military-hall');
 const historicalHallRoutes = require('./routes/historical-hall');
+const autografHallRoutes = require('./routes/autograf-hall');
 const adminRoutes = require('./routes/admin');
 
 // Использование маршрутов
@@ -82,6 +83,7 @@ app.use('/', indexRoutes);
 app.use('/hall', hallRoutes);
 app.use('/hall', militaryHallRoutes);
 app.use('/hall', historicalHallRoutes);
+app.use('/hall', autografHallRoutes);
 app.use('/admin', adminRoutes);
 
 // Обработка 404

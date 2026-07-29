@@ -1,0 +1,44 @@
+/* Дополнительные стили для зала автографов */
+
+/* Анимация появления текста */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.main-text {
+    animation: fadeInUp 0.8s ease-out forwards;
+}
+
+.quote {
+    animation: fadeInUp 0.8s ease-out 0.2s both;
+}
+
+.development-message {
+    animation: fadeInUp 0.8s ease-out 0.4s both;
+}
+
+/* Дополнительная адаптивность для планшетов */
+@media (min-width: 769px) and (max-width: 1024px) {
+    .main-text {
+        max-width: 700px;
+    }
+}
+
+/* Для очень больших экранов */
+@media (min-width: 1920px) {
+    .main-text {
+        max-width: 1100px;
+        padding: 60px 80px;
+    }
+    
+    .quote {
+        font-size: 36px;
+    }
+}

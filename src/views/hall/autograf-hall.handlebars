@@ -1,0 +1,392 @@
+<div class="autograf-page">
+    <!-- Фоновое изображение страницы -->
+    <div class="autograf-background"></div>
+    
+    <!-- Плашка в левом верхнем углу (как в других залах) -->
+    <div class="top-left-plate">
+        <div class="plate-wrapper">
+            <div class="plate-bg" style="background-image: url('/images/autograf-hall/autograf-plate.png');"></div>
+        </div>
+    </div>
+    
+    <!-- Контент страницы -->
+    <div class="autograf-content">
+        <div class="main-text">
+            <p class="quote">
+                Книга с автографом – это не просто текст, написанный на её страницах, 
+                это символ глубокой признательности и благодарности, вошедший в историю
+            </p>
+            
+            <div class="development-message">
+                <p class="apology">Приносим свои извинения.</p>
+                <p class="status">Страница находится в стадии разработки.</p>
+                <p class="info">
+                    Данную информацию можете посмотреть 
+                    в необновленной версии по ссылке – 
+                    <a href="https://bibliogorod32.ru/index.php/component/k2/item/1562.html" target="_blank" class="old-site-link">
+                        https://bibliogorod32.ru/index.php/component/k2/item/1562.html
+                    </a>
+                </p>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Кнопка назад -->
+    <a href="/" class="back-button-autograf">
+        <img src="/images/back-button.png" alt="Назад" class="back-button-img">
+    </a>
+</div>
+
+<style>
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+    
+    .autograf-page {
+        position: relative;
+        width: 100%;
+        height: 100vh;
+        overflow: hidden;
+        font-family: 'Montserrat', sans-serif;
+    }
+    
+    /* Фоновое изображение страницы */
+    .autograf-background {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-image: url('/images/autograf-hall/autograf-background.jpg');
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+        z-index: 0;
+    }
+    
+    /* ===== ПЛАШКА В ЛЕВОМ ВЕРХНЕМ УГЛУ ===== */
+    .top-left-plate {
+        position: absolute;
+        top: 0;
+        left: 0;
+        z-index: 2;
+        width: 78%;
+        max-width: 1400px;
+        min-width: 250px;
+        height: auto;
+    }
+    
+    .plate-wrapper {
+        position: relative;
+        width: 100%;
+        height: auto;
+        overflow: visible;
+    }
+    
+    .plate-bg {
+        position: relative;
+        width: 100%;
+        height: auto;
+        aspect-ratio: auto;
+        background-size: 100% 100%;
+        background-position: center;
+        background-repeat: no-repeat;
+        padding-bottom: 10%;
+        transition: transform 0.3s ease;
+    }
+    
+    /* ===== ОСНОВНОЙ КОНТЕНТ ===== */
+    .autograf-content {
+        position: relative;
+        z-index: 2;
+        width: 100%;
+        height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 100px 80px 80px 80px;
+    }
+    
+    .main-text {
+        max-width: 900px;
+        text-align: center;
+        background: rgba(255, 255, 255, 0.85);
+        padding: 50px 60px;
+        border-radius: 20px;
+        backdrop-filter: blur(10px);
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        margin-top: 40px;
+        border: 2px solid rgba(255, 255, 255, 0.3);
+    }
+    
+    .quote {
+        font-size: clamp(18px, 2.5vw, 32px);
+        font-weight: 600;
+        color: #2c3e50;
+        line-height: 1.6;
+        margin-bottom: 40px;
+        font-style: italic;
+        padding: 0 20px;
+        border-left: 4px solid #667eea;
+        padding-left: 30px;
+        text-align: left;
+        letter-spacing: 0.5px;
+    }
+    
+    .development-message {
+        margin-top: 30px;
+        padding-top: 30px;
+        border-top: 2px solid rgba(102, 126, 234, 0.3);
+    }
+    
+    .apology {
+        font-size: clamp(16px, 1.8vw, 24px);
+        font-weight: 700;
+        color: #e74c3c;
+        margin-bottom: 10px;
+    }
+    
+    .status {
+        font-size: clamp(14px, 1.5vw, 20px);
+        font-weight: 600;
+        color: #34495e;
+        margin-bottom: 20px;
+    }
+    
+    .info {
+        font-size: clamp(12px, 1.2vw, 18px);
+        color: #2c3e50;
+        line-height: 1.8;
+    }
+    
+    .old-site-link {
+        display: inline-block;
+        margin-top: 10px;
+        padding: 10px 25px;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        text-decoration: none;
+        border-radius: 50px;
+        font-weight: 600;
+        transition: all 0.3s ease;
+        font-size: clamp(12px, 1.1vw, 16px);
+        box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+    }
+    
+    .old-site-link:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 25px rgba(102, 126, 234, 0.6);
+    }
+    
+    /* ===== КНОПКА НАЗАД ===== */
+    .back-button-autograf {
+        position: fixed;
+        bottom: 30px;
+        right: 100px;
+        z-index: 10;
+        width: 180px;
+        height: auto;
+        cursor: pointer;
+        transition: transform 0.3s ease;
+        display: block;
+    }
+    
+    .back-button-img {
+        width: 100%;
+        height: auto;
+        display: block;
+    }
+    
+    .back-button-autograf:hover {
+        transform: scale(1.05);
+    }
+    
+    .back-button-autograf:active {
+        transform: scale(0.98);
+    }
+    
+    /* ============= АДАПТИВНОСТЬ ============= */
+    
+    @media (max-width: 1024px) {
+        .top-left-plate {
+            width: 75%;
+            max-width: 850px;
+            min-width: 200px;
+            top: 2%;
+            left: 2%;
+        }
+        
+        .plate-bg {
+            padding-bottom: 22%;
+        }
+        
+        .autograf-content {
+            padding: 80px 40px 40px 40px;
+        }
+        
+        .main-text {
+            padding: 40px 40px;
+            margin-top: 30px;
+        }
+        
+        .quote {
+            font-size: clamp(16px, 2.2vw, 26px);
+            padding-left: 20px;
+        }
+        
+        .back-button-autograf {
+            width: 140px;
+            right: 80px;
+            bottom: 25px;
+        }
+    }
+    
+    @media (max-width: 768px) {
+        .top-left-plate {
+            width: 85%;
+            max-width: 550px;
+            min-width: 180px;
+            top: 1.5%;
+            left: 1.5%;
+        }
+        
+        .plate-bg {
+            padding-bottom: 25%;
+        }
+        
+        .autograf-content {
+            padding: 70px 20px 20px 20px;
+            align-items: flex-start;
+            padding-top: 80px;
+        }
+        
+        .main-text {
+            padding: 30px 25px;
+            margin-top: 20px;
+            border-radius: 15px;
+        }
+        
+        .quote {
+            font-size: clamp(14px, 2vw, 20px);
+            padding-left: 15px;
+            margin-bottom: 25px;
+            padding-right: 0;
+        }
+        
+        .apology {
+            font-size: clamp(14px, 1.6vw, 18px);
+        }
+        
+        .status {
+            font-size: clamp(13px, 1.4vw, 16px);
+        }
+        
+        .info {
+            font-size: clamp(11px, 1.2vw, 14px);
+        }
+        
+        .old-site-link {
+            font-size: clamp(11px, 1.1vw, 14px);
+            padding: 8px 20px;
+        }
+        
+        .back-button-autograf {
+            width: 100px;
+            bottom: 15px;
+            right: 15px;
+        }
+    }
+    
+    @media (max-width: 480px) {
+        .top-left-plate {
+            width: 90%;
+            max-width: 400px;
+            min-width: 140px;
+            top: 1%;
+            left: 1%;
+        }
+        
+        .plate-bg {
+            padding-bottom: 28%;
+        }
+        
+        .autograf-content {
+            padding: 60px 10px 10px 10px;
+            padding-top: 70px;
+        }
+        
+        .main-text {
+            padding: 20px 15px;
+            margin-top: 15px;
+            border-radius: 12px;
+        }
+        
+        .quote {
+            font-size: clamp(12px, 1.8vw, 16px);
+            padding-left: 10px;
+            margin-bottom: 20px;
+            border-left-width: 3px;
+        }
+        
+        .apology {
+            font-size: clamp(12px, 1.5vw, 15px);
+        }
+        
+        .status {
+            font-size: clamp(11px, 1.3vw, 14px);
+        }
+        
+        .info {
+            font-size: clamp(10px, 1.1vw, 12px);
+        }
+        
+        .old-site-link {
+            font-size: clamp(10px, 1vw, 12px);
+            padding: 6px 15px;
+            display: inline-block;
+        }
+        
+        .back-button-autograf {
+            width: 70px;
+            bottom: 10px;
+            right: 10px;
+        }
+    }
+    
+    @media (max-height: 600px) {
+        .top-left-plate {
+            width: 60%;
+            max-width: 700px;
+            min-width: 200px;
+            top: 1%;
+            left: 1%;
+        }
+        
+        .plate-bg {
+            padding-bottom: 18%;
+        }
+        
+        .autograf-content {
+            padding: 60px 30px 20px 30px;
+            padding-top: 50px;
+        }
+        
+        .main-text {
+            padding: 20px 30px;
+            margin-top: 10px;
+        }
+        
+        .quote {
+            font-size: clamp(12px, 1.8vw, 18px);
+            margin-bottom: 20px;
+        }
+        
+        .back-button-autograf {
+            width: 80px;
+            bottom: 10px;
+            right: 40px;
+        }
+    }
+</style>
