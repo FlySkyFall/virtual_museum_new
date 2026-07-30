@@ -33,9 +33,9 @@
         top: 0;
         left: 0;
         z-index: 2;
-        width: 78%; /* Увеличили с 50% до 70% */
-        max-width: 1400px; /* Увеличили максимальную ширину */
-        min-width: 250px; /* Увеличили минимальную ширину */
+        width: 78%;
+        max-width: 1400px;
+        min-width: 250px;
         height: auto;
     }
     
@@ -47,7 +47,6 @@
         border-radius: 0;
     }
     
-    /* Фоновое изображение - как у кнопок в hall.css */
     .title-image-bg {
         position: relative;
         width: 100%;
@@ -57,11 +56,10 @@
         background-position: center;
         background-repeat: no-repeat;
         border-radius: 0;
-        padding-bottom: 10%; /* Уменьшили с 25% до 20% (плашка стала ниже) */
+        padding-bottom: 10%;
         transition: transform 0.3s ease;
     }
     
-    /* Текст поверх изображения - УМЕНЬШЕННЫЙ */
     .person-name-overlay {
         position: absolute;
         top: 50%;
@@ -73,7 +71,7 @@
         pointer-events: none;
         text-align: right;
         display: flex;
-        gap: 17px; /* Уменьшили gap */
+        gap: 17px;
         align-items: baseline;
         justify-content: flex-end;
         z-index: 2;
@@ -82,16 +80,16 @@
     
     .person-surname {
         font-weight: 800;
-        font-size: clamp(14px, 4vw, 50px); /* Уменьшили размер */
+        font-size: clamp(14px, 4vw, 50px);
         text-transform: uppercase;
-        letter-spacing: 2px; /* Уменьшили интервал */
+        letter-spacing: 2px;
         display: inline-block;
         font-family: 'Comic Sans MS', 'Comic Sans', cursive;
     }
     
     .person-firstname {
         font-weight: 400;
-        font-size: clamp(10px, 3vw, 50px); /* Уменьшили размер */
+        font-size: clamp(10px, 3vw, 50px);
         display: inline-block;
         white-space: nowrap;
         font-family: 'Comic Sans MS', 'Comic Sans', cursive;
@@ -137,11 +135,11 @@
       justify-items: center;
       align-items: center;
     }
-    /* Карточка артефакта */
+    /* Карточка артефакта - исходный размер 800px */
     .artifact-card {
       position: relative;
       width: 100%;
-      max-width: 280px;
+      max-width: 800px;
       margin: 0 auto;
       display: flex;
       align-items: center;
@@ -191,7 +189,7 @@
     .artifact-card:hover { transform: scale(1.05); }
     .artifact-card:active { transform: scale(0.98); }
 
-    /* Навигационные кнопки — всегда видны, но полупрозрачны если неактивны */
+    /* Навигационные кнопки */
     .nav-button {
       position: fixed;
       bottom: 30px;
@@ -254,6 +252,7 @@
       .artifact-image { width: 90%; }
       .nav-button { width: 60px; height: 60px; }
       .artifacts-grid.grid-2 { gap: 20px 80px; }
+      .artifact-card { max-width: 500px; }
     }
     @media (max-width: 768px) {
       .artifacts-content { padding: 80px 20px 80px 20px; }
@@ -263,6 +262,7 @@
       .artifact-image { width: 90%; }
       .nav-button { width: 50px; height: 50px; bottom: 20px; }
       .artifacts-grid.grid-2 { gap: 15px 40px; }
+      .artifact-card { max-width: 350px; }
     }
     @media (max-width: 480px) {
       .artifacts-content { padding: 70px 15px 70px 15px; }
@@ -271,6 +271,7 @@
       .artifact-image { width: 80%; }
       .nav-button { width: 40px; height: 40px; }
       .artifacts-grid.grid-2 { gap: 15px 20px; }
+      .artifact-card { max-width: 200px; }
     }
   </style>
 </head>
@@ -280,7 +281,6 @@
   <!-- Левое верхнее изображение с ФИО поверх -->
     <div class="top-left-image">
         <div class="title-image-wrapper">
-            <!--<div class="title-image-bg" style="background-image: url('/images/literary-hall/person-title.png');"></div> -->
             <div class="title-image-bg" style="background-image: url('{{person.buttonImagePath}}');"></div>
         </div>
     </div>
@@ -288,7 +288,7 @@
   <div class="artifacts-content">
     {{#if artifacts.length}}
     <div class="artifacts-grid-container">
-      <div class="artifacts-grid" id="artifactsGrid">
+      <div class="artifacts-grid grid-2" id="artifactsGrid">
         {{#each artifacts}}
         <button class="artifact-card" data-artifact-index="{{@index}}" data-artifact-name="{{name}}">
           <div class="artifact-image" style="background-image: url('{{imagePath}}');"></div>
@@ -304,7 +304,7 @@
     {{/if}}
   </div>
 
-  <!-- Кнопки пагинации ВСЕГДА ВИДНЫ, но с классом .disabled при неактивности -->
+  <!-- Кнопки пагинации -->
   <button class="nav-button back-button" id="prevPageBtn">
     <img src="/images/back-button.png" alt="Назад" class="nav-button-img">
   </button>
@@ -312,7 +312,7 @@
     <img src="/images/next-button.png" alt="Далее" class="nav-button-img">
   </button>
 
-  <!-- Скрытая информация о странице (не отображается) -->
+  <!-- Скрытая информация о странице -->
   <div class="page-info">Страница {{currentPage}} из {{totalPages}}</div>
 
   <script>
@@ -323,27 +323,27 @@
       const totalPages = parseInt('{{totalPages}}', 10) || 1;
 
       // ----- Клик по карточке артефакта -----
-      document.querySelectorAll('.artifact-card').forEach((card, index) => {
+      document.querySelectorAll('.artifact-card').forEach((card) => {
         card.addEventListener('click', function() {
-          const artifactIndex = card.dataset.artifactIndex;
+          const artifactIndex = this.dataset.artifactIndex;
           window.location.href = `/hall/artifact-video/${personId}/${artifactIndex}`;
         });
       });
 
-      // ----- Кнопки пагинации (всегда видны, но disabled) -----
+      // ----- Кнопки пагинации -----
       const prevBtn = document.getElementById('prevPageBtn');
       const nextBtn = document.getElementById('nextPageBtn');
 
-      // Устанавливаем состояние (активна / неактивна)
-      function setPaginationState() {
-        // Назад: неактивна если currentPage <= 1
+      // Функция обновления состояния кнопок
+      function updatePaginationButtons() {
+        // Кнопка "Назад" активна если currentPage > 1
         if (currentPage <= 1) {
           prevBtn.classList.add('disabled');
         } else {
           prevBtn.classList.remove('disabled');
         }
 
-        // Далее: неактивна если currentPage >= totalPages
+        // Кнопка "Далее" активна если currentPage < totalPages
         if (currentPage >= totalPages) {
           nextBtn.classList.add('disabled');
         } else {
@@ -351,7 +351,7 @@
         }
       }
 
-      // Обработчики кликов (переход только если кнопка активна)
+      // Обработчики кликов
       prevBtn.addEventListener('click', function(e) {
         if (this.classList.contains('disabled')) return;
         window.location.href = `/hall/artifacts/${personId}?page=${currentPage - 1}`;
@@ -362,41 +362,8 @@
         window.location.href = `/hall/artifacts/${personId}?page=${currentPage + 1}`;
       });
 
-      // Применяем состояние
-      setPaginationState();
-
-      // ----- Фиксированная сетка для двух артефактов на страницу -----
-      function setupGridLayout() {
-        const grid = document.getElementById('artifactsGrid');
-        if (!grid) return;
-        
-        // Всегда используем сетку для двух колонок
-        grid.classList.remove('grid-1', 'grid-2', 'grid-3', 'grid-4', 'grid-5', 'grid-6');
-        grid.classList.add('grid-2');
-        
-        // Принудительно устанавливаем две колонки и одну строку
-        grid.style.gridTemplateColumns = 'repeat(2, 1fr)';
-        grid.style.gridTemplateRows = 'auto';
-        
-        // Устанавливаем максимальную ширину для карточек
-        const cards = grid.querySelectorAll('.artifact-card');
-        cards.forEach(card => {
-          card.style.maxWidth = '800px';
-        });
-        
-        // Удаляем возможный плейсхолдер
-        const placeholder = grid.querySelector('.grid-placeholder');
-        if (placeholder) placeholder.remove();
-      }
-
-      setupGridLayout();
-
-      // Адаптивность при ресайзе не ломает сетку
-      let resizeTimeout;
-      window.addEventListener('resize', function() {
-        clearTimeout(resizeTimeout);
-        resizeTimeout = setTimeout(setupGridLayout, 200);
-      });
+      // Применяем состояние кнопок
+      updatePaginationButtons();
     });
   </script>
 </body>
