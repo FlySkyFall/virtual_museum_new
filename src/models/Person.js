@@ -88,6 +88,10 @@ const personSchema = new mongoose.Schema({
         type: String,
         default: '/images/literary-hall/person-placeholder.png'
     },
+    titleImagePath: { // НОВОЕ ПОЛЕ для плашки на странице персоналии
+        type: String,
+        default: '/images/literary-hall/person-title.png' // Путь к изображению для плашки
+    },
     biography: {
         type: String,
         required: true
