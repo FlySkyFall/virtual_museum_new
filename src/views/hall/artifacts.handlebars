@@ -135,7 +135,7 @@
       justify-items: center;
       align-items: center;
     }
-    /* Карточка артефакта - исходный размер 800px */
+    /* Карточка артефакта */
     .artifact-card {
       position: relative;
       width: 100%;
@@ -240,8 +240,9 @@
       margin-bottom: 20px;
     }
 
-    /* ===== СПЕЦИАЛЬНО ДЛЯ 2 АРТЕФАКТОВ: увеличенный gap ===== */
+    /* ===== СПЕЦИАЛЬНО ДЛЯ 2 АРТЕФАКТОВ ===== */
     .artifacts-grid.grid-2 {
+      grid-template-columns: repeat(2, 1fr); /* 2 колонки */
       gap: 20px 300px;  /* горизонтальное расстояние увеличено */
     }
 
