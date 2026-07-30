@@ -291,7 +291,7 @@
     <div class="artifacts-grid-container">
       <div class="artifacts-grid grid-2" id="artifactsGrid">
         {{#each artifacts}}
-        <button class="artifact-card" data-artifact-index="{{@index}}" data-artifact-name="{{name}}">
+        <button class="artifact-card" data-artifact-index="{{@index}}" data-artifact-name="{{name}}" style="display: none;">
           <div class="artifact-image" style="background-image: url('{{imagePath}}');"></div>
           <div class="artifact-name-overlay">{{name}}</div>
         </button>
@@ -320,11 +320,37 @@
     document.addEventListener('DOMContentLoaded', function() {
       // ----- Данные из шаблона -----
       const personId = '{{personId}}';
-      const currentPage = parseInt('{{currentPage}}', 10) || 1;
-      const totalPages = parseInt('{{totalPages}}', 10) || 1;
+      let currentPage = parseInt('{{currentPage}}', 10) || 1;
+      let totalPages = parseInt('{{totalPages}}', 10) || 1;
+
+      // Получаем все карточки
+      const allCards = document.querySelectorAll('.artifact-card');
+      const totalArtifacts = allCards.length;
+      
+      // Если totalPages неправильное, пересчитываем
+      if (totalArtifacts > 0) {
+        totalPages = Math.ceil(totalArtifacts / 2);
+      }
+
+      // Функция показа карточек для текущей страницы
+      function showPage(page) {
+        const start = (page - 1) * 2;
+        const end = start + 2;
+        
+        allCards.forEach((card, index) => {
+          if (index >= start && index < end) {
+            card.style.display = 'flex';
+          } else {
+            card.style.display = 'none';
+          }
+        });
+      }
+
+      // Показываем текущую страницу
+      showPage(currentPage);
 
       // ----- Клик по карточке артефакта -----
-      document.querySelectorAll('.artifact-card').forEach((card) => {
+      allCards.forEach((card) => {
         card.addEventListener('click', function() {
           const artifactIndex = this.dataset.artifactIndex;
           window.location.href = `/hall/artifact-video/${personId}/${artifactIndex}`;
@@ -337,14 +363,12 @@
 
       // Функция обновления состояния кнопок
       function updatePaginationButtons() {
-        // Кнопка "Назад" активна если currentPage > 1
         if (currentPage <= 1) {
           prevBtn.classList.add('disabled');
         } else {
           prevBtn.classList.remove('disabled');
         }
 
-        // Кнопка "Далее" активна если currentPage < totalPages
         if (currentPage >= totalPages) {
           nextBtn.classList.add('disabled');
         } else {
@@ -355,12 +379,19 @@
       // Обработчики кликов
       prevBtn.addEventListener('click', function(e) {
         if (this.classList.contains('disabled')) return;
-        window.location.href = `/hall/artifacts/${personId}?page=${currentPage - 1}`;
+        currentPage--;
+        showPage(currentPage);
+        updatePaginationButtons();
+        // Обновляем URL без перезагрузки
+        window.history.pushState({}, '', `/hall/artifacts/${personId}?page=${currentPage}`);
       });
 
       nextBtn.addEventListener('click', function(e) {
         if (this.classList.contains('disabled')) return;
-        window.location.href = `/hall/artifacts/${personId}?page=${currentPage + 1}`;
+        currentPage++;
+        showPage(currentPage);
+        updatePaginationButtons();
+        window.history.pushState({}, '', `/hall/artifacts/${personId}?page=${currentPage}`);
       });
 
       // Применяем состояние кнопок
