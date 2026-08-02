@@ -42,12 +42,16 @@ const halls = [
 ];
 
 // Главная страница
-router.get('/', (req, res) => {
+/*router.get('/', (req, res) => {
     res.render('home', {
         layout: 'main',
         title: 'Виртуальный музей детских библиотек',
         halls: halls
     });
+});*/
+
+router.get('/', (req, res) => {
+    res.send('Сервер работает, но шаблоны не найдены');
 });
 
 module.exports = router;
