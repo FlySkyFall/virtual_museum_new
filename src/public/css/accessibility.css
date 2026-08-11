@@ -198,8 +198,8 @@
 
 /* Иконка через background-image */
 .search-icon {
-    width: 4vw;
-    height: 4vw;
+    width: 3vw;
+    height: 3vw;
     margin-right: 12px;
     flex-shrink: 0;
     background-size: 100% 100% !important;
