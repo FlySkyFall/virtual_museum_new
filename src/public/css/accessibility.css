@@ -1,51 +1,119 @@
+/* ============================================
+   ФАЙЛ: accessibility.css
+   ОПИСАНИЕ: Стили для кнопок доступности,
+   модального окна поиска и версии для слабовидящих
+   ============================================ */
+
 /* ===== КНОПКИ УПРАВЛЕНИЯ ===== */
 .accessibility-controls {
     position: fixed;
     top: 20px;
     right: 20px;
-    z-index: 1000;
+    z-index: 9999 !important; /* Максимальный приоритет */
     display: flex;
     flex-direction: column;
     gap: 10px;
+    pointer-events: none; /* Чтобы клики проходили сквозь контейнер */
+}
+
+.accessibility-controls .accessibility-btn {
+    pointer-events: auto; /* Но не сквозь кнопки */
 }
 
 .accessibility-btn {
     width: 50px;
     height: 50px;
-    border: none;
+    border: 3px solid #ffffff;
     border-radius: 50%;
     cursor: pointer;
-    background-size: cover;
-    background-position: center;
-    background-repeat: no-repeat;
+    background-size: 60% !important;
+    background-position: center !important;
+    background-repeat: no-repeat !important;
     transition: all 0.3s ease;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-    background-color: #ffffff;
-    border: 2px solid rgba(255, 255, 255, 0.8);
-}
-
-.accessibility-btn:hover {
-    transform: scale(1.1);
-    box-shadow: 0 6px 25px rgba(0, 0, 0, 0.3);
-}
-
-.accessibility-btn:active {
-    transform: scale(0.95);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+    background-color: rgba(255, 255, 255, 0.95);
+    position: relative;
 }
 
 /* Кнопка поиска */
 .search-btn {
-    background-image: url('/images/search-button.png');
-    background-size: 60%;
+    background-image: url('/images/search-icon.png') !important;
+    background-color: #4A90E2 !important; /* Синий фон для видимости */
 }
 
 /* Кнопка версии для слабовидящих */
 .vision-btn {
-    background-image: url('/images/vision-icon.png');
-    background-size: 60%;
+    background-image: url('/images/vision-icon.png') !important;
+    background-color: #6C63FF !important; /* Фиолетовый фон для видимости */
 }
 
-/* Адаптивность для мобильных */
+/* Запасные варианты если картинки не загрузились */
+.search-btn {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='50' height='50' viewBox='0 0 24 24' fill='none' stroke='%234A90E2' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='11' cy='11' r='8'/%3E%3Cline x1='21' y1='21' x2='16.65' y2='16.65'/%3E%3C/svg%3E") !important;
+    background-size: 60% !important;
+    background-position: center !important;
+    background-repeat: no-repeat !important;
+    background-color: #ffffff !important;
+}
+
+.vision-btn {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='50' height='50' viewBox='0 0 24 24' fill='none' stroke='%236C63FF' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z'/%3E%3Ccircle cx='12' cy='12' r='3'/%3E%3C/svg%3E") !important;
+    background-size: 60% !important;
+    background-position: center !important;
+    background-repeat: no-repeat !important;
+    background-color: #ffffff !important;
+}
+
+/* Эмодзи-заглушки если ничего не работает */
+.search-btn::after {
+    content: "🔍";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 24px;
+    display: none;
+}
+
+.vision-btn::after {
+    content: "👁️";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 24px;
+    display: none;
+}
+
+/* Показываем эмодзи если картинка не загрузилась */
+.search-btn:not([style*="background-image"]):not([style*="background-image"])::after,
+.search-btn[style*="background-image: none"]::after {
+    display: block;
+}
+
+.vision-btn:not([style*="background-image"]):not([style*="background-image"])::after,
+.vision-btn[style*="background-image: none"]::after {
+    display: block;
+}
+
+.accessibility-btn:hover {
+    transform: scale(1.15) !important;
+    box-shadow: 0 6px 30px rgba(0, 0, 0, 0.4);
+    border-color: #FFD700;
+}
+
+.accessibility-btn:active {
+    transform: scale(0.95) !important;
+}
+
+/* Активное состояние кнопки vision */
+.vision-btn.active {
+    background-color: #FF6B6B !important;
+    border-color: #FFD700;
+    animation: pulse 0.5s ease;
+}
+
+/* ===== АДАПТИВНОСТЬ КНОПОК ===== */
 @media (max-width: 768px) {
     .accessibility-controls {
         top: 10px;
@@ -54,8 +122,9 @@
     }
     
     .accessibility-btn {
-        width: 40px;
-        height: 40px;
+        width: 44px;
+        height: 44px;
+        background-size: 55% !important;
     }
 }
 
@@ -67,8 +136,10 @@
     }
     
     .accessibility-btn {
-        width: 35px;
-        height: 35px;
+        width: 38px;
+        height: 38px;
+        background-size: 50% !important;
+        border-width: 2px;
     }
 }
 
@@ -80,12 +151,13 @@
     left: 0;
     width: 100%;
     height: 100%;
-    background: rgba(0, 0, 0, 0.5);
-    z-index: 2000;
+    background: rgba(0, 0, 0, 0.6);
+    z-index: 9998 !important;
     animation: fadeIn 0.3s ease;
     justify-content: center;
     align-items: flex-start;
     padding-top: 80px;
+    backdrop-filter: blur(5px);
 }
 
 .search-modal.active {
@@ -104,11 +176,11 @@
 @keyframes slideDown {
     from {
         opacity: 0;
-        transform: translateY(-30px);
+        transform: translateY(-30px) scale(0.95);
     }
     to {
         opacity: 1;
-        transform: translateY(0);
+        transform: translateY(0) scale(1);
     }
 }
 
@@ -121,13 +193,10 @@
     box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
     animation: slideDown 0.3s ease;
     position: relative;
-}
-
-/* Закрытие модального окна по клику вне его */
-.search-modal.active .search-modal-content {
     pointer-events: auto;
 }
 
+/* Закрытие модального окна по клику вне его */
 .search-modal.active {
     pointer-events: none;
 }
@@ -136,7 +205,7 @@
     pointer-events: auto;
 }
 
-/* Контейнер поиска */
+/* ===== КОНТЕЙНЕР ПОИСКА ===== */
 .search-container {
     display: flex;
     align-items: center;
@@ -183,20 +252,29 @@
     color: #999;
 }
 
+/* Кнопка "Искать" */
 .search-submit-btn {
     width: 50px;
     height: 50px;
     border: none;
     border-radius: 50%;
     background-image: url('/images/search-submit.png');
-    background-size: cover;
-    background-position: center;
-    background-repeat: no-repeat;
+    background-size: cover !important;
+    background-position: center !important;
+    background-repeat: no-repeat !important;
     cursor: pointer;
     transition: all 0.3s ease;
     flex-shrink: 0;
     background-color: #667eea;
     box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+}
+
+/* Запасной вариант для кнопки "Искать" */
+.search-submit-btn {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='50' height='50'%3E%3Crect width='50' height='50' rx='25' fill='%23667eea'/%3E%3Ctext x='25' y='32' font-family='Arial' font-size='14' fill='white' text-anchor='middle' font-weight='bold'%3EИскать%3C/text%3E%3C/svg%3E") !important;
+    background-size: cover !important;
+    background-position: center !important;
+    background-repeat: no-repeat !important;
 }
 
 .search-submit-btn:hover {
@@ -208,7 +286,7 @@
     transform: scale(0.95);
 }
 
-/* Результаты поиска */
+/* ===== РЕЗУЛЬТАТЫ ПОИСКА ===== */
 .search-results {
     margin-top: 20px;
     max-height: 400px;
@@ -255,7 +333,14 @@
     font-size: 16px;
 }
 
-/* Адаптивность модального окна */
+/* Стили для подсветки найденного текста */
+.search-result-item mark {
+    background: #ffeb3b;
+    padding: 0 2px;
+    border-radius: 2px;
+}
+
+/* ===== АДАПТИВНОСТЬ МОДАЛЬНОГО ОКНА ===== */
 @media (max-width: 768px) {
     .search-modal {
         padding-top: 60px;
@@ -321,8 +406,8 @@
 body.vision-mode {
     font-size: 18px !important;
     line-height: 1.8 !important;
-    background: #fff !important;
-    color: #000 !important;
+    background: #ffffff !important;
+    color: #000000 !important;
 }
 
 body.vision-mode * {
@@ -330,43 +415,57 @@ body.vision-mode * {
     line-height: inherit !important;
 }
 
+/* Кнопки залов в режиме слабовидящих */
 body.vision-mode .hall-button {
-    border: 3px solid #000 !important;
-    box-shadow: 0 0 0 2px #fff, 0 0 0 5px #000 !important;
+    border: 3px solid #000000 !important;
+    box-shadow: 0 0 0 2px #ffffff, 0 0 0 5px #000000 !important;
+    border-radius: 0 0 30px 0 !important;
 }
 
 body.vision-mode .hall-button:hover {
     transform: scale(1.1) !important;
     border-color: #0066cc !important;
-    box-shadow: 0 0 0 2px #fff, 0 0 0 5px #0066cc !important;
+    box-shadow: 0 0 0 2px #ffffff, 0 0 0 5px #0066cc !important;
 }
 
+body.vision-mode .hall-button .button-image {
+    border-radius: 0 0 30px 0 !important;
+}
+
+/* Кнопки доступности в режиме слабовидящих */
 body.vision-mode .accessibility-btn {
-    border: 3px solid #000 !important;
-    box-shadow: 0 0 0 2px #fff, 0 0 0 5px #000 !important;
+    border: 3px solid #000000 !important;
+    box-shadow: 0 0 0 2px #ffffff, 0 0 0 5px #000000 !important;
+    width: 60px !important;
+    height: 60px !important;
 }
 
 body.vision-mode .accessibility-btn:hover {
     transform: scale(1.1) !important;
     border-color: #0066cc !important;
-    box-shadow: 0 0 0 2px #fff, 0 0 0 5px #0066cc !important;
+    box-shadow: 0 0 0 2px #ffffff, 0 0 0 5px #0066cc !important;
 }
 
+/* Поиск в режиме слабовидящих */
 body.vision-mode .search-input-wrapper {
-    border: 3px solid #000 !important;
+    border: 3px solid #000000 !important;
 }
 
 body.vision-mode .search-input {
     font-size: 20px !important;
+    padding: 16px 0 !important;
 }
 
 body.vision-mode .search-submit-btn {
-    border: 3px solid #000 !important;
-    box-shadow: 0 0 0 2px #fff, 0 0 0 5px #000 !important;
+    border: 3px solid #000000 !important;
+    box-shadow: 0 0 0 2px #ffffff, 0 0 0 5px #000000 !important;
+    width: 60px !important;
+    height: 60px !important;
 }
 
+/* Результаты поиска в режиме слабовидящих */
 body.vision-mode .search-result-item {
-    border: 2px solid #000 !important;
+    border: 2px solid #000000 !important;
     margin-bottom: 8px !important;
     padding: 20px !important;
 }
@@ -379,44 +478,96 @@ body.vision-mode .search-result-description {
     font-size: 18px !important;
 }
 
+body.vision-mode .search-result-item mark {
+    background: #ffeb3b !important;
+    padding: 2px 4px !important;
+}
+
+/* Логотип в режиме слабовидящих */
 body.vision-mode .main-logo {
-    border: 3px solid #000 !important;
-    box-shadow: 0 0 0 2px #fff, 0 0 0 5px #000 !important;
+    border: 3px solid #000000 !important;
+    box-shadow: 0 0 0 2px #ffffff, 0 0 0 5px #000000 !important;
+}
+
+/* Текст в режиме слабовидящих */
+body.vision-mode h1,
+body.vision-mode h2,
+body.vision-mode h3,
+body.vision-mode h4,
+body.vision-mode h5,
+body.vision-mode h6 {
+    font-size: 1.4em !important;
+    font-weight: 700 !important;
+}
+
+body.vision-mode p,
+body.vision-mode span,
+body.vision-mode div:not(.accessibility-controls):not(.search-modal-content) {
+    font-size: 1.1em !important;
+}
+
+body.vision-mode a,
+body.vision-mode button:not(.accessibility-btn):not(.search-submit-btn) {
+    font-size: 1.1em !important;
+    text-decoration: underline !important;
 }
 
 /* Индикатор активного режима */
 body.vision-mode::before {
-    content: "🔍 Версия для слабовидящих";
+    content: "👁️ Версия для слабовидящих";
     position: fixed;
     bottom: 20px;
     left: 50%;
     transform: translateX(-50%);
-    background: #000;
-    color: #fff;
-    padding: 10px 20px;
+    background: #000000;
+    color: #ffffff;
+    padding: 12px 24px;
     border-radius: 30px;
     font-size: 16px;
-    z-index: 9999;
+    z-index: 99999 !important;
     font-family: 'Montserrat', sans-serif;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+    font-weight: 600;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
     pointer-events: none;
+    border: 2px solid #ffffff;
+    letter-spacing: 1px;
 }
 
 @media (max-width: 768px) {
     body.vision-mode::before {
         font-size: 14px;
-        padding: 8px 16px;
-        bottom: 10px;
+        padding: 10px 20px;
+        bottom: 15px;
+        max-width: 90%;
+        text-align: center;
+    }
+    
+    body.vision-mode .accessibility-btn {
+        width: 50px !important;
+        height: 50px !important;
     }
 }
 
-/* Анимация для кнопок */
+@media (max-width: 480px) {
+    body.vision-mode::before {
+        font-size: 12px;
+        padding: 8px 16px;
+        bottom: 10px;
+    }
+    
+    body.vision-mode .accessibility-btn {
+        width: 44px !important;
+        height: 44px !important;
+    }
+}
+
+/* ===== АНИМАЦИИ ===== */
 @keyframes pulse {
     0% {
         box-shadow: 0 0 0 0 rgba(102, 126, 234, 0.4);
     }
     70% {
-        box-shadow: 0 0 0 10px rgba(102, 126, 234, 0);
+        box-shadow: 0 0 0 15px rgba(102, 126, 234, 0);
     }
     100% {
         box-shadow: 0 0 0 0 rgba(102, 126, 234, 0);
@@ -425,4 +576,50 @@ body.vision-mode::before {
 
 .accessibility-btn.active {
     animation: pulse 0.5s ease;
+}
+
+/* Стили для скроллбара результатов поиска */
+.search-results::-webkit-scrollbar {
+    width: 6px;
+}
+
+.search-results::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 10px;
+}
+
+.search-results::-webkit-scrollbar-thumb {
+    background: #667eea;
+    border-radius: 10px;
+}
+
+.search-results::-webkit-scrollbar-thumb:hover {
+    background: #764ba2;
+}
+
+/* ===== ОБЩИЕ УЛУЧШЕНИЯ ===== */
+/* Запрет выделения текста на кнопках */
+.accessibility-btn {
+    user-select: none;
+    -webkit-user-select: none;
+}
+
+/* Плавный переход для всех элементов в режиме слабовидящих */
+body.vision-mode * {
+    transition: all 0.2s ease !important;
+}
+
+/* Контрастные фокусы */
+.accessibility-btn:focus-visible,
+.search-input:focus-visible,
+.search-submit-btn:focus-visible {
+    outline: 3px solid #FFD700;
+    outline-offset: 3px;
+}
+
+body.vision-mode .accessibility-btn:focus-visible,
+body.vision-mode .search-input:focus-visible,
+body.vision-mode .search-submit-btn:focus-visible {
+    outline: 4px solid #FFD700;
+    outline-offset: 4px;
 }

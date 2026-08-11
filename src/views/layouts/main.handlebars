@@ -12,12 +12,20 @@
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
-    <!-- Кнопки управления доступностью -->
-    <div class="accessibility-controls">
+    <!-- Кнопки управления доступностью - ВЫШЕ ВСЕГО -->
+    <div class="accessibility-controls" id="accessibilityControls">
         <!-- Кнопка поиска -->
-        <button id="searchToggle" class="accessibility-btn search-btn" aria-label="Поиск по сайту"></button>
+        <button id="searchToggle" class="accessibility-btn search-btn" 
+                aria-label="Поиск по сайту" 
+                title="Поиск (Ctrl+F)"
+                style="background-image: url('/images/search-icon.png');">
+        </button>
         <!-- Кнопка версии для слабовидящих -->
-        <button id="visionToggle" class="accessibility-btn vision-btn" aria-label="Версия для слабовидящих"></button>
+        <button id="visionToggle" class="accessibility-btn vision-btn" 
+                aria-label="Версия для слабовидящих" 
+                title="Версия для слабовидящих"
+                style="background-image: url('/images/vision-icon.png');">
+        </button>
     </div>
 
     <!-- Модальное окно поиска -->
@@ -25,10 +33,14 @@
         <div class="search-modal-content">
             <div class="search-container">
                 <div class="search-input-wrapper">
-                    <img src="/images/search-icon.png" alt="Поиск" class="search-icon">
+                    <img src="/images/search-icon.png" alt="Поиск" class="search-icon" 
+                         onerror="this.style.display='none'">
                     <input type="text" id="searchInput" placeholder="Введите запрос..." class="search-input">
                 </div>
-                <button id="searchButton" class="search-submit-btn" aria-label="Искать"></button>
+                <button id="searchButton" class="search-submit-btn" 
+                        aria-label="Искать"
+                        style="background-image: url('/images/search-submit.png');">
+                </button>
             </div>
             <div id="searchResults" class="search-results"></div>
         </div>
@@ -42,5 +54,58 @@
     <script src="/js/hall.js"></script>
     <script src="/js/warHall.js"></script>
     <script src="/js/accessibility.js"></script>
+
+    <!-- Отладочный скрипт для проверки кнопок -->
+    <script>
+        (function() {
+            console.log('=== ПРОВЕРКА КНОПОК ДОСТУПНОСТИ ===');
+            const controls = document.getElementById('accessibilityControls');
+            const searchBtn = document.getElementById('searchToggle');
+            const visionBtn = document.getElementById('visionToggle');
+            
+            console.log('Контейнер кнопок:', controls);
+            console.log('Кнопка поиска:', searchBtn);
+            console.log('Кнопка vision:', visionBtn);
+            
+            if (controls) {
+                const rect = controls.getBoundingClientRect();
+                console.log('Позиция контейнера:', rect);
+                console.log('Стили контейнера:', window.getComputedStyle(controls));
+            }
+            
+            if (searchBtn) {
+                const rect = searchBtn.getBoundingClientRect();
+                console.log('Позиция кнопки поиска:', rect);
+                console.log('Стили кнопки поиска:', window.getComputedStyle(searchBtn));
+            }
+            
+            if (visionBtn) {
+                const rect = visionBtn.getBoundingClientRect();
+                console.log('Позиция кнопки vision:', rect);
+                console.log('Стили кнопки vision:', window.getComputedStyle(visionBtn));
+            }
+            
+            // Проверяем, видны ли кнопки
+            setTimeout(() => {
+                if (searchBtn) {
+                    const rect = searchBtn.getBoundingClientRect();
+                    if (rect.width === 0 || rect.height === 0) {
+                        console.warn('⚠️ Кнопка поиска имеет нулевой размер!');
+                    } else {
+                        console.log('✅ Кнопка поиска видна');
+                    }
+                }
+                
+                if (visionBtn) {
+                    const rect = visionBtn.getBoundingClientRect();
+                    if (rect.width === 0 || rect.height === 0) {
+                        console.warn('⚠️ Кнопка vision имеет нулевой размер!');
+                    } else {
+                        console.log('✅ Кнопка vision видна');
+                    }
+                }
+            }, 500);
+        })();
+    </script>
 </body>
 </html>
