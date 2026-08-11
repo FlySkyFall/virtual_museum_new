@@ -9,47 +9,49 @@
     position: fixed;
     top: 20px;
     right: 20px;
-    z-index: 9999 !important; /* Максимальный приоритет */
+    z-index: 9999 !important;
     display: flex;
     flex-direction: column;
     gap: 10px;
-    pointer-events: none; /* Чтобы клики проходили сквозь контейнер */
-}
-
-.accessibility-controls .accessibility-btn {
-    pointer-events: auto; /* Но не сквозь кнопки */
 }
 
 .accessibility-btn {
     width: 50px;
     height: 50px;
-    border: 3px solid #ffffff;
-    border-radius: 50%;
+    border: 2px solid #ffffff;
+    border-radius: 12px !important; /* Сделаем кнопки с прямыми углами */
     cursor: pointer;
-    background-size: 60% !important;
+    background-size: cover !important;
     background-position: center !important;
     background-repeat: no-repeat !important;
     transition: all 0.3s ease;
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
-    background-color: rgba(255, 255, 255, 0.95);
+    background-color: #ffffff;
     position: relative;
+    overflow: hidden;
 }
 
-/* Кнопка поиска */
+/* Кнопка поиска - используем только фоновое изображение */
 .search-btn {
     background-image: url('/images/search-icon.png') !important;
-    background-color: #4A90E2 !important; /* Синий фон для видимости */
+    background-size: cover !important;
+    background-position: center !important;
+    background-repeat: no-repeat !important;
+    background-color: transparent !important;
 }
 
 /* Кнопка версии для слабовидящих */
 .vision-btn {
     background-image: url('/images/vision-icon.png') !important;
-    background-color: #6C63FF !important; /* Фиолетовый фон для видимости */
+    background-size: cover !important;
+    background-position: center !important;
+    background-repeat: no-repeat !important;
+    background-color: transparent !important;
 }
 
 /* Запасные варианты если картинки не загрузились */
 .search-btn {
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='50' height='50' viewBox='0 0 24 24' fill='none' stroke='%234A90E2' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='11' cy='11' r='8'/%3E%3Cline x1='21' y1='21' x2='16.65' y2='16.65'/%3E%3C/svg%3E") !important;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='50' height='50' viewBox='0 0 24 24' fill='%234A90E2'%3E%3Ccircle cx='11' cy='11' r='8'/%3E%3Cline x1='21' y1='21' x2='16.65' y2='16.65' stroke='%234A90E2' stroke-width='2'/%3E%3C/svg%3E") !important;
     background-size: 60% !important;
     background-position: center !important;
     background-repeat: no-repeat !important;
@@ -57,60 +59,20 @@
 }
 
 .vision-btn {
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='50' height='50' viewBox='0 0 24 24' fill='none' stroke='%236C63FF' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z'/%3E%3Ccircle cx='12' cy='12' r='3'/%3E%3C/svg%3E") !important;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='50' height='50' viewBox='0 0 24 24' fill='%236C63FF'%3E%3Cpath d='M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z'/%3E%3Ccircle cx='12' cy='12' r='3' fill='%236C63FF'/%3E%3C/svg%3E") !important;
     background-size: 60% !important;
     background-position: center !important;
     background-repeat: no-repeat !important;
     background-color: #ffffff !important;
 }
 
-/* Эмодзи-заглушки если ничего не работает */
-.search-btn::after {
-    content: "🔍";
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    font-size: 24px;
-    display: none;
-}
-
-.vision-btn::after {
-    content: "👁️";
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    font-size: 24px;
-    display: none;
-}
-
-/* Показываем эмодзи если картинка не загрузилась */
-.search-btn:not([style*="background-image"]):not([style*="background-image"])::after,
-.search-btn[style*="background-image: none"]::after {
-    display: block;
-}
-
-.vision-btn:not([style*="background-image"]):not([style*="background-image"])::after,
-.vision-btn[style*="background-image: none"]::after {
-    display: block;
-}
-
 .accessibility-btn:hover {
-    transform: scale(1.15) !important;
-    box-shadow: 0 6px 30px rgba(0, 0, 0, 0.4);
-    border-color: #FFD700;
+    transform: scale(1.1);
+    box-shadow: 0 6px 25px rgba(0, 0, 0, 0.4);
 }
 
 .accessibility-btn:active {
-    transform: scale(0.95) !important;
-}
-
-/* Активное состояние кнопки vision */
-.vision-btn.active {
-    background-color: #FF6B6B !important;
-    border-color: #FFD700;
-    animation: pulse 0.5s ease;
+    transform: scale(0.95);
 }
 
 /* ===== АДАПТИВНОСТЬ КНОПОК ===== */
@@ -124,7 +86,6 @@
     .accessibility-btn {
         width: 44px;
         height: 44px;
-        background-size: 55% !important;
     }
 }
 
@@ -138,8 +99,7 @@
     .accessibility-btn {
         width: 38px;
         height: 38px;
-        background-size: 50% !important;
-        border-width: 2px;
+        border-radius: 8px !important;
     }
 }
 
@@ -155,9 +115,7 @@
     z-index: 9998 !important;
     animation: fadeIn 0.3s ease;
     justify-content: center;
-    align-items: flex-start;
-    padding-top: 80px;
-    backdrop-filter: blur(5px);
+    align-items: center;
 }
 
 .search-modal.active {
@@ -176,7 +134,7 @@
 @keyframes slideDown {
     from {
         opacity: 0;
-        transform: translateY(-30px) scale(0.95);
+        transform: translateY(-20px) scale(0.95);
     }
     to {
         opacity: 1;
@@ -187,22 +145,23 @@
 .search-modal-content {
     background: white;
     border-radius: 16px;
-    padding: 30px;
+    padding: 30px 30px 25px;
     max-width: 600px;
     width: 90%;
     box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
     animation: slideDown 0.3s ease;
     position: relative;
-    pointer-events: auto;
 }
 
-/* Закрытие модального окна по клику вне его */
-.search-modal.active {
-    pointer-events: none;
-}
-
-.search-modal.active .search-modal-content {
-    pointer-events: auto;
+/* Заголовок модального окна */
+.search-modal-title {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 22px;
+    font-weight: 700;
+    color: #333;
+    margin: 0 0 20px 0;
+    padding: 0;
+    text-align: center;
 }
 
 /* ===== КОНТЕЙНЕР ПОИСКА ===== */
@@ -222,6 +181,7 @@
     padding: 0 16px;
     border: 2px solid #e0e0e0;
     transition: all 0.3s ease;
+    height: 50px;
 }
 
 .search-input-wrapper:focus-within {
@@ -229,18 +189,20 @@
     box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.1);
 }
 
+/* Иконка лупы слева от поля ввода - квадратная */
 .search-icon {
-    width: 24px;
-    height: 24px;
+    width: 32px;
+    height: 32px;
     margin-right: 12px;
-    opacity: 0.6;
     flex-shrink: 0;
+    border-radius: 0 !important; /* Квадратная иконка */
+    object-fit: contain;
 }
 
 .search-input {
     flex: 1;
     border: none;
-    padding: 14px 0;
+    padding: 12px 0;
     font-size: 16px;
     font-family: 'Montserrat', sans-serif;
     background: transparent;
@@ -252,12 +214,12 @@
     color: #999;
 }
 
-/* Кнопка "Искать" */
+/* Кнопка "Искать" - квадратная со сглаженными углами */
 .search-submit-btn {
     width: 50px;
     height: 50px;
     border: none;
-    border-radius: 50%;
+    border-radius: 8px !important; /* Сглаженные углы, но не круглые */
     background-image: url('/images/search-submit.png');
     background-size: cover !important;
     background-position: center !important;
@@ -271,7 +233,7 @@
 
 /* Запасной вариант для кнопки "Искать" */
 .search-submit-btn {
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='50' height='50'%3E%3Crect width='50' height='50' rx='25' fill='%23667eea'/%3E%3Ctext x='25' y='32' font-family='Arial' font-size='14' fill='white' text-anchor='middle' font-weight='bold'%3EИскать%3C/text%3E%3C/svg%3E") !important;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='50' height='50'%3E%3Crect width='50' height='50' rx='8' fill='%23667eea'/%3E%3Ctext x='25' y='32' font-family='Arial' font-size='14' fill='white' text-anchor='middle' font-weight='bold'%3EИскать%3C/text%3E%3C/svg%3E") !important;
     background-size: cover !important;
     background-position: center !important;
     background-repeat: no-repeat !important;
@@ -289,7 +251,7 @@
 /* ===== РЕЗУЛЬТАТЫ ПОИСКА ===== */
 .search-results {
     margin-top: 20px;
-    max-height: 400px;
+    max-height: 350px;
     overflow-y: auto;
     display: none;
 }
@@ -342,18 +304,24 @@
 
 /* ===== АДАПТИВНОСТЬ МОДАЛЬНОГО ОКНА ===== */
 @media (max-width: 768px) {
-    .search-modal {
-        padding-top: 60px;
+    .search-modal-content {
+        padding: 20px 20px 18px;
+        max-width: 95%;
     }
     
-    .search-modal-content {
-        padding: 20px;
-        max-width: 95%;
+    .search-modal-title {
+        font-size: 18px;
+        margin-bottom: 15px;
+    }
+    
+    .search-input-wrapper {
+        height: 44px;
+        padding: 0 14px;
     }
     
     .search-input {
         font-size: 14px;
-        padding: 12px 0;
+        padding: 10px 0;
     }
     
     .search-submit-btn {
@@ -362,19 +330,21 @@
     }
     
     .search-icon {
-        width: 20px;
-        height: 20px;
+        width: 28px;
+        height: 28px;
+        margin-right: 10px;
     }
 }
 
 @media (max-width: 480px) {
-    .search-modal {
-        padding-top: 40px;
+    .search-modal-content {
+        padding: 16px 16px 14px;
+        border-radius: 12px;
     }
     
-    .search-modal-content {
-        padding: 16px;
-        border-radius: 12px;
+    .search-modal-title {
+        font-size: 16px;
+        margin-bottom: 12px;
     }
     
     .search-container {
@@ -382,22 +352,25 @@
     }
     
     .search-input-wrapper {
+        height: 40px;
         padding: 0 12px;
+        border-radius: 40px;
     }
     
     .search-input {
         font-size: 13px;
-        padding: 10px 0;
+        padding: 8px 0;
     }
     
     .search-submit-btn {
         width: 40px;
         height: 40px;
+        border-radius: 6px !important;
     }
     
     .search-icon {
-        width: 18px;
-        height: 18px;
+        width: 24px;
+        height: 24px;
         margin-right: 8px;
     }
 }
@@ -428,16 +401,13 @@ body.vision-mode .hall-button:hover {
     box-shadow: 0 0 0 2px #ffffff, 0 0 0 5px #0066cc !important;
 }
 
-body.vision-mode .hall-button .button-image {
-    border-radius: 0 0 30px 0 !important;
-}
-
 /* Кнопки доступности в режиме слабовидящих */
 body.vision-mode .accessibility-btn {
     border: 3px solid #000000 !important;
     box-shadow: 0 0 0 2px #ffffff, 0 0 0 5px #000000 !important;
     width: 60px !important;
     height: 60px !important;
+    border-radius: 12px !important;
 }
 
 body.vision-mode .accessibility-btn:hover {
@@ -449,18 +419,29 @@ body.vision-mode .accessibility-btn:hover {
 /* Поиск в режиме слабовидящих */
 body.vision-mode .search-input-wrapper {
     border: 3px solid #000000 !important;
+    height: 56px !important;
 }
 
 body.vision-mode .search-input {
     font-size: 20px !important;
-    padding: 16px 0 !important;
+    padding: 14px 0 !important;
 }
 
 body.vision-mode .search-submit-btn {
     border: 3px solid #000000 !important;
     box-shadow: 0 0 0 2px #ffffff, 0 0 0 5px #000000 !important;
-    width: 60px !important;
-    height: 60px !important;
+    width: 56px !important;
+    height: 56px !important;
+    border-radius: 8px !important;
+}
+
+body.vision-mode .search-icon {
+    width: 36px !important;
+    height: 36px !important;
+}
+
+body.vision-mode .search-modal-title {
+    font-size: 26px !important;
 }
 
 /* Результаты поиска в режиме слабовидящих */
@@ -476,11 +457,6 @@ body.vision-mode .search-result-title {
 
 body.vision-mode .search-result-description {
     font-size: 18px !important;
-}
-
-body.vision-mode .search-result-item mark {
-    background: #ffeb3b !important;
-    padding: 2px 4px !important;
 }
 
 /* Логотип в режиме слабовидящих */
@@ -546,6 +522,15 @@ body.vision-mode::before {
         width: 50px !important;
         height: 50px !important;
     }
+    
+    body.vision-mode .search-input-wrapper {
+        height: 50px !important;
+    }
+    
+    body.vision-mode .search-submit-btn {
+        width: 50px !important;
+        height: 50px !important;
+    }
 }
 
 @media (max-width: 480px) {
@@ -558,6 +543,10 @@ body.vision-mode::before {
     body.vision-mode .accessibility-btn {
         width: 44px !important;
         height: 44px !important;
+    }
+    
+    body.vision-mode .search-modal-title {
+        font-size: 20px !important;
     }
 }
 
@@ -602,11 +591,6 @@ body.vision-mode::before {
 .accessibility-btn {
     user-select: none;
     -webkit-user-select: none;
-}
-
-/* Плавный переход для всех элементов в режиме слабовидящих */
-body.vision-mode * {
-    transition: all 0.2s ease !important;
 }
 
 /* Контрастные фокусы */
