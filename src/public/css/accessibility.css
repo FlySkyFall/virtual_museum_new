@@ -15,17 +15,16 @@
 
 /* Кнопки - увеличенные, без рамки, адаптивные */
 .accessibility-btn {
-    width: 4vw;
-    height: 4vw;
+    width: 8vw;
+    height: 6vw;
     min-width: 45px;
-    max-width: 80px;
+    max-width: 100px;
     min-height: 45px;
     max-height: 80px;
     border: none !important;
     border-radius: 12px;
     cursor: pointer;
     transition: all 0.3s ease;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
     background: transparent;
     padding: 0;
     outline: none;
@@ -54,7 +53,6 @@
 
 .accessibility-btn:hover {
     transform: scale(1.1);
-    box-shadow: 0 6px 25px rgba(0, 0, 0, 0.4);
 }
 
 .accessibility-btn:active {
