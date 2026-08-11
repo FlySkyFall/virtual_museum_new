@@ -8,9 +8,32 @@
     <link rel="stylesheet" href="/css/hall.css">
     <link rel="stylesheet" href="/css/military-hall.css">
     <link rel="stylesheet" href="/css/autograf-hall.css">
+    <link rel="stylesheet" href="/css/accessibility.css">
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
+    <!-- Кнопки управления доступностью -->
+    <div class="accessibility-controls">
+        <!-- Кнопка поиска -->
+        <button id="searchToggle" class="accessibility-btn search-btn" aria-label="Поиск по сайту"></button>
+        <!-- Кнопка версии для слабовидящих -->
+        <button id="visionToggle" class="accessibility-btn vision-btn" aria-label="Версия для слабовидящих"></button>
+    </div>
+
+    <!-- Модальное окно поиска -->
+    <div id="searchModal" class="search-modal">
+        <div class="search-modal-content">
+            <div class="search-container">
+                <div class="search-input-wrapper">
+                    <img src="/images/search-icon.png" alt="Поиск" class="search-icon">
+                    <input type="text" id="searchInput" placeholder="Введите запрос..." class="search-input">
+                </div>
+                <button id="searchButton" class="search-submit-btn" aria-label="Искать"></button>
+            </div>
+            <div id="searchResults" class="search-results"></div>
+        </div>
+    </div>
+
     <main>
         {{{body}}}
     </main>
@@ -18,5 +41,6 @@
     <script src="/js/main.js"></script>
     <script src="/js/hall.js"></script>
     <script src="/js/warHall.js"></script>
+    <script src="/js/accessibility.js"></script>
 </body>
 </html>
