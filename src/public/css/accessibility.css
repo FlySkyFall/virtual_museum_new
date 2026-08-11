@@ -1,7 +1,5 @@
 /* ============================================
    ФАЙЛ: accessibility.css
-   ОПИСАНИЕ: Стили для кнопок доступности,
-   модального окна поиска и версии для слабовидящих
    ============================================ */
 
 /* ===== КНОПКИ УПРАВЛЕНИЯ ===== */
@@ -15,48 +13,39 @@
     gap: 10px;
 }
 
+/* Кнопки как в вашем примере */
 .accessibility-btn {
     width: 50px;
     height: 50px;
     border: 2px solid #ffffff;
-    border-radius: 12px !important;
+    border-radius: 12px;
     cursor: pointer;
     transition: all 0.3s ease;
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
-    background-color: transparent !important;
-    position: relative;
-    overflow: hidden;
+    background: transparent;
     padding: 0;
-    background-size: 100% 100% !important;
+    outline: none;
+    background-size: contain !important;
     background-position: center !important;
     background-repeat: no-repeat !important;
 }
 
+.accessibility-btn:focus {
+    outline: none;
+}
+
+.accessibility-btn::-moz-focus-inner {
+    border: 0;
+}
+
 /* Кнопка поиска */
 .search-btn {
-    background-image: url('/images/search-button.png') !important;
+    background-image: url('/images/search-icon.png') !important;
 }
 
 /* Кнопка версии для слабовидящих */
 .vision-btn {
     background-image: url('/images/vision-icon.png') !important;
-}
-
-/* Запасные варианты если картинки не загрузились */
-.search-btn {
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='50' height='50' viewBox='0 0 24 24' fill='none' stroke='%234A90E2' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='11' cy='11' r='8'/%3E%3Cline x1='21' y1='21' x2='16.65' y2='16.65'/%3E%3C/svg%3E") !important;
-    background-size: 60% 60% !important;
-    background-position: center !important;
-    background-repeat: no-repeat !important;
-    background-color: #ffffff !important;
-}
-
-.vision-btn {
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='50' height='50' viewBox='0 0 24 24' fill='none' stroke='%236C63FF' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z'/%3E%3Ccircle cx='12' cy='12' r='3'/%3E%3C/svg%3E") !important;
-    background-size: 60% 60% !important;
-    background-position: center !important;
-    background-repeat: no-repeat !important;
-    background-color: #ffffff !important;
 }
 
 .accessibility-btn:hover {
@@ -68,7 +57,6 @@
     transform: scale(0.95);
 }
 
-/* Активное состояние для кнопки vision */
 .vision-btn.active {
     border-color: #FFD700;
     box-shadow: 0 0 20px rgba(255, 215, 0, 0.5);
@@ -85,7 +73,7 @@
     .accessibility-btn {
         width: 44px;
         height: 44px;
-        border-radius: 10px !important;
+        border-radius: 10px;
     }
 }
 
@@ -99,7 +87,7 @@
     .accessibility-btn {
         width: 38px;
         height: 38px;
-        border-radius: 8px !important;
+        border-radius: 8px;
         border-width: 2px;
     }
 }
@@ -154,7 +142,6 @@
     position: relative;
 }
 
-/* Заголовок модального окна */
 .search-modal-title {
     font-family: 'Montserrat', sans-serif;
     font-size: 22px;
@@ -190,14 +177,16 @@
     box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.1);
 }
 
-/* Иконка лупы слева от поля ввода */
+/* Иконка как в вашем примере - через background-image */
 .search-icon {
     width: 32px;
     height: 32px;
     margin-right: 12px;
     flex-shrink: 0;
-    object-fit: contain;
-    border-radius: 0 !important;
+    background-size: contain !important;
+    background-position: center !important;
+    background-repeat: no-repeat !important;
+    background-image: url('/images/search-icon.png') !important;
 }
 
 .search-input {
@@ -215,30 +204,31 @@
     color: #999;
 }
 
-/* Кнопка "Искать" */
+/* Кнопка "Искать" как в вашем примере */
 .search-submit-btn {
     width: 50px;
     height: 50px;
     border: none;
-    border-radius: 8px !important;
+    border-radius: 8px;
     cursor: pointer;
     transition: all 0.3s ease;
     flex-shrink: 0;
     box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
     padding: 0;
-    background-size: 100% 100% !important;
+    background: transparent;
+    background-size: contain !important;
     background-position: center !important;
     background-repeat: no-repeat !important;
-    background-color: transparent !important;
     background-image: url('/images/search-submit.png') !important;
+    outline: none;
 }
 
-/* Запасной вариант для кнопки "Искать" */
-.search-submit-btn {
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='50' height='50'%3E%3Crect width='50' height='50' rx='8' fill='%23667eea'/%3E%3Ctext x='25' y='32' font-family='Arial' font-size='14' fill='white' text-anchor='middle' font-weight='bold'%3EИскать%3C/text%3E%3C/svg%3E") !important;
-    background-size: 100% 100% !important;
-    background-position: center !important;
-    background-repeat: no-repeat !important;
+.search-submit-btn:focus {
+    outline: none;
+}
+
+.search-submit-btn::-moz-focus-inner {
+    border: 0;
 }
 
 .search-submit-btn:hover {
@@ -297,7 +287,6 @@
     font-size: 16px;
 }
 
-/* Стили для подсветки найденного текста */
 .search-result-item mark {
     background: #ffeb3b;
     padding: 0 2px;
@@ -367,7 +356,7 @@
     .search-submit-btn {
         width: 40px;
         height: 40px;
-        border-radius: 6px !important;
+        border-radius: 6px;
     }
     
     .search-icon {
@@ -390,7 +379,6 @@ body.vision-mode * {
     line-height: inherit !important;
 }
 
-/* Кнопки залов в режиме слабовидящих */
 body.vision-mode .hall-button {
     border: 3px solid #000000 !important;
     box-shadow: 0 0 0 2px #ffffff, 0 0 0 5px #000000 !important;
@@ -403,7 +391,6 @@ body.vision-mode .hall-button:hover {
     box-shadow: 0 0 0 2px #ffffff, 0 0 0 5px #0066cc !important;
 }
 
-/* Кнопки доступности в режиме слабовидящих */
 body.vision-mode .accessibility-btn {
     border: 3px solid #000000 !important;
     box-shadow: 0 0 0 2px #ffffff, 0 0 0 5px #000000 !important;
@@ -418,7 +405,6 @@ body.vision-mode .accessibility-btn:hover {
     box-shadow: 0 0 0 2px #ffffff, 0 0 0 5px #0066cc !important;
 }
 
-/* Поиск в режиме слабовидящих */
 body.vision-mode .search-input-wrapper {
     border: 3px solid #000000 !important;
     height: 56px !important;
@@ -446,7 +432,6 @@ body.vision-mode .search-modal-title {
     font-size: 26px !important;
 }
 
-/* Результаты поиска в режиме слабовидящих */
 body.vision-mode .search-result-item {
     border: 2px solid #000000 !important;
     margin-bottom: 8px !important;
@@ -461,36 +446,11 @@ body.vision-mode .search-result-description {
     font-size: 18px !important;
 }
 
-/* Логотип в режиме слабовидящих */
 body.vision-mode .main-logo {
     border: 3px solid #000000 !important;
     box-shadow: 0 0 0 2px #ffffff, 0 0 0 5px #000000 !important;
 }
 
-/* Текст в режиме слабовидящих */
-body.vision-mode h1,
-body.vision-mode h2,
-body.vision-mode h3,
-body.vision-mode h4,
-body.vision-mode h5,
-body.vision-mode h6 {
-    font-size: 1.4em !important;
-    font-weight: 700 !important;
-}
-
-body.vision-mode p,
-body.vision-mode span,
-body.vision-mode div:not(.accessibility-controls):not(.search-modal-content) {
-    font-size: 1.1em !important;
-}
-
-body.vision-mode a,
-body.vision-mode button:not(.accessibility-btn):not(.search-submit-btn) {
-    font-size: 1.1em !important;
-    text-decoration: underline !important;
-}
-
-/* Индикатор активного режима */
 body.vision-mode::before {
     content: "👁️ Версия для слабовидящих";
     position: fixed;
@@ -569,7 +529,6 @@ body.vision-mode::before {
     animation: pulse 0.5s ease;
 }
 
-/* Стили для скроллбара результатов поиска */
 .search-results::-webkit-scrollbar {
     width: 6px;
 }
@@ -588,14 +547,11 @@ body.vision-mode::before {
     background: #764ba2;
 }
 
-/* ===== ОБЩИЕ УЛУЧШЕНИЯ ===== */
-/* Запрет выделения текста на кнопках */
 .accessibility-btn {
     user-select: none;
     -webkit-user-select: none;
 }
 
-/* Контрастные фокусы */
 .accessibility-btn:focus-visible,
 .search-input:focus-visible,
 .search-submit-btn:focus-visible {
