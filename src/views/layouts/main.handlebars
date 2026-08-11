@@ -12,38 +12,35 @@
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
-    <!-- Кнопки управления доступностью - ВЫШЕ ВСЕГО -->
-    <div class="accessibility-controls" id="accessibilityControls">
+     <!-- Кнопки управления доступностью -->
+    <div class="accessibility-controls">
         <!-- Кнопка поиска -->
         <button id="searchToggle" class="accessibility-btn search-btn" 
                 aria-label="Поиск по сайту" 
-                title="Поиск (Ctrl+F)"
-                style="background-image: url('/images/search-icon.png');">
+                title="Поиск (Ctrl+F)">
+            <img src="/images/search-icon.png" alt="Поиск" class="btn-icon">
         </button>
         <!-- Кнопка версии для слабовидящих -->
         <button id="visionToggle" class="accessibility-btn vision-btn" 
                 aria-label="Версия для слабовидящих" 
-                title="Версия для слабовидящих"
-                style="background-image: url('/images/vision-icon.png');">
+                title="Версия для слабовидящих">
+            <img src="/images/vision-icon.png" alt="Версия для слабовидящих" class="btn-icon">
         </button>
     </div>
 
     <!-- Модальное окно поиска -->
     <div id="searchModal" class="search-modal">
         <div class="search-modal-content">
-
             <!-- Заголовок -->
             <h2 class="search-modal-title">🔍 Поиск по сайту</h2>
             
             <div class="search-container">
                 <div class="search-input-wrapper">
-                    <img src="/images/search-icon.png" alt="Поиск" class="search-icon" 
-                         onerror="this.style.display='none'">
+                    <img src="/images/search-icon.png" alt="Поиск" class="search-icon">
                     <input type="text" id="searchInput" placeholder="Введите запрос..." class="search-input">
                 </div>
-                <button id="searchButton" class="search-submit-btn" 
-                        aria-label="Искать"
-                        style="background-image: url('/images/search-submit.png');">
+                <button id="searchButton" class="search-submit-btn" aria-label="Искать">
+                    <img src="/images/search-submit.png" alt="Искать" class="submit-icon">
                 </button>
             </div>
             <div id="searchResults" class="search-results"></div>
