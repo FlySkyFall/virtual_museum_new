@@ -98,7 +98,7 @@ router.get('/api/search', async (req, res) => {
                 results.push({
                     title: person.fullName,
                     description: person.shortBio || person.biography.substring(0, 150) + '...',
-                    url: `/hall/literary-local-history/person/${person._id}`,
+                    url: `/hall/person/${person._id}`,
                     type: 'Персоналия',
                     relevance: nameMatch ? 10 : 7
                 });
@@ -112,7 +112,7 @@ router.get('/api/search', async (req, res) => {
                         results.push({
                             title: artifact.name,
                             description: artifact.description || `Артефакт из коллекции ${person.fullName}`,
-                            url: `/hall/literary-local-history/person/${person._id}?artifact=${artifact._id}`,
+                            url: `/hall/person/${person._id}?artifact=${artifact._id}`,
                             type: 'Артефакт',
                             relevance: artifact.name.toLowerCase().includes(query) ? 9 : 6
                         });
