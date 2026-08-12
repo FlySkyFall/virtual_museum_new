@@ -1,5 +1,8 @@
 const express = require('express');
 const router = express.Router();
+const Person = require('../models/Person');
+const War = require('../models/War');
+const HistoricalArtifact = require('../models/HistoricalArtifact');
 
 // Данные для трех залов музея
 const halls = [
