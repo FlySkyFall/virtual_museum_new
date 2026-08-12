@@ -89,21 +89,47 @@
             });
     }
 
-    function displayResults(results) {
+    function displayResults(data) {
+        const results = data.items || [];
+        
         if (!results || results.length === 0) {
             searchResults.innerHTML = '<div class="search-result-empty">🔍 Ничего не найдено</div>';
             searchResults.classList.add('has-results');
             return;
         }
 
-        let html = '';
+        // Группируем результаты по типу
+        const grouped = {};
         results.forEach(item => {
-            html += `
-                <div class="search-result-item" data-url="${item.url}">
-                    <div class="search-result-title">${highlightText(item.title, searchInput.value.trim())}</div>
-                    <div class="search-result-description">${highlightText(item.description || '', searchInput.value.trim())}</div>
-                </div>
-            `;
+            const type = item.type || 'Другое';
+            if (!grouped[type]) {
+                grouped[type] = [];
+            }
+            grouped[type].push(item);
+        });
+
+        let html = '';
+        
+        // Добавляем информацию о количестве найденных результатов
+        html += `<div class="search-result-count">Найдено: ${results.length} результатов</div>`;
+
+        // Выводим сгруппированные результаты
+        Object.keys(grouped).forEach(type => {
+            const items = grouped[type];
+            html += `<div class="search-result-group">
+                <div class="search-result-group-title">${type} (${items.length})</div>`;
+            
+            items.forEach(item => {
+                html += `
+                    <div class="search-result-item" data-url="${item.url}">
+                        <div class="search-result-title">${highlightText(item.title, searchInput.value.trim())}</div>
+                        <div class="search-result-description">${highlightText(item.description || '', searchInput.value.trim())}</div>
+                        <div class="search-result-type">${item.type}</div>
+                    </div>
+                `;
+            });
+            
+            html += `</div>`;
         });
 
         searchResults.innerHTML = html;
@@ -114,6 +140,7 @@
             item.addEventListener('click', function() {
                 const url = this.dataset.url;
                 if (url) {
+                    closeSearch();
                     window.location.href = url;
                 }
             });
@@ -192,9 +219,7 @@
     loadVisionMode();
 
     // ===== ДОПОЛНИТЕЛЬНЫЕ УЛУЧШЕНИЯ =====
-    // Улучшенная навигация с клавиатуры для поиска
     document.addEventListener('keydown', function(e) {
-        // Ctrl+F или Cmd+F для открытия поиска
         if ((e.ctrlKey || e.metaKey) && e.key === 'f') {
             e.preventDefault();
             if (!searchModal.classList.contains('active')) {
@@ -203,7 +228,6 @@
         }
     });
 
-    // Фокус на поле поиска при открытии
     const observer = new MutationObserver(function(mutations) {
         mutations.forEach(function(mutation) {
             if (mutation.attributeName === 'class' && 
