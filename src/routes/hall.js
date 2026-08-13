@@ -38,7 +38,7 @@ router.get('/person/:id', async (req, res) => {
         console.log(`Загружена персоналия: ${person.fullName}`);
         
         res.render('hall/person', {
-            layout: false,
+            layout: 'main',
             title: `${person.fullName} | Виртуальный музей`,
             person: person
         });
@@ -75,7 +75,7 @@ router.get('/artifacts/:personId', async (req, res) => {
         console.log(`Загружены артефакты для: ${person.fullName}, страница ${page} из ${totalPages}, показано ${paginatedArtifacts.length} артефактов`);
         
         res.render('hall/artifacts', {
-            layout: false,
+            layout: 'main',
             title: `Артефакты ${person.fullName} | Виртуальный музей`,
             person: person,
             artifacts: paginatedArtifacts,
@@ -112,7 +112,7 @@ router.get('/artifact-video/:personId/:artifactIndex', async (req, res) => {
         console.log(`Загружено видео для артефакта: ${artifact.name}`);
         
         res.render('hall/artifact-video', {
-            layout: false,
+            layout: 'main',
             title: `${artifact.name} | Виртуальный музей`,
             person: person,
             artifact: artifact,

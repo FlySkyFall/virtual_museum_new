@@ -1,5 +1,6 @@
 /* ============================================
    ФАЙЛ: accessibility.css
+   ПОЛНАЯ ВЕРСИЯ СО ВСЕМИ СТИЛЯМИ ДЛЯ ВСЕХ СТРАНИЦ
    ============================================ */
 
 /* ===== КНОПКИ УПРАВЛЕНИЯ ===== */
@@ -383,7 +384,11 @@
     }
 }
 
-/* ===== СТИЛИ ДЛЯ ВЕРСИИ СЛАБОВИДЯЩИХ ===== */
+/* ============================================
+   СТИЛИ ДЛЯ ВЕРСИИ СЛАБОВИДЯЩИХ (ВСЕ СТРАНИЦЫ)
+   ============================================ */
+
+/* Общие стили для body */
 body.vision-mode {
     font-size: 18px !important;
     line-height: 1.8 !important;
@@ -396,6 +401,7 @@ body.vision-mode * {
     line-height: inherit !important;
 }
 
+/* ===== СТИЛИ ДЛЯ ГЛАВНОЙ СТРАНИЦЫ ===== */
 body.vision-mode .hall-button {
     border: 3px solid #000000 !important;
     box-shadow: 0 0 0 2px #ffffff, 0 0 0 5px #000000 !important;
@@ -408,6 +414,131 @@ body.vision-mode .hall-button:hover {
     box-shadow: 0 0 0 2px #ffffff, 0 0 0 5px #0066cc !important;
 }
 
+body.vision-mode .main-logo {
+    border: 3px solid #000000 !important;
+    box-shadow: 0 0 0 2px #ffffff, 0 0 0 5px #000000 !important;
+}
+
+body.vision-mode .bottom-logo {
+    border: 3px solid #000000 !important;
+    box-shadow: 0 0 0 2px #ffffff, 0 0 0 5px #000000 !important;
+}
+
+/* ===== СТИЛИ ДЛЯ СТРАНИЦ ЗАЛОВ ===== */
+
+/* Фон залов - делаем светлее для читаемости */
+body.vision-mode .hall-background,
+body.vision-mode .person-background,
+body.vision-mode .museum-background {
+    filter: brightness(1.3) contrast(1.2) !important;
+}
+
+body.vision-mode .museum-background {
+    background-color: #ffffff !important;
+    opacity: 0.9 !important;
+}
+
+/* Логотипы залов */
+body.vision-mode .hall-logo {
+    border: 3px solid #000000 !important;
+    box-shadow: 0 0 0 2px #ffffff, 0 0 0 5px #000000 !important;
+}
+
+/* Кнопки персоналий в залах */
+body.vision-mode .person-button {
+    border: 3px solid #000000 !important;
+    box-shadow: 0 0 0 2px #ffffff, 0 0 0 5px #000000 !important;
+    border-radius: 0 30px 30px 0 !important;
+}
+
+body.vision-mode .person-button:hover {
+    transform: scale(1.05) !important;
+    border-color: #0066cc !important;
+    box-shadow: 0 0 0 2px #ffffff, 0 0 0 5px #0066cc !important;
+}
+
+/* Изображения кнопок персоналий - делаем контрастнее */
+body.vision-mode .person-button-bg {
+    filter: contrast(1.2) brightness(1.1) !important;
+}
+
+/* Текст на кнопках персоналий */
+body.vision-mode .person-name {
+    font-size: clamp(18px, 2.5vw, 36px) !important;
+    color: #000000 !important;
+    text-shadow: 1px 1px 2px rgba(255,255,255,0.8) !important;
+}
+
+body.vision-mode .person-surname {
+    font-size: clamp(22px, 3vw, 42px) !important;
+    color: #000000 !important;
+}
+
+body.vision-mode .person-name-rest {
+    font-size: clamp(18px, 2.2vw, 32px) !important;
+    color: #000000 !important;
+}
+
+/* ===== СТИЛИ ДЛЯ СТРАНИЦЫ ПЕРСОНАЛИИ ===== */
+
+/* Плашка с именем */
+body.vision-mode .title-image-bg {
+    filter: contrast(1.2) brightness(1.1) !important;
+    border: 3px solid #000000 !important;
+    box-shadow: 0 0 0 2px #ffffff, 0 0 0 5px #000000 !important;
+}
+
+/* Имя на плашке */
+body.vision-mode .person-name-overlay .person-surname,
+body.vision-mode .person-name-overlay .person-firstname {
+    color: #000000 !important;
+    text-shadow: 1px 1px 2px rgba(255,255,255,0.8) !important;
+}
+
+/* Краткая биография */
+body.vision-mode .short-bio {
+    font-size: clamp(16px, 1.8vw, 28px) !important;
+    color: #000000 !important;
+    background: rgba(255,255,255,0.85) !important;
+    padding: 20px !important;
+    border-radius: 12px !important;
+    border: 3px solid #000000 !important;
+    box-shadow: 0 0 0 2px #ffffff, 0 0 0 5px #000000 !important;
+}
+
+/* Фото персоналии */
+body.vision-mode .person-photo {
+    border: 3px solid #000000 !important;
+    box-shadow: 0 0 0 2px #ffffff, 0 0 0 5px #000000 !important;
+    border-radius: 12px !important;
+}
+
+/* Кнопка "Артефакты" */
+body.vision-mode .artifacts-button {
+    border: 3px solid #000000 !important;
+    box-shadow: 0 0 0 2px #ffffff, 0 0 0 5px #000000 !important;
+    border-radius: 12px !important;
+}
+
+body.vision-mode .artifacts-button:hover {
+    border-color: #0066cc !important;
+    box-shadow: 0 0 0 2px #ffffff, 0 0 0 5px #0066cc !important;
+}
+
+/* ===== СТИЛИ ДЛЯ КНОПКИ "НАЗАД" ===== */
+body.vision-mode .back-button {
+    border: 3px solid #000000 !important;
+    box-shadow: 0 0 0 2px #ffffff, 0 0 0 5px #000000 !important;
+    border-radius: 12px !important;
+    padding: 5px !important;
+}
+
+body.vision-mode .back-button:hover {
+    border-color: #0066cc !important;
+    box-shadow: 0 0 0 2px #ffffff, 0 0 0 5px #0066cc !important;
+}
+
+/* ===== КНОПКИ УПРАВЛЕНИЯ ДОСТУПНОСТЬЮ ===== */
 body.vision-mode .accessibility-btn {
     border: 3px solid #000000 !important;
     box-shadow: 0 0 0 2px #ffffff, 0 0 0 5px #000000 !important;
@@ -424,6 +555,17 @@ body.vision-mode .accessibility-btn:hover {
     transform: scale(1.1) !important;
     border-color: #0066cc !important;
     box-shadow: 0 0 0 2px #ffffff, 0 0 0 5px #0066cc !important;
+}
+
+body.vision-mode .accessibility-btn:focus-visible {
+    outline: 4px solid #FFD700 !important;
+    outline-offset: 4px !important;
+}
+
+/* ===== МОДАЛЬНОЕ ОКНО ПОИСКА ===== */
+body.vision-mode .search-modal-content {
+    border: 3px solid #000000 !important;
+    box-shadow: 0 0 0 2px #ffffff, 0 0 0 5px #000000 !important;
 }
 
 body.vision-mode .search-input-wrapper {
@@ -451,6 +593,7 @@ body.vision-mode .search-icon {
 
 body.vision-mode .search-modal-title {
     font-size: 26px !important;
+    color: #000000 !important;
 }
 
 body.vision-mode .search-result-item {
@@ -461,17 +604,20 @@ body.vision-mode .search-result-item {
 
 body.vision-mode .search-result-title {
     font-size: 20px !important;
+    color: #000000 !important;
 }
 
 body.vision-mode .search-result-description {
     font-size: 18px !important;
+    color: #333333 !important;
 }
 
-body.vision-mode .main-logo {
-    border: 3px solid #000000 !important;
-    box-shadow: 0 0 0 2px #ffffff, 0 0 0 5px #000000 !important;
+body.vision-mode .search-result-empty {
+    font-size: 18px !important;
+    color: #333333 !important;
 }
 
+/* ===== ИНДИКАТОР ВЕРСИИ ДЛЯ СЛАБОВИДЯЩИХ ===== */
 body.vision-mode::before {
     content: "👁️ Версия для слабовидящих";
     position: fixed;
@@ -492,6 +638,7 @@ body.vision-mode::before {
     letter-spacing: 1px;
 }
 
+/* ===== АДАПТИВНОСТЬ ИНДИКАТОРА ===== */
 @media (max-width: 768px) {
     body.vision-mode::before {
         font-size: 14px;
@@ -508,15 +655,6 @@ body.vision-mode::before {
         max-width: 60px !important;
         min-height: 40px !important;
         max-height: 60px !important;
-    }
-    
-    body.vision-mode .search-input-wrapper {
-        height: 50px !important;
-    }
-    
-    body.vision-mode .search-submit-btn {
-        width: 50px !important;
-        height: 50px !important;
     }
 }
 
@@ -541,58 +679,57 @@ body.vision-mode::before {
     }
 }
 
-/* ===== АНИМАЦИИ ===== */
-@keyframes pulse {
-    0% {
-        box-shadow: 0 0 0 0 rgba(102, 126, 234, 0.4);
-    }
-    70% {
-        box-shadow: 0 0 0 15px rgba(102, 126, 234, 0);
-    }
-    100% {
-        box-shadow: 0 0 0 0 rgba(102, 126, 234, 0);
-    }
+/* ===== ДОПОЛНИТЕЛЬНЫЕ УЛУЧШЕНИЯ ===== */
+
+/* Увеличиваем контрастность текста */
+body.vision-mode .hall-description,
+body.vision-mode .hall-title {
+    color: #000000 !important;
+    text-shadow: 1px 1px 2px rgba(255,255,255,0.8) !important;
 }
 
-.accessibility-btn.active {
-    animation: pulse 0.5s ease;
+/* Улучшаем видимость кнопок персоналий в военном зале */
+body.vision-mode .war-person-button {
+    border: 3px solid #000000 !important;
+    box-shadow: 0 0 0 2px #ffffff, 0 0 0 5px #000000 !important;
+    border-radius: 12px !important;
 }
 
-.search-results::-webkit-scrollbar {
-    width: 6px;
+body.vision-mode .war-person-button:hover {
+    border-color: #0066cc !important;
+    box-shadow: 0 0 0 2px #ffffff, 0 0 0 5px #0066cc !important;
 }
 
-.search-results::-webkit-scrollbar-track {
-    background: #f1f1f1;
-    border-radius: 10px;
+/* Стили для автографов */
+body.vision-mode .autograf-card {
+    border: 3px solid #000000 !important;
+    box-shadow: 0 0 0 2px #ffffff, 0 0 0 5px #000000 !important;
+    border-radius: 12px !important;
 }
 
-.search-results::-webkit-scrollbar-thumb {
-    background: #667eea;
-    border-radius: 10px;
+body.vision-mode .autograf-card:hover {
+    border-color: #0066cc !important;
+    box-shadow: 0 0 0 2px #ffffff, 0 0 0 5px #0066cc !important;
 }
 
-.search-results::-webkit-scrollbar-thumb:hover {
-    background: #764ba2;
+/* Анимации для плавного переключения */
+body.vision-mode * {
+    transition: all 0.3s ease !important;
 }
 
-.accessibility-btn {
-    user-select: none;
-    -webkit-user-select: none;
+/* Улучшаем читаемость ссылок */
+body.vision-mode a {
+    color: #0000EE !important;
+    text-decoration: underline !important;
 }
 
-.accessibility-btn:focus-visible,
-.search-input:focus-visible,
-.search-submit-btn:focus-visible {
-    outline: 3px solid #FFD700;
-    outline-offset: 3px;
+body.vision-mode a:visited {
+    color: #551A8B !important;
 }
 
-body.vision-mode .accessibility-btn:focus-visible,
-body.vision-mode .search-input:focus-visible,
-body.vision-mode .search-submit-btn:focus-visible {
-    outline: 4px solid #FFD700;
-    outline-offset: 4px;
+body.vision-mode a:hover {
+    color: #0066cc !important;
+    text-decoration: underline !important;
 }
 
 /* ===== СТИЛИ ДЛЯ РЕЗУЛЬТАТОВ ПОИСКА С ГРУППИРОВКОЙ ===== */
@@ -660,4 +797,58 @@ body.vision-mode .search-submit-btn:focus-visible {
     background: #f0f2f5;
     padding: 2px 10px;
     border-radius: 12px;
+}
+
+/* ===== АНИМАЦИИ ===== */
+@keyframes pulse {
+    0% {
+        box-shadow: 0 0 0 0 rgba(102, 126, 234, 0.4);
+    }
+    70% {
+        box-shadow: 0 0 0 15px rgba(102, 126, 234, 0);
+    }
+    100% {
+        box-shadow: 0 0 0 0 rgba(102, 126, 234, 0);
+    }
+}
+
+.accessibility-btn.active {
+    animation: pulse 0.5s ease;
+}
+
+.search-results::-webkit-scrollbar {
+    width: 6px;
+}
+
+.search-results::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 10px;
+}
+
+.search-results::-webkit-scrollbar-thumb {
+    background: #667eea;
+    border-radius: 10px;
+}
+
+.search-results::-webkit-scrollbar-thumb:hover {
+    background: #764ba2;
+}
+
+.accessibility-btn {
+    user-select: none;
+    -webkit-user-select: none;
+}
+
+.accessibility-btn:focus-visible,
+.search-input:focus-visible,
+.search-submit-btn:focus-visible {
+    outline: 3px solid #FFD700;
+    outline-offset: 3px;
+}
+
+body.vision-mode .accessibility-btn:focus-visible,
+body.vision-mode .search-input:focus-visible,
+body.vision-mode .search-submit-btn:focus-visible {
+    outline: 4px solid #FFD700;
+    outline-offset: 4px;
 }
