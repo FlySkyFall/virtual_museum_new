@@ -106,6 +106,82 @@ main {
     }
 }
 
+.bottom-logo {
+    position: absolute;
+    bottom: 2%;
+    right: 2%;
+    z-index: 10;
+    width: 12%; /* Размер в процентах */
+    max-width: 200px; /* Максимальный размер */
+    min-width: 50px; /* Минимальный размер */
+    height: auto;
+    pointer-events: none;
+    transition: width 0.3s ease, bottom 0.3s ease, right 0.3s ease;
+}
+
+/* Адаптивные размеры для нового логотипа */
+@media (max-width: 1200px) {
+    .bottom-logo {
+        width: 11%;
+        max-width: 180px;
+    }
+}
+
+@media (max-width: 992px) {
+    .bottom-logo {
+        width: 10%;
+        max-width: 150px;
+        bottom: 2%;
+        right: 2%;
+    }
+}
+
+@media (max-width: 768px) {
+    .bottom-logo {
+        width: 12%;
+        max-width: 120px;
+        bottom: 2%;
+        right: 2%;
+    }
+}
+
+@media (max-width: 576px) {
+    .bottom-logo {
+        width: 14%;
+        max-width: 100px;
+        bottom: 1.5%;
+        right: 1.5%;
+    }
+}
+
+@media (max-width: 480px) {
+    .bottom-logo {
+        width: 16%;
+        max-width: 80px;
+        bottom: 1%;
+        right: 1%;
+    }
+}
+
+@media (max-width: 360px) {
+    .bottom-logo {
+        width: 18%;
+        max-width: 60px;
+        bottom: 1%;
+        right: 1%;
+    }
+}
+
+/* Для больших экранов */
+@media (min-width: 1920px) {
+    .bottom-logo {
+        width: 10%;
+        max-width: 250px;
+        bottom: 3%;
+        right: 3%;
+    }
+}
+
 /* Остальные ваши стили для кнопок оставьте без изменений */
 .hall-button {
     position: absolute;
