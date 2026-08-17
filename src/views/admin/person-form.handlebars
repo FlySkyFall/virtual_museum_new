@@ -1,514 +1,128 @@
-<!-- views/admin/person-form.handlebars -->
-<!DOCTYPE html>
-<html lang="ru">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{title}}</title>
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: 'Montserrat', sans-serif; background: #f0f2f5; }
-        .admin-wrapper { display: flex; min-height: 100vh; }
-        .sidebar {
-            width: 280px;
-            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
-            color: white;
-            padding: 30px 0;
-            position: fixed;
-            height: 100vh;
-            overflow-y: auto;
-        }
-        .sidebar-brand { padding: 0 30px 30px; border-bottom: 1px solid rgba(255,255,255,0.1); margin-bottom: 30px; }
-        .sidebar-brand h2 { font-size: 22px; font-weight: 700; }
-        .sidebar-brand span { font-size: 12px; opacity: 0.7; display: block; }
-        .sidebar-menu { list-style: none; padding: 0 15px; }
-        .sidebar-menu li { margin-bottom: 5px; }
-        .sidebar-menu a {
-            display: flex; align-items: center; padding: 12px 20px;
-            color: rgba(255,255,255,0.7); text-decoration: none;
-            border-radius: 10px; transition: all 0.3s; gap: 15px;
-        }
-        .sidebar-menu a:hover { background: rgba(255,255,255,0.1); color: white; }
-        .sidebar-menu a i { width: 20px; }
-        .sidebar-menu .logout { margin-top: 30px; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 20px; }
-        .sidebar-menu .logout a { color: #ff6b6b; }
-        .sidebar-menu .logout a:hover { background: rgba(255,107,107,0.1); }
-        .main-content { margin-left: 280px; flex: 1; padding: 30px; }
-        .page-header {
-            display: flex; justify-content: space-between; align-items: center;
-            margin-bottom: 30px; background: white; padding: 20px 30px;
-            border-radius: 15px; box-shadow: 0 2px 10px rgba(0,0,0,0.05);
-        }
-        .page-header h1 { font-size: 28px; color: #1a1a2e; }
-        .form-container {
-            background: white; border-radius: 15px; padding: 30px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
-        }
-        .form-group {
-            margin-bottom: 25px;
-        }
-        .form-group label {
-            display: block; font-weight: 600; margin-bottom: 8px;
-            color: #333;
-        }
-        .form-group label .required {
-            color: #ff6b6b;
-        }
-        .form-control {
-            width: 100%; padding: 12px; border: 1px solid #ddd;
-            border-radius: 10px; font-size: 16px; font-family: inherit;
-            transition: border-color 0.3s;
-        }
-        .form-control:focus {
-            outline: none; border-color: #667eea;
-        }
-        textarea.form-control {
-            resize: vertical;
-            min-height: 100px;
-        }
-        .form-row {
-            display: grid; grid-template-columns: 1fr 1fr; gap: 20px;
-        }
-        .form-row-3 {
-            display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 20px;
-        }
-        .btn-primary {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white; padding: 12px 30px; border: none; border-radius: 10px;
-            cursor: pointer; font-weight: 600; font-size: 16px;
-            text-decoration: none; display: inline-flex; align-items: center; gap: 8px;
-            transition: all 0.3s;
-        }
-        .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 5px 20px rgba(102,126,234,0.4); }
-        .btn-secondary {
-            background: #6c757d; color: white; padding: 12px 30px; border: none;
-            border-radius: 10px; cursor: pointer; font-weight: 600;
-            text-decoration: none; display: inline-flex; align-items: center; gap: 8px;
-            transition: all 0.3s;
-        }
-        .btn-secondary:hover { background: #5a6268; }
-        .btn-danger {
-            background: #ff6b6b; color: white; padding: 8px 15px; border: none;
-            border-radius: 8px; cursor: pointer; font-weight: 600;
-            transition: all 0.3s;
-        }
-        .btn-danger:hover { background: #ee5a24; }
-        .btn-success {
-            background: #28a745; color: white; padding: 8px 15px; border: none;
-            border-radius: 8px; cursor: pointer; font-weight: 600;
-            transition: all 0.3s;
-        }
-        .btn-success:hover { background: #218838; }
-        .btn-warning {
-            background: #fdcb6e; color: #333; padding: 8px 15px; border: none;
-            border-radius: 8px; cursor: pointer; font-weight: 600;
-            text-decoration: none; display: inline-flex; align-items: center; gap: 5px;
-            transition: all 0.3s;
-        }
-        .btn-warning:hover { background: #f9ca24; }
-        .form-actions {
-            display: flex; gap: 15px; margin-top: 30px;
-            padding-top: 20px; border-top: 1px solid #eee;
-        }
-        .artifacts-section {
-            margin-top: 40px; padding-top: 30px;
-            border-top: 2px solid #eee;
-        }
-        .artifacts-section h3 {
-            display: flex; align-items: center; gap: 10px;
-            margin-bottom: 20px; color: #1a1a2e;
-        }
-        .artifact-card {
-            background: #f8f9fa; border-radius: 10px; padding: 20px;
-            margin-bottom: 20px; border: 1px solid #e9ecef;
-        }
-        .artifact-card-header {
-            display: flex; justify-content: space-between; align-items: center;
-            margin-bottom: 15px;
-        }
-        .artifact-card-header h4 {
-            color: #1a1a2e;
-        }
-        .artifact-preview {
-            display: flex; gap: 20px; align-items: flex-start;
-        }
-        .artifact-preview img {
-            width: 120px; height: 120px; object-fit: cover;
-            border-radius: 10px; border: 1px solid #ddd;
-        }
-        .artifact-preview .artifact-info {
-            flex: 1;
-        }
-        .artifact-preview .artifact-info p {
-            margin-bottom: 5px; color: #666;
-        }
-        .artifact-preview .artifact-info strong {
-            color: #333;
-        }
-        .artifact-form {
-            background: #f8f9fa; border-radius: 10px; padding: 20px;
-            margin-top: 20px; border: 1px solid #e9ecef;
-        }
-        .file-upload-wrapper {
-            position: relative;
-        }
-        .file-upload-wrapper input[type="file"] {
-            position: absolute; opacity: 0; width: 100%; height: 100%; cursor: pointer;
-        }
-        .file-upload-label {
-            display: inline-block; padding: 10px 20px;
-            background: #e8ecf1; border-radius: 10px; cursor: pointer;
-            transition: all 0.3s; color: #666;
-        }
-        .file-upload-label:hover { background: #d5d9e0; }
-        .current-image-preview {
-            display: inline-block; margin: 10px 0;
-        }
-        .current-image-preview img {
-            max-height: 150px; border-radius: 10px; border: 1px solid #ddd;
-        }
-        .checkbox-group {
-            display: flex; align-items: center; gap: 10px;
-        }
-        .checkbox-group input[type="checkbox"] {
-            width: 20px; height: 20px; cursor: pointer;
-        }
-        .html-hint {
-            font-size: 12px;
-            color: #999;
-            margin-top: 5px;
-            display: block;
-        }
-        @media (max-width: 768px) {
-            .sidebar { width: 100%; height: auto; position: relative; }
-            .main-content { margin-left: 0; }
-            .form-row, .form-row-3 { grid-template-columns: 1fr; }
-            .page-header { flex-direction: column; gap: 15px; text-align: center; }
-        }
-    </style>
-</head>
-<body>
-<div class="admin-wrapper">
-    <nav class="sidebar">
-        <div class="sidebar-brand"><h2>📚 Музей</h2><span>Панель управления</span></div>
-        <ul class="sidebar-menu">
-            <li><a href="/admin"><i class="fas fa-users"></i> Персоналии</a></li>
-            <li><a href="/admin/debug" target="_blank"><i class="fas fa-bug"></i> Отладка</a></li>
-            <li class="logout"><a href="/admin/logout"><i class="fas fa-sign-out-alt"></i> Выйти</a></li>
-        </ul>
-    </nav>
-    <main class="main-content">
-        <div class="page-header">
-            <h1>{{title}}</h1>
-            <a href="/admin" class="btn-secondary"><i class="fas fa-arrow-left"></i> Назад</a>
-        </div>
+<div class="card">
+    <div class="card-header">
+        {{#if isEdit}}
+            Редактирование персоналии: {{person.fullName}}
+        {{else}}
+            Добавление новой персоналии
+        {{/if}}
+    </div>
 
-        <div class="form-container">
-            <!-- ВАЖНО: Правильный action для формы -->
-            <form id="personForm" method="POST" enctype="multipart/form-data" action="{{#if isEdit}}/admin/person/{{person._id}}{{else}}/admin/person{{/if}}">
-                <input type="hidden" name="personData" id="personData">
-
-                <!-- Основная информация -->
-                <div class="form-row-3">
-                    <div class="form-group">
-                        <label>Фамилия <span class="required">*</span></label>
-                        <input type="text" class="form-control" id="lastName" value="{{person.lastName}}" required>
-                    </div>
-                    <div class="form-group">
-                        <label>Имя <span class="required">*</span></label>
-                        <input type="text" class="form-control" id="firstName" value="{{person.firstName}}" required>
-                    </div>
-                    <div class="form-group">
-                        <label>Отчество</label>
-                        <input type="text" class="form-control" id="patronymic" value="{{person.patronymic}}">
-                    </div>
-                </div>
-
-                <div class="form-group">
-                    <label>Полное имя <span class="required">*</span></label>
-                    <input type="text" class="form-control" id="fullName" value="{{person.fullName}}" required>
-                </div>
-
-                <div class="form-row">
-                    <div class="form-group">
-                        <label>Год рождения <span class="required">*</span></label>
-                        <input type="number" class="form-control" id="birthYear" value="{{person.birthYear}}" required>
-                    </div>
-                    <div class="form-group">
-                        <label>Год смерти</label>
-                        <input type="number" class="form-control" id="deathYear" value="{{person.deathYear}}">
-                    </div>
-                </div>
-
-                <div class="form-group">
-                    <label>Краткая биография <span class="required">*</span></label>
-                    <textarea class="form-control" id="shortBio" rows="3" required>{{person.shortBio}}</textarea>
-                    <small class="html-hint">Поддерживается HTML: &lt;b&gt;, &lt;i&gt;, &lt;br&gt;, &lt;p&gt; и т.д.</small>
-                </div>
-
-                <div class="form-group">
-                    <label>Полная биография <span class="required">*</span></label>
-                    <textarea class="form-control" id="biography" rows="10" required>{{person.biography}}</textarea>
-                    <small class="html-hint">Поддерживается HTML: &lt;b&gt;, &lt;i&gt;, &lt;br&gt;, &lt;p&gt;, &lt;ul&gt;, &lt;ol&gt;, &lt;h1&gt;-&lt;h6&gt; и т.д.</small>
-                </div>
-
-                <div class="form-row">
-                    <div class="form-group">
-                        <label>Порядок сортировки</label>
-                        <input type="number" class="form-control" id="order" value="{{person.order}}">
-                    </div>
-                    <div class="form-group">
-                        <label>Зал</label>
-                        <input type="number" class="form-control" id="hallId" value="{{person.hallId}}" readonly>
-                    </div>
-                </div>
-
-                <div class="form-group">
-                    <div class="checkbox-group">
-                        <input type="checkbox" id="isActive" {{#if person.isActive}}checked{{/if}}>
-                        <label for="isActive">Активен</label>
-                    </div>
-                </div>
-
-                <!-- Загрузка фото -->
-                <div class="form-group">
-                    <label>Фото персоналии</label>
-                    <div class="current-image-preview">
-                        <img src="{{person.photoPath}}" alt="Фото" id="photoPreview" style="max-height: 150px;">
-                    </div>
-                    <div class="file-upload-wrapper">
-                        <input type="file" name="photo" accept="image/*" id="photoInput">
-                        <div class="file-upload-label"><i class="fas fa-cloud-upload-alt"></i> Выбрать фото</div>
-                    </div>
-                    <small style="color: #666; display: block; margin-top: 5px;">Рекомендуемый размер: 500x500px</small>
-                </div>
-
-                <!-- Загрузка изображения для кнопки -->
-                <div class="form-group">
-                    <label>Изображение для кнопки (литературный зал)</label>
-                    <div class="current-image-preview">
-                        <img src="{{person.buttonImagePath}}" alt="Кнопка" id="buttonPreview" style="max-height: 150px;">
-                    </div>
-                    {{#if isEdit}}
-                    <form action="/admin/person/{{person._id}}/button-image" method="POST" enctype="multipart/form-data" style="display: inline;">
-                        <div class="file-upload-wrapper" style="display: inline-block;">
-                            <input type="file" name="buttonImage" accept="image/*" onchange="this.form.submit()">
-                            <div class="file-upload-label"><i class="fas fa-cloud-upload-alt"></i> Загрузить</div>
-                        </div>
-                    </form>
-                    {{else}}
-                    <div class="file-upload-wrapper">
-                        <input type="file" name="buttonImage" accept="image/*" id="buttonInput">
-                        <div class="file-upload-label"><i class="fas fa-cloud-upload-alt"></i> Выбрать</div>
-                    </div>
-                    <small style="color: #666; display: block; margin-top: 5px;">Квадратное изображение для кнопки в литературном зале</small>
-                    {{/if}}
-                </div>
-
-                <div class="form-actions">
-                    <button type="submit" class="btn-primary"><i class="fas fa-save"></i> Сохранить</button>
-                    <a href="/admin" class="btn-secondary"><i class="fas fa-times"></i> Отмена</a>
-                </div>
-            </form>
-
-            <!-- Артефакты (только для редактирования) -->
-            {{#if isEdit}}
-            <div class="artifacts-section">
-                <h3><i class="fas fa-box"></i> Артефакты (личные вещи)</h3>
-
-                {{#if person.artifacts.length}}
-                    {{#each person.artifacts}}
-                    <div class="artifact-card" data-artifact-id="{{this._id}}">
-                        <div class="artifact-card-header">
-                            <h4>{{this.name}}</h4>
-                            <div>
-                                <button class="btn-warning edit-artifact" data-artifact-id="{{this._id}}">
-                                    <i class="fas fa-edit"></i>
-                                </button>
-                                <button class="btn-danger delete-artifact" data-artifact-id="{{this._id}}">
-                                    <i class="fas fa-trash"></i>
-                                </button>
-                            </div>
-                        </div>
-                        <div class="artifact-preview">
-                            <img src="{{this.imagePath}}" alt="{{this.name}}" onerror="this.src='/images/artifacts/placeholder.jpg'">
-                            <div class="artifact-info">
-                                <p><strong>Описание:</strong> {{this.description}}</p>
-                                {{#if this.year}}<p><strong>Год:</strong> {{this.year}}</p>{{/if}}
-                                {{#if this.material}}<p><strong>Материал:</strong> {{this.material}}</p>{{/if}}
-                                {{#if this.dimensions}}<p><strong>Размеры:</strong> {{this.dimensions}}</p>{{/if}}
-                                {{#if this.videoUrl}}<p><strong>Видео:</strong> <a href="{{this.videoUrl}}" target="_blank">Ссылка</a></p>{{/if}}
-                            </div>
-                        </div>
-                    </div>
-                    {{/each}}
-                {{else}}
-                    <p style="color: #666; padding: 20px; text-align: center; background: #f8f9fa; border-radius: 10px;">
-                        Артефактов пока нет
-                    </p>
-                {{/if}}
-
-                <!-- Форма добавления артефакта -->
-                <div class="artifact-form">
-                    <h4><i class="fas fa-plus"></i> Добавить артефакт</h4>
-                    <form id="artifactForm" method="POST" enctype="multipart/form-data" action="/admin/person/{{person._id}}/artifact">
-                        <div class="form-group">
-                            <label>Название <span class="required">*</span></label>
-                            <input type="text" class="form-control" name="artifactName" required>
-                        </div>
-                        <div class="form-group">
-                            <label>Описание <span class="required">*</span></label>
-                            <textarea class="form-control" name="artifactDescription" rows="3" required></textarea>
-                        </div>
-                        <div class="form-row-3">
-                            <div class="form-group">
-                                <label>Год</label>
-                                <input type="number" class="form-control" name="artifactYear">
-                            </div>
-                            <div class="form-group">
-                                <label>Материал</label>
-                                <input type="text" class="form-control" name="artifactMaterial">
-                            </div>
-                            <div class="form-group">
-                                <label>Размеры</label>
-                                <input type="text" class="form-control" name="artifactDimensions" placeholder="например: 30x40 см">
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label>Ссылка на видео (YouTube/Vimeo)</label>
-                            <input type="url" class="form-control" name="artifactVideoUrl" placeholder="https://www.youtube.com/watch?v=...">
-                        </div>
-                        <div class="form-group">
-                            <label>Изображение артефакта</label>
-                            <div class="file-upload-wrapper">
-                                <input type="file" name="artifactImage" accept="image/*">
-                                <div class="file-upload-label"><i class="fas fa-cloud-upload-alt"></i> Выбрать изображение</div>
-                            </div>
-                        </div>
-                        <button type="submit" class="btn-success"><i class="fas fa-plus"></i> Добавить артефакт</button>
-                    </form>
-                </div>
+    <form action="{{#if isEdit}}/admin/person/edit/{{person._id}}{{else}}/admin/person/add{{/if}}" method="POST">
+        <div class="form-row">
+            <div class="form-group">
+                <label for="fullName">Полное ФИО *</label>
+                <input type="text" id="fullName" name="fullName" value="{{person.fullName}}" required>
             </div>
-            {{/if}}
+            <div class="form-group">
+                <label for="order">Порядок отображения</label>
+                <input type="number" id="order" name="order" value="{{person.order}}" min="0">
+                <small style="color: #999;">Чем меньше число, тем выше в списке</small>
+            </div>
         </div>
-    </main>
+
+        <div class="form-row">
+            <div class="form-group">
+                <label for="lastName">Фамилия *</label>
+                <input type="text" id="lastName" name="lastName" value="{{person.lastName}}" required>
+            </div>
+            <div class="form-group">
+                <label for="firstName">Имя *</label>
+                <input type="text" id="firstName" name="firstName" value="{{person.firstName}}" required>
+            </div>
+        </div>
+
+        <div class="form-row">
+            <div class="form-group">
+                <label for="patronymic">Отчество</label>
+                <input type="text" id="patronymic" name="patronymic" value="{{person.patronymic}}">
+            </div>
+            <div class="form-group">
+                <label for="birthYear">Год рождения *</label>
+                <input type="number" id="birthYear" name="birthYear" value="{{person.birthYear}}" required>
+            </div>
+        </div>
+
+        <div class="form-row">
+            <div class="form-group">
+                <label for="deathYear">Год смерти</label>
+                <input type="number" id="deathYear" name="deathYear" value="{{person.deathYear}}">
+            </div>
+            <div class="form-group">
+                <label for="isActive">Активен</label>
+                <input type="checkbox" id="isActive" name="isActive" {{#if person.isActive}}checked{{/if}}>
+                <small style="color: #999; margin-left: 10px;">Отображать на сайте</small>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="photoPath">Путь к фото (относительный)</label>
+            <input type="text" id="photoPath" name="photoPath" value="{{person.photoPath}}" placeholder="/images/persons/имя_файла.jpg">
+            <small style="color: #999;">Путь к изображению персоналии (например: /images/persons/ivanov.jpg)</small>
+        </div>
+
+        <div class="form-row">
+            <div class="form-group">
+                <label for="buttonImagePath">Путь к кнопке (относительный)</label>
+                <input type="text" id="buttonImagePath" name="buttonImagePath" value="{{person.buttonImagePath}}" placeholder="/images/literary-hall/button.png">
+                <small style="color: #999;">Изображение для кнопки на главной странице зала</small>
+            </div>
+            <div class="form-group">
+                <label for="titleImagePath">Путь к плашке (относительный)</label>
+                <input type="text" id="titleImagePath" name="titleImagePath" value="{{person.titleImagePath}}" placeholder="/images/literary-hall/title.png">
+                <small style="color: #999;">Изображение для плашки на странице персоналии</small>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="shortBio">Краткая биография (для страницы персоналии) *</label>
+            <textarea id="shortBio" name="shortBio" rows="3" required>{{person.shortBio}}</textarea>
+        </div>
+
+        <div class="form-group">
+            <label for="biography">Полная биография *</label>
+            <textarea id="biography" name="biography" rows="6" required>{{person.biography}}</textarea>
+        </div>
+
+        {{#if isEdit}}
+            <div class="card" style="margin-top: 30px;">
+                <div class="card-header">
+                    Артефакты ({{person.artifacts.length}})
+                    <a href="/admin/person/{{person._id}}/artifact/add" class="btn btn-success btn-sm" style="float: right;">+ Добавить артефакт</a>
+                </div>
+                
+                {{#if person.artifacts.length}}
+                    <div class="artifact-list">
+                        {{#each person.artifacts}}
+                            <div class="artifact-item">
+                                <div class="artifact-info">
+                                    <div class="artifact-name">{{name}}</div>
+                                    <div class="artifact-desc">{{description}}</div>
+                                    <div style="font-size: 12px; color: #999; margin-top: 3px;">
+                                        {{#if year}}Год: {{year}}{{/if}}
+                                        {{#if material}} • Материал: {{material}}{{/if}}
+                                        {{#if dimensions}} • Размер: {{dimensions}}{{/if}}
+                                    </div>
+                                </div>
+                                <div class="artifact-actions">
+                                    <a href="/admin/person/{{../person._id}}/artifact/edit/{{@index}}" class="btn btn-primary btn-xs">Ред.</a>
+                                    <form action="/admin/person/{{../person._id}}/artifact/delete/{{@index}}" method="POST" style="display: inline;">
+                                        <button type="submit" class="btn btn-danger btn-xs delete-artifact-confirm">Удалить</button>
+                                    </form>
+                                </div>
+                            </div>
+                        {{/each}}
+                    </div>
+                {{else}}
+                    <p style="color: #999; padding: 20px; text-align: center;">У этой персоналии пока нет артефактов</p>
+                {{/if}}
+            </div>
+        {{/if}}
+
+        <div style="margin-top: 30px; display: flex; gap: 15px;">
+            <button type="submit" class="btn btn-success">
+                {{#if isEdit}}Сохранить изменения{{else}}Добавить персоналию{{/if}}
+            </button>
+            <a href="/admin" class="btn btn-warning">Отмена</a>
+        </div>
+    </form>
 </div>
-
-<script>
-    // Предпросмотр фото
-    document.getElementById('photoInput')?.addEventListener('change', function(e) {
-        const reader = new FileReader();
-        reader.onload = function(event) {
-            document.getElementById('photoPreview').src = event.target.result;
-        };
-        reader.readAsDataURL(e.target.files[0]);
-    });
-
-    document.getElementById('buttonInput')?.addEventListener('change', function(e) {
-        const reader = new FileReader();
-        reader.onload = function(event) {
-            document.getElementById('buttonPreview').src = event.target.result;
-        };
-        reader.readAsDataURL(e.target.files[0]);
-    });
-
-    // Подготовка данных перед отправкой формы
-    document.getElementById('personForm').addEventListener('submit', function(e) {
-        e.preventDefault();
-
-        const personData = {
-            fullName: document.getElementById('fullName').value.trim(),
-            lastName: document.getElementById('lastName').value.trim(),
-            firstName: document.getElementById('firstName').value.trim(),
-            patronymic: document.getElementById('patronymic').value.trim(),
-            birthYear: parseInt(document.getElementById('birthYear').value),
-            deathYear: document.getElementById('deathYear').value ? parseInt(document.getElementById('deathYear').value) : null,
-            shortBio: document.getElementById('shortBio').value,
-            biography: document.getElementById('biography').value,
-            order: parseInt(document.getElementById('order').value) || 0,
-            hallId: parseInt(document.getElementById('hallId').value) || 1,
-            isActive: document.getElementById('isActive').checked
-        };
-
-        document.getElementById('personData').value = JSON.stringify(personData);
-        this.submit();
-    });
-
-    {{#if isEdit}}
-    // Удаление артефакта
-    document.querySelectorAll('.delete-artifact').forEach(btn => {
-        btn.addEventListener('click', async function() {
-            const artifactId = this.dataset.artifactId;
-            const personId = '{{person._id}}';
-            if (!confirm('Удалить артефакт?')) return;
-
-            try {
-                const res = await fetch(`/admin/person/${personId}/artifact/${artifactId}`, {
-                    method: 'DELETE'
-                });
-                if (res.ok) location.reload();
-                else {
-                    const data = await res.json();
-                    alert('Ошибка удаления: ' + (data.error || 'Неизвестная ошибка'));
-                }
-            } catch(e) {
-                alert('Ошибка: ' + e.message);
-            }
-        });
-    });
-
-    // Редактирование артефакта
-    document.querySelectorAll('.edit-artifact').forEach(btn => {
-        btn.addEventListener('click', function() {
-            const artifactId = this.dataset.artifactId;
-            const card = this.closest('.artifact-card');
-            
-            const name = card.querySelector('h4')?.textContent || '';
-            const description = card.querySelector('.artifact-info p')?.textContent?.replace('Описание:', '').trim() || '';
-            const yearEl = card.querySelector('.artifact-info p:nth-child(2)');
-            const year = yearEl ? yearEl.textContent.replace('Год:', '').trim() : '';
-            const materialEl = card.querySelector('.artifact-info p:nth-child(3)');
-            const material = materialEl ? materialEl.textContent.replace('Материал:', '').trim() : '';
-            const dimensionsEl = card.querySelector('.artifact-info p:nth-child(4)');
-            const dimensions = dimensionsEl ? dimensionsEl.textContent.replace('Размеры:', '').trim() : '';
-            const videoEl = card.querySelector('.artifact-info a');
-            const videoUrl = videoEl ? videoEl.href : '';
-            
-            const form = document.getElementById('artifactForm');
-            form.querySelector('[name="artifactName"]').value = name;
-            form.querySelector('[name="artifactDescription"]').value = description;
-            form.querySelector('[name="artifactYear"]').value = year;
-            form.querySelector('[name="artifactMaterial"]').value = material;
-            form.querySelector('[name="artifactDimensions"]').value = dimensions;
-            form.querySelector('[name="artifactVideoUrl"]').value = videoUrl;
-            
-            const personId = '{{person._id}}';
-            form.action = `/admin/person/${personId}/artifact/${artifactId}`;
-            
-            const submitBtn = form.querySelector('button[type="submit"]');
-            submitBtn.innerHTML = '<i class="fas fa-save"></i> Обновить артефакт';
-            
-            if (!form.querySelector('.btn-cancel-edit')) {
-                const cancelBtn = document.createElement('button');
-                cancelBtn.type = 'button';
-                cancelBtn.className = 'btn-secondary btn-cancel-edit';
-                cancelBtn.innerHTML = '<i class="fas fa-times"></i> Отменить';
-                cancelBtn.style.marginLeft = '10px';
-                cancelBtn.onclick = function() {
-                    form.action = `/admin/person/${personId}/artifact`;
-                    submitBtn.innerHTML = '<i class="fas fa-plus"></i> Добавить артефакт';
-                    form.reset();
-                    this.remove();
-                };
-                form.appendChild(cancelBtn);
-            }
-            
-            form.scrollIntoView({ behavior: 'smooth', block: 'center' });
-        });
-    });
-    {{/if}}
-</script>
-</body>
-</html>

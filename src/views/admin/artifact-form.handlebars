@@ -1,0 +1,63 @@
+<div class="card">
+    <div class="card-header">
+        {{#if isEdit}}
+            Редактирование артефакта: {{artifact.name}}
+        {{else}}
+            Добавление артефакта для: {{person.fullName}}
+        {{/if}}
+    </div>
+
+    <form action="{{#if isEdit}}/admin/person/{{person._id}}/artifact/edit/{{artifactIndex}}{{else}}/admin/person/{{person._id}}/artifact/add{{/if}}" method="POST">
+        <div class="form-group">
+            <label for="name">Название артефакта *</label>
+            <input type="text" id="name" name="name" value="{{artifact.name}}" required>
+        </div>
+
+        <div class="form-group">
+            <label for="description">Описание *</label>
+            <textarea id="description" name="description" rows="4" required>{{artifact.description}}</textarea>
+        </div>
+
+        <div class="form-group">
+            <label for="imagePath">Путь к изображению (относительный)</label>
+            <input type="text" id="imagePath" name="imagePath" value="{{artifact.imagePath}}" placeholder="/images/artifacts/artifact1.png">
+            <small style="color: #999;">Путь к изображению артефакта (например: /images/artifacts/kniga.jpg)</small>
+        </div>
+
+        <div class="form-row">
+            <div class="form-group">
+                <label for="videoUrl">Ссылка на видео</label>
+                <input type="text" id="videoUrl" name="videoUrl" value="{{artifact.videoUrl}}" placeholder="https://rutube.ru/embed/...">
+                <small style="color: #999;">Полная ссылка на видео (если есть)</small>
+            </div>
+            <div class="form-group">
+                <label for="videoId">ID видео (Rutube)</label>
+                <input type="text" id="videoId" name="videoId" value="{{artifact.videoId}}" placeholder="embed-xxxxxxxxxxxxx">
+                <small style="color: #999;">ID видео для встраивания (только для Rutube)</small>
+            </div>
+        </div>
+
+        <div class="form-row">
+            <div class="form-group">
+                <label for="year">Год</label>
+                <input type="number" id="year" name="year" value="{{artifact.year}}">
+            </div>
+            <div class="form-group">
+                <label for="material">Материал</label>
+                <input type="text" id="material" name="material" value="{{artifact.material}}" placeholder="Бумага, картон...">
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="dimensions">Размеры</label>
+            <input type="text" id="dimensions" name="dimensions" value="{{artifact.dimensions}}" placeholder="20x30 см">
+        </div>
+
+        <div style="margin-top: 30px; display: flex; gap: 15px;">
+            <button type="submit" class="btn btn-success">
+                {{#if isEdit}}Сохранить изменения{{else}}Добавить артефакт{{/if}}
+            </button>
+            <a href="/admin/person/edit/{{person._id}}" class="btn btn-warning">Отмена</a>
+        </div>
+    </form>
+</div>
