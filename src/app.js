@@ -39,6 +39,9 @@ app.engine('handlebars', engine({
     subtract: function(a, b) {
       return a - b;
     },
+    multiply: function(a, b) {
+      return a * b;
+    }
   },
   allowProtoPropertiesByDefault: true,
   allowProtoMethodsByDefault: true

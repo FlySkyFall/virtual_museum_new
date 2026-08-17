@@ -14,30 +14,46 @@
     
     <!-- Контент страницы -->
     <div class="autograf-content">
-        <div class="main-text">
+        <!-- Первый текст - цитата (центрирован по центру страницы) -->
+        <div class="quote-container">
             <p class="quote">
                 Книга с автографом – это не просто текст, написанный на её страницах, 
                 это символ глубокой признательности и благодарности, вошедший в историю
             </p>
-            
-            <div class="development-message">
-                <p class="apology">Приносим свои извинения.</p>
-                <p class="status">Страница находится в стадии разработки.</p>
-                <p class="info">
-                    Данную информацию можете посмотреть 
-                    в необновленной версии по ссылке – 
-                    <a href="https://bibliogorod32.ru/index.php/component/k2/item/1562.html" target="_blank" class="old-site-link">
-                        https://bibliogorod32.ru/index.php/component/k2/item/1562.html
-                    </a>
-                </p>
+        </div>
+
+        <!-- Алфавитный указатель (два ряда по 12 изображений) -->
+        <div class="alphabet-container">
+            {{#each alphabet}}
+            <div class="alphabet-letter">
+                <img src="{{imagePath}}" alt="Буква {{letter}}" class="letter-image">
             </div>
+            {{/each}}
+        </div>
+
+        <!-- Второй текст - сообщение о разработке (центрирован по центру страницы) -->
+        <div class="development-container">
+            <p class="apology">Приносим свои извинения.</p>
+            <p class="status">Страница находится в стадии разработки.</p>
+            <p class="info">
+                Данную информацию можете посмотреть 
+                в необновленной версии по ссылке – 
+                <a href="https://bibliogorod32.ru/index.php/component/k2/item/1562.html" target="_blank" class="old-site-link">
+                    https://bibliogorod32.ru/index.php/component/k2/item/1562.html
+                </a>
+            </p>
         </div>
     </div>
     
-    <!-- Кнопка назад -->
+    <!-- Кнопка "Назад" в левом нижнем углу -->
     <a href="/" class="back-button-autograf">
         <img src="/images/back-button.png" alt="Назад" class="back-button-img">
     </a>
+
+    <!-- Кнопка "Далее" в правом нижнем углу (неактивная) -->
+    <button class="next-button-autograf disabled" disabled>
+        <img src="/images/next-button.png" alt="Далее" class="next-button-img">
+    </button>
 </div>
 
 <style>
@@ -81,35 +97,26 @@
         height: auto;
     }
 
-    /* АДАПТИВНЫЙ ЛОГОТИП - используем относительные единицы */
+    /* АДАПТИВНЫЙ ЛОГОТИП */
     .hall-logo {
         position: absolute;
         top: 0%;
         left: 2%;
         z-index: 10;
-        width: 25%; /* Используем проценты вместо фиксированных пикселей */
-        max-width: 400px; /* Максимальный размер */
-        min-width: 40px; /* Минимальный размер */
+        width: 25%;
+        max-width: 400px;
+        min-width: 40px;
         height: auto;
         pointer-events: none;
-        transition: width 0.3s ease; /* Плавное изменение размера */
+        transition: width 0.3s ease;
     }
 
-    /* Адаптивные размеры для разных экранов */
     @media (max-width: 1200px) {
-        .hall-logo {
-            width: 22%;
-            max-width: 350px;
-        }
+        .hall-logo { width: 22%; max-width: 350px; }
     }
-
     @media (max-width: 992px) {
-        .hall-logo {
-            width: 20%;
-            max-width: 300px;
-        }
+        .hall-logo { width: 20%; max-width: 300px; }
     }
-
     @media (max-width: 768px) {
         .hall-logo {
             width: 18%;
@@ -118,7 +125,6 @@
             left: 1.5%;
         }
     }
-
     @media (max-width: 576px) {
         .hall-logo {
             width: 15%;
@@ -127,7 +133,6 @@
             left: 1%;
         }
     }
-
     @media (max-width: 480px) {
         .hall-logo {
             width: 12%;
@@ -136,7 +141,6 @@
             left: 1%;
         }
     }
-
     
     .plate-wrapper {
         position: relative;
@@ -164,109 +168,200 @@
         width: 100%;
         height: 100vh;
         display: flex;
+        flex-direction: column;
         align-items: center;
         justify-content: center;
-        padding: 100px 80px 80px 80px;
+        padding: 100px 80px 100px 80px;
+        gap: 20px;
     }
-    
-    .main-text {
-        max-width: 900px;
+
+    /* ===== ПЕРВЫЙ ТЕКСТ - ЦИТАТА (ЦЕНТРИРОВАН) ===== */
+    .quote-container {
+        width: 100%;
+        max-width: 1000px;
         text-align: center;
-        background: rgba(255, 255, 255, 0.85);
-        padding: 50px 60px;
-        border-radius: 20px;
-        backdrop-filter: blur(10px);
-        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
-        margin-top: 40px;
-        border: 2px solid rgba(255, 255, 255, 0.3);
+        padding: 0 20px;
     }
-    
+
     .quote {
-        font-size: clamp(18px, 2.5vw, 32px);
+        font-size: clamp(18px, 2.5vw, 34px);
         font-weight: 600;
         color: #2c3e50;
         line-height: 1.6;
-        margin-bottom: 40px;
         font-style: italic;
         padding: 0 20px;
         border-left: 4px solid #667eea;
-        padding-left: 30px;
-        text-align: left;
+        border-right: 4px solid #667eea;
+        padding: 10px 30px;
+        display: inline-block;
+        background: rgba(255, 255, 255, 0.85);
+        border-radius: 15px;
+        backdrop-filter: blur(10px);
+        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
+        margin: 0;
         letter-spacing: 0.5px;
+        text-align: center;
+        max-width: 900px;
     }
-    
-    .development-message {
-        margin-top: 30px;
-        padding-top: 30px;
-        border-top: 2px solid rgba(102, 126, 234, 0.3);
+
+    /* ===== АЛФАВИТНЫЙ УКАЗАТЕЛЬ ===== */
+    .alphabet-container {
+        display: grid;
+        grid-template-columns: repeat(12, 1fr);
+        gap: 6px 10px;
+        max-width: 1100px;
+        width: 100%;
+        padding: 10px 20px;
+        background: rgba(255, 255, 255, 0.85);
+        border-radius: 15px;
+        backdrop-filter: blur(10px);
+        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
+        justify-items: center;
+        align-items: center;
     }
-    
+
+    .alphabet-letter {
+        width: 100%;
+        aspect-ratio: 1 / 1;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: transform 0.3s ease;
+        cursor: pointer;
+        max-width: 75px;
+    }
+
+    .alphabet-letter:hover {
+        transform: scale(1.1);
+    }
+
+    .letter-image {
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+        display: block;
+        filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1));
+        transition: filter 0.3s ease;
+    }
+
+    .alphabet-letter:hover .letter-image {
+        filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.2));
+    }
+
+    /* ===== ВТОРОЙ ТЕКСТ - СООБЩЕНИЕ О РАЗРАБОТКЕ ===== */
+    .development-container {
+        width: 100%;
+        max-width: 900px;
+        text-align: center;
+        padding: 0 20px;
+        background: rgba(255, 255, 255, 0.85);
+        border-radius: 15px;
+        backdrop-filter: blur(10px);
+        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
+        padding: 25px 30px;
+        border: 2px solid rgba(255, 255, 255, 0.3);
+    }
+
     .apology {
         font-size: clamp(16px, 1.8vw, 24px);
         font-weight: 700;
         color: #e74c3c;
-        margin-bottom: 10px;
+        margin-bottom: 8px;
     }
-    
+
     .status {
         font-size: clamp(14px, 1.5vw, 20px);
         font-weight: 600;
         color: #34495e;
-        margin-bottom: 20px;
+        margin-bottom: 15px;
     }
-    
+
     .info {
         font-size: clamp(12px, 1.2vw, 18px);
         color: #2c3e50;
         line-height: 1.8;
     }
-    
+
     .old-site-link {
         display: inline-block;
-        margin-top: 10px;
-        padding: 10px 25px;
+        margin-top: 8px;
+        padding: 8px 20px;
         background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
         color: white;
         text-decoration: none;
         border-radius: 50px;
         font-weight: 600;
         transition: all 0.3s ease;
-        font-size: clamp(12px, 1.1vw, 16px);
+        font-size: clamp(11px, 1.1vw, 16px);
         box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+        word-break: break-all;
     }
-    
+
     .old-site-link:hover {
         transform: translateY(-2px);
         box-shadow: 0 8px 25px rgba(102, 126, 234, 0.6);
     }
-    
-    /* ===== КНОПКА НАЗАД ===== */
+
+    /* ===== КНОПКА "НАЗАД" (ЛЕВЫЙ НИЖНИЙ УГОЛ) ===== */
     .back-button-autograf {
         position: fixed;
         bottom: 30px;
-        right: 100px;
+        left: 100px;
         z-index: 10;
         width: 180px;
         height: auto;
         cursor: pointer;
         transition: transform 0.3s ease;
         display: block;
+        border: none;
+        background: transparent;
+        padding: 0;
     }
-    
+
     .back-button-img {
         width: 100%;
         height: auto;
         display: block;
     }
-    
+
     .back-button-autograf:hover {
         transform: scale(1.05);
     }
-    
+
     .back-button-autograf:active {
         transform: scale(0.98);
     }
-    
+
+    /* ===== КНОПКА "ДАЛЕЕ" (ПРАВЫЙ НИЖНИЙ УГОЛ, НЕАКТИВНАЯ) ===== */
+    .next-button-autograf {
+        position: fixed;
+        bottom: 30px;
+        right: 100px;
+        z-index: 10;
+        width: 180px;
+        height: auto;
+        cursor: not-allowed;
+        transition: transform 0.3s ease;
+        display: block;
+        border: none;
+        background: transparent;
+        padding: 0;
+        opacity: 0.4;
+        pointer-events: none;
+    }
+
+    .next-button-autograf.disabled {
+        opacity: 0.4;
+        pointer-events: none;
+        cursor: not-allowed;
+    }
+
+    .next-button-img {
+        width: 100%;
+        height: auto;
+        display: block;
+    }
+
     /* ============= АДАПТИВНОСТЬ ============= */
     
     @media (max-width: 1024px) {
@@ -283,20 +378,37 @@
         }
         
         .autograf-content {
-            padding: 80px 40px 40px 40px;
-        }
-        
-        .main-text {
-            padding: 40px 40px;
-            margin-top: 30px;
+            padding: 80px 40px 80px 40px;
+            gap: 15px;
         }
         
         .quote {
             font-size: clamp(16px, 2.2vw, 26px);
-            padding-left: 20px;
+            padding: 8px 25px;
+        }
+        
+        .alphabet-container {
+            gap: 5px 8px;
+            padding: 8px 15px;
+            max-width: 800px;
+        }
+
+        .alphabet-letter {
+            max-width: 55px;
+        }
+
+        .development-container {
+            padding: 20px 25px;
+            max-width: 700px;
         }
         
         .back-button-autograf {
+            width: 140px;
+            left: 80px;
+            bottom: 25px;
+        }
+
+        .next-button-autograf {
             width: 140px;
             right: 80px;
             bottom: 25px;
@@ -317,24 +429,33 @@
         }
         
         .autograf-content {
-            padding: 70px 20px 20px 20px;
-            align-items: flex-start;
-            padding-top: 80px;
-        }
-        
-        .main-text {
-            padding: 30px 25px;
-            margin-top: 20px;
-            border-radius: 15px;
+            padding: 70px 20px 70px 20px;
+            gap: 12px;
         }
         
         .quote {
             font-size: clamp(14px, 2vw, 20px);
-            padding-left: 15px;
-            margin-bottom: 25px;
-            padding-right: 0;
+            padding: 8px 20px;
+            border-left-width: 3px;
+            border-right-width: 3px;
         }
         
+        .alphabet-container {
+            gap: 4px 6px;
+            padding: 6px 10px;
+            max-width: 600px;
+            grid-template-columns: repeat(12, 1fr);
+        }
+
+        .alphabet-letter {
+            max-width: 40px;
+        }
+
+        .development-container {
+            padding: 15px 20px;
+            max-width: 550px;
+        }
+
         .apology {
             font-size: clamp(14px, 1.6vw, 18px);
         }
@@ -349,13 +470,19 @@
         
         .old-site-link {
             font-size: clamp(11px, 1.1vw, 14px);
-            padding: 8px 20px;
+            padding: 6px 15px;
         }
         
         .back-button-autograf {
             width: 100px;
+            left: 15px;
             bottom: 15px;
+        }
+
+        .next-button-autograf {
+            width: 100px;
             right: 15px;
+            bottom: 15px;
         }
     }
     
@@ -373,23 +500,33 @@
         }
         
         .autograf-content {
-            padding: 60px 10px 10px 10px;
-            padding-top: 70px;
-        }
-        
-        .main-text {
-            padding: 20px 15px;
-            margin-top: 15px;
-            border-radius: 12px;
+            padding: 60px 10px 60px 10px;
+            gap: 10px;
         }
         
         .quote {
             font-size: clamp(12px, 1.8vw, 16px);
-            padding-left: 10px;
-            margin-bottom: 20px;
-            border-left-width: 3px;
+            padding: 6px 15px;
+            border-left-width: 2px;
+            border-right-width: 2px;
         }
         
+        .alphabet-container {
+            gap: 3px 4px;
+            padding: 4px 8px;
+            max-width: 400px;
+            grid-template-columns: repeat(12, 1fr);
+        }
+
+        .alphabet-letter {
+            max-width: 28px;
+        }
+
+        .development-container {
+            padding: 12px 15px;
+            max-width: 400px;
+        }
+
         .apology {
             font-size: clamp(12px, 1.5vw, 15px);
         }
@@ -404,17 +541,53 @@
         
         .old-site-link {
             font-size: clamp(10px, 1vw, 12px);
-            padding: 6px 15px;
-            display: inline-block;
+            padding: 4px 12px;
         }
         
         .back-button-autograf {
             width: 70px;
+            left: 10px;
             bottom: 10px;
+        }
+
+        .next-button-autograf {
+            width: 70px;
             right: 10px;
+            bottom: 10px;
         }
     }
     
+    @media (max-height: 700px) {
+        .autograf-content {
+            padding: 50px 40px 50px 40px;
+            gap: 10px;
+        }
+
+        .quote {
+            font-size: clamp(12px, 1.6vw, 18px);
+            padding: 5px 15px;
+        }
+
+        .alphabet-container {
+            gap: 3px 5px;
+            padding: 5px 10px;
+        }
+
+        .alphabet-letter {
+            max-width: 35px;
+        }
+
+        .development-container {
+            padding: 12px 20px;
+        }
+
+        .back-button-autograf,
+        .next-button-autograf {
+            width: 80px;
+            bottom: 10px;
+        }
+    }
+
     @media (max-height: 600px) {
         .top-left-plate {
             width: 60%;
@@ -429,24 +602,87 @@
         }
         
         .autograf-content {
-            padding: 60px 30px 20px 30px;
-            padding-top: 50px;
+            padding: 40px 30px 40px 30px;
+            gap: 8px;
         }
-        
-        .main-text {
-            padding: 20px 30px;
-            margin-top: 10px;
-        }
-        
+
         .quote {
-            font-size: clamp(12px, 1.8vw, 18px);
-            margin-bottom: 20px;
+            font-size: clamp(11px, 1.4vw, 15px);
+            padding: 4px 12px;
         }
-        
-        .back-button-autograf {
-            width: 80px;
-            bottom: 10px;
-            right: 40px;
+
+        .alphabet-container {
+            gap: 2px 4px;
+            padding: 4px 8px;
+        }
+
+        .alphabet-letter {
+            max-width: 28px;
+        }
+
+        .development-container {
+            padding: 8px 15px;
+        }
+
+        .apology {
+            font-size: clamp(11px, 1.2vw, 14px);
+            margin-bottom: 4px;
+        }
+
+        .status {
+            font-size: clamp(10px, 1.1vw, 13px);
+            margin-bottom: 8px;
+        }
+
+        .info {
+            font-size: clamp(9px, 1vw, 12px);
+        }
+
+        .old-site-link {
+            font-size: clamp(9px, 0.9vw, 11px);
+            padding: 4px 12px;
+            margin-top: 4px;
+        }
+
+        .back-button-autograf,
+        .next-button-autograf {
+            width: 60px;
+            bottom: 8px;
         }
     }
+
+    /* Анимации */
+    @keyframes fadeInUp {
+        from {
+            opacity: 0;
+            transform: translateY(30px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    .quote-container {
+        animation: fadeInUp 0.6s ease-out forwards;
+    }
+
+    .alphabet-container {
+        animation: fadeInUp 0.6s ease-out 0.2s both;
+    }
+
+    .development-container {
+        animation: fadeInUp 0.6s ease-out 0.4s both;
+    }
+
+    .alphabet-letter {
+        animation: fadeInUp 0.4s ease-out both;
+    }
+
+    /* Задержки для букв */
+    {{#each alphabet}}
+    .alphabet-letter:nth-child({{add @index 1}}) {
+        animation-delay: {{multiply @index 0.05}}s;
+    }
+    {{/each}}
 </style>
