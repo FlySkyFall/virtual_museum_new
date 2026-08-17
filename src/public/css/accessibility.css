@@ -424,12 +424,15 @@ body.vision-mode .bottom-logo {
     box-shadow: 0 0 0 2px #ffffff, 0 0 0 5px #000000 !important;
 }
 
-/* ===== СТИЛИ ДЛЯ СТРАНИЦ ЗАЛОВ ===== */
+/* ===== СТИЛИ ДЛЯ СТРАНИЦ ЗАЛОВ (ОБЩИЕ) ===== */
 
 /* Фон залов - делаем светлее для читаемости */
 body.vision-mode .hall-background,
 body.vision-mode .person-background,
-body.vision-mode .museum-background {
+body.vision-mode .museum-background,
+body.vision-mode .military-hall-background,
+body.vision-mode .artifacts-background,
+body.vision-mode .video-background {
     filter: brightness(1.3) contrast(1.2) !important;
 }
 
@@ -439,44 +442,107 @@ body.vision-mode .museum-background {
 }
 
 /* Логотипы залов */
-body.vision-mode .hall-logo {
+body.vision-mode .hall-logo,
+body.vision-mode .military-hall-logo {
     border: 3px solid #000000 !important;
     box-shadow: 0 0 0 2px #ffffff, 0 0 0 5px #000000 !important;
 }
 
-/* Кнопки персоналий в залах */
-body.vision-mode .person-button {
+/* ===== СТИЛИ ДЛЯ ВОЕННО-ИСТОРИЧЕСКОГО ЗАЛА ===== */
+
+/* Кнопки войн */
+body.vision-mode .military-war-button {
     border: 3px solid #000000 !important;
     box-shadow: 0 0 0 2px #ffffff, 0 0 0 5px #000000 !important;
-    border-radius: 0 30px 30px 0 !important;
+    border-radius: 12px !important;
 }
 
-body.vision-mode .person-button:hover {
+body.vision-mode .military-war-button:hover {
     transform: scale(1.05) !important;
     border-color: #0066cc !important;
     box-shadow: 0 0 0 2px #ffffff, 0 0 0 5px #0066cc !important;
 }
 
-/* Изображения кнопок персоналий - делаем контрастнее */
-body.vision-mode .person-button-bg {
+/* Изображения кнопок войн */
+body.vision-mode .military-war-button-bg {
     filter: contrast(1.2) brightness(1.1) !important;
 }
 
-/* Текст на кнопках персоналий */
-body.vision-mode .person-name {
-    font-size: clamp(18px, 2.5vw, 36px) !important;
-    color: #000000 !important;
-    text-shadow: 1px 1px 2px rgba(255,255,255,0.8) !important;
+/* Кнопка "Назад" в военном зале */
+body.vision-mode .military-back-button {
+    border: 3px solid #000000 !important;
+    box-shadow: 0 0 0 2px #ffffff, 0 0 0 5px #000000 !important;
+    border-radius: 12px !important;
+    padding: 5px !important;
 }
 
-body.vision-mode .person-surname {
-    font-size: clamp(22px, 3vw, 42px) !important;
-    color: #000000 !important;
+body.vision-mode .military-back-button:hover {
+    border-color: #0066cc !important;
+    box-shadow: 0 0 0 2px #ffffff, 0 0 0 5px #0066cc !important;
 }
 
-body.vision-mode .person-name-rest {
-    font-size: clamp(18px, 2.2vw, 32px) !important;
-    color: #000000 !important;
+/* ===== СТИЛИ ДЛЯ СТРАНИЦЫ АРТЕФАКТОВ ВОЕННОГО ЗАЛА ===== */
+
+/* Карточки артефактов */
+body.vision-mode .artifact-card {
+    border: 3px solid #000000 !important;
+    box-shadow: 0 0 0 2px #ffffff, 0 0 0 5px #000000 !important;
+    border-radius: 12px !important;
+}
+
+body.vision-mode .artifact-card:hover {
+    transform: scale(1.05) !important;
+    border-color: #0066cc !important;
+    box-shadow: 0 0 0 2px #ffffff, 0 0 0 5px #0066cc !important;
+}
+
+body.vision-mode .artifact-image {
+    filter: contrast(1.2) brightness(1.1) !important;
+}
+
+/* Плашка с названием войны на странице артефактов */
+body.vision-mode .title-image-bg {
+    filter: contrast(1.2) brightness(1.1) !important;
+    border: 3px solid #000000 !important;
+    box-shadow: 0 0 0 2px #ffffff, 0 0 0 5px #000000 !important;
+}
+
+/* Навигационные кнопки (Назад/Далее) на странице артефактов */
+body.vision-mode .nav-button {
+    border: 3px solid #000000 !important;
+    box-shadow: 0 0 0 2px #ffffff, 0 0 0 5px #000000 !important;
+    border-radius: 12px !important;
+    padding: 5px !important;
+}
+
+body.vision-mode .nav-button:hover {
+    border-color: #0066cc !important;
+    box-shadow: 0 0 0 2px #ffffff, 0 0 0 5px #0066cc !important;
+}
+
+/* ===== СТИЛИ ДЛЯ СТРАНИЦЫ ВИДЕО АРТЕФАКТА ===== */
+
+/* Рамка видео */
+body.vision-mode .frame-image {
+    border: 3px solid #000000 !important;
+    box-shadow: 0 0 0 2px #ffffff, 0 0 0 5px #000000 !important;
+    border-radius: 12px !important;
+}
+
+/* Видео-плеер */
+body.vision-mode .video-overlay {
+    border: 3px solid #000000 !important;
+    box-shadow: 0 0 0 2px #ffffff, 0 0 0 5px #000000 !important;
+    border-radius: 8px !important;
+}
+
+/* Название артефакта в правом нижнем углу */
+body.vision-mode .artifact-name {
+    background: #000000 !important;
+    color: #ffffff !important;
+    border: 2px solid #ffffff !important;
+    font-size: 18px !important;
+    padding: 10px 20px !important;
 }
 
 /* ===== СТИЛИ ДЛЯ СТРАНИЦЫ ПЕРСОНАЛИИ ===== */
@@ -686,18 +752,6 @@ body.vision-mode .hall-description,
 body.vision-mode .hall-title {
     color: #000000 !important;
     text-shadow: 1px 1px 2px rgba(255,255,255,0.8) !important;
-}
-
-/* Улучшаем видимость кнопок персоналий в военном зале */
-body.vision-mode .war-person-button {
-    border: 3px solid #000000 !important;
-    box-shadow: 0 0 0 2px #ffffff, 0 0 0 5px #000000 !important;
-    border-radius: 12px !important;
-}
-
-body.vision-mode .war-person-button:hover {
-    border-color: #0066cc !important;
-    box-shadow: 0 0 0 2px #ffffff, 0 0 0 5px #0066cc !important;
 }
 
 /* Стили для автографов */
