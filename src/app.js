@@ -87,7 +87,7 @@ app.use('/hall', hallRoutes);
 app.use('/hall', militaryHallRoutes);
 app.use('/hall', historicalHallRoutes);
 app.use('/hall', autografHallRoutes);
-app.use('/admin', adminRoutes);
+app.use('/', adminRoutes);
 
 // Обработка 404
 app.use((req, res) => {
