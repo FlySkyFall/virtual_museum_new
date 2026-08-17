@@ -61,7 +61,7 @@ router.get('/military-history/war/:warId', async (req, res) => {
         console.log(`Показано артефактов: ${paginatedArtifacts.length}`);
         
         res.render('hall/war-artifacts', {
-            layout: false,
+            layout: 'main',
             title: `${war.name} | Виртуальный музей`,
             war: war,
             artifacts: paginatedArtifacts,
@@ -97,7 +97,7 @@ router.get('/military-history/war/:warId/artifact/:artifactIndex', async (req, r
         console.log(`Загружено видео для артефакта: ${artifact.name}`);
         
         res.render('hall/military-artifact-video', {
-            layout: false,
+            layout: 'main',
             title: `${artifact.name} | Виртуальный музей`,
             war: war,
             artifact: artifact,
