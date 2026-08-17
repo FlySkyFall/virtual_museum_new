@@ -3,7 +3,7 @@ const { engine } = require('express-handlebars');
 const path = require('path');
 const mongoose = require('mongoose');
 const session = require('express-session');
-const MongoStore = require('connect-mongo')(session); // <-- ИСПРАВЛЕНО
+const MongoStore = require('connect-mongo'); // <-- ПРОСТО ТАК
 const methodOverride = require('method-override');
 const fs = require('fs');
 require('dotenv').config();
@@ -71,8 +71,8 @@ app.use(session({
   secret: process.env.SESSION_SECRET || 'your-secret-key-change-this-in-production',
   resave: false,
   saveUninitialized: false,
-  store: new MongoStore({
-    mongooseConnection: mongoose.connection,
+  store: MongoStore.create({
+    mongoUrl: process.env.MONGODB_URI || 'mongodb://localhost:27017/museum',
     ttl: 14 * 24 * 60 * 60 // 14 дней
   }),
   cookie: {
@@ -104,10 +104,7 @@ app.use(express.urlencoded({ extended: true }));
 
 // Подключение к MongoDB
 mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost:27017/museum')
-  .then(() => {
-    console.log('✅ MongoDB подключена');
-    // После подключения к БД, сессии будут работать
-  })
+  .then(() => console.log('✅ MongoDB подключена'))
   .catch(err => console.error('❌ Ошибка подключения к MongoDB:', err));
 
 // Импорт маршрутов
