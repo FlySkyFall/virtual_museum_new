@@ -1,0 +1,83 @@
+<div class="admin-header-bar">
+    <h2>Мой профиль</h2>
+    <p>Управление учетной записью администратора</p>
+</div>
+
+<div class="card">
+    <div class="card-header">Информация о профиле</div>
+    
+    {{#if success}}
+        <div class="alert alert-success">✅ Профиль успешно обновлен</div>
+    {{/if}}
+    
+    {{#if error}}
+        {{#if (eq error "current_password_required")}}
+            <div class="alert alert-danger">❌ Для смены пароля необходимо указать текущий пароль</div>
+        {{/if}}
+        {{#if (eq error "invalid_current_password")}}
+            <div class="alert alert-danger">❌ Неверный текущий пароль</div>
+        {{/if}}
+        {{#if (eq error "passwords_mismatch")}}
+            <div class="alert alert-danger">❌ Пароли не совпадают</div>
+        {{/if}}
+        {{#if (eq error "update_failed")}}
+            <div class="alert alert-danger">❌ Ошибка обновления профиля</div>
+        {{/if}}
+    {{/if}}
+    
+    <form action="/admin/profile" method="POST">
+        <div class="form-group">
+            <label for="username">Имя пользователя</label>
+            <input type="text" id="username" value="{{admin.username}}" disabled>
+            <small style="color: #999;">Имя пользователя нельзя изменить</small>
+        </div>
+        
+        <div class="form-group">
+            <label for="email">Email *</label>
+            <input type="email" id="email" name="email" value="{{admin.email}}" required>
+        </div>
+        
+        <div class="form-group">
+            <label for="createdAt">Дата регистрации</label>
+            <input type="text" id="createdAt" value="{{formatDate admin.createdAt}}" disabled>
+        </div>
+        
+        {{#if admin.lastLogin}}
+            <div class="form-group">
+                <label for="lastLogin">Последний вход</label>
+                <input type="text" id="lastLogin" value="{{formatDate admin.lastLogin}}" disabled>
+            </div>
+        {{/if}}
+        
+        <hr style="margin: 30px 0; border: none; border-top: 2px solid #f0f0f0;">
+        
+        <h3 style="margin-bottom: 20px;">Смена пароля</h3>
+        
+        <div class="form-group">
+            <label for="currentPassword">Текущий пароль</label>
+            <input type="password" id="currentPassword" name="currentPassword" placeholder="Введите текущий пароль">
+        </div>
+        
+        <div class="form-group">
+            <label for="newPassword">Новый пароль</label>
+            <input type="password" id="newPassword" name="newPassword" placeholder="Введите новый пароль" minlength="6">
+            <small style="color: #999;">Минимум 6 символов. Оставьте пустым, если не хотите менять пароль.</small>
+        </div>
+        
+        <div class="form-group">
+            <label for="confirmPassword">Подтверждение нового пароля</label>
+            <input type="password" id="confirmPassword" name="confirmPassword" placeholder="Повторите новый пароль">
+        </div>
+        
+        <div style="margin-top: 30px; display: flex; gap: 15px;">
+            <button type="submit" class="btn btn-success">Сохранить изменения</button>
+            <a href="/admin" class="btn btn-warning">Отмена</a>
+        </div>
+    </form>
+</div>
+
+<div class="card" style="border: 2px solid #f8d7da; background: #fff8f8;">
+    <div class="card-header" style="color: #721c24;">⚠️ Опасная зона</div>
+    <p style="color: #721c24; margin-bottom: 15px;">Выйти из системы управления</p>
+    <a href="/admin/logout" class="btn btn-danger" onclick="return confirm('Вы уверены, что хотите выйти из системы?')">Выйти</a>
+</div>

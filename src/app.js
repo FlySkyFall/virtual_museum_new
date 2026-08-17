@@ -3,6 +3,7 @@ const { engine } = require('express-handlebars');
 const path = require('path');
 const mongoose = require('mongoose');
 const session = require('express-session');
+const MongoStore = require('connect-mongo'); // <-- ДОБАВИТЬ
 const methodOverride = require('method-override');
 const fs = require('fs');
 require('dotenv').config();
@@ -41,6 +42,17 @@ app.engine('handlebars', engine({
     },
     multiply: function(a, b) {
       return a * b;
+    },
+    formatDate: (date) => {
+        if (!date) return '—';
+        const d = new Date(date);
+        return d.toLocaleString('ru-RU', {
+            day: '2-digit',
+            month: '2-digit',
+            year: 'numeric',
+            hour: '2-digit',
+            minute: '2-digit'
+        });
     }
   },
   allowProtoPropertiesByDefault: true,
@@ -51,12 +63,35 @@ app.set('views', path.join(__dirname, 'views'));
 
 // Middleware
 app.use(methodOverride('_method'));
+
+// ============================================
+// НАСТРОЙКА СЕССИЙ С ХРАНЕНИЕМ В MONGODB
+// ============================================
 app.use(session({
-  secret: process.env.SESSION_SECRET || 'your-secret-key',
+  secret: process.env.SESSION_SECRET || 'your-secret-key-change-this-in-production',
   resave: false,
   saveUninitialized: false,
-  cookie: { secure: false, maxAge: 3600000 }
+  store: MongoStore.create({
+    mongoUrl: process.env.MONGODB_URI || 'mongodb://localhost:27017/museum',
+    ttl: 14 * 24 * 60 * 60, // 14 дней
+    touchAfter: 24 * 3600 // обновлять сессию не чаще раза в 24 часа
+  }),
+  cookie: {
+    maxAge: 1000 * 60 * 60 * 24 * 7, // 7 дней
+    httpOnly: true,
+    secure: process.env.NODE_ENV === 'production'
+  }
 }));
+
+// ============================================
+// ДОБАВЛЯЕМ ПЕРЕМЕННЫЕ ДЛЯ ВСЕХ ШАБЛОНОВ
+// ============================================
+app.use((req, res, next) => {
+  res.locals.currentYear = new Date().getFullYear();
+  res.locals.isAdmin = req.session && req.session.adminId ? true : false;
+  res.locals.adminUsername = req.session ? req.session.adminUsername : null;
+  next();
+});
 
 // Статические файлы
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
@@ -69,7 +104,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 // Подключение к MongoDB
-mongoose.connect(process.env.MONGODB_URI)
+mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost:27017/museum')
   .then(() => console.log('✅ MongoDB подключена'))
   .catch(err => console.error('❌ Ошибка подключения к MongoDB:', err));
 

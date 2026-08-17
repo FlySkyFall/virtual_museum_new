@@ -1,11 +1,191 @@
 const express = require('express');
 const router = express.Router();
 const Person = require('../models/Person');
+const Admin = require('../models/Admin');
+const { isAdmin, isNotAuthenticated } = require('../middleware/auth');
+const bcrypt = require('bcryptjs');
 
 // ============================================
-// ГЛАВНАЯ СТРАНИЦА АДМИНКИ
+// МАРШРУТЫ АУТЕНТИФИКАЦИИ
 // ============================================
-router.get('/admin', async (req, res) => {
+
+// Страница входа
+router.get('/admin/login', isNotAuthenticated, (req, res) => {
+    const error = req.query.error;
+    res.render('admin/login', {
+        layout: false,
+        title: 'Вход в админ-панель',
+        error: error
+    });
+});
+
+// Обработка входа
+router.post('/admin/login', isNotAuthenticated, async (req, res) => {
+    try {
+        const { username, password } = req.body;
+        
+        // Ищем пользователя по username или email
+        const admin = await Admin.findOne({
+            $or: [
+                { username: username },
+                { email: username }
+            ]
+        });
+        
+        if (!admin) {
+            return res.redirect('/admin/login?error=invalid_credentials');
+        }
+        
+        if (!admin.isActive) {
+            return res.redirect('/admin/login?error=account_disabled');
+        }
+        
+        // Проверяем пароль
+        const isMatch = await admin.comparePassword(password);
+        if (!isMatch) {
+            return res.redirect('/admin/login?error=invalid_credentials');
+        }
+        
+        // Создаем сессию
+        req.session.adminId = admin._id;
+        req.session.adminUsername = admin.username;
+        
+        // Обновляем время последнего входа
+        admin.lastLogin = new Date();
+        await admin.save();
+        
+        // Перенаправляем на страницу, с которой пришли, или на главную админки
+        const returnTo = req.session.returnTo || '/admin';
+        delete req.session.returnTo;
+        res.redirect(returnTo);
+        
+    } catch (error) {
+        console.error('Ошибка входа:', error);
+        res.redirect('/admin/login?error=server_error');
+    }
+});
+
+// Выход из системы
+router.get('/admin/logout', (req, res) => {
+    req.session.destroy((err) => {
+        if (err) {
+            console.error('Ошибка выхода:', err);
+        }
+        res.redirect('/admin/login');
+    });
+});
+
+// Страница регистрации (только для первого администратора)
+router.get('/admin/register', isNotAuthenticated, async (req, res) => {
+    try {
+        // Проверяем, есть ли уже администраторы
+        const adminCount = await Admin.countDocuments();
+        if (adminCount > 0) {
+            return res.redirect('/admin/login');
+        }
+        res.render('admin/register', {
+            layout: false,
+            title: 'Регистрация администратора'
+        });
+    } catch (error) {
+        console.error('Ошибка загрузки страницы регистрации:', error);
+        res.status(500).send('Ошибка сервера');
+    }
+});
+
+// Обработка регистрации (только для первого администратора)
+router.post('/admin/register', isNotAuthenticated, async (req, res) => {
+    try {
+        const adminCount = await Admin.countDocuments();
+        if (adminCount > 0) {
+            return res.status(403).send('Регистрация запрещена. Администратор уже существует.');
+        }
+        
+        const { username, email, password, confirmPassword } = req.body;
+        
+        // Проверка совпадения паролей
+        if (password !== confirmPassword) {
+            return res.redirect('/admin/register?error=passwords_mismatch');
+        }
+        
+        // Создаем администратора
+        const admin = new Admin({
+            username,
+            email,
+            password
+        });
+        
+        await admin.save();
+        
+        res.redirect('/admin/login?registered=true');
+    } catch (error) {
+        console.error('Ошибка регистрации:', error);
+        if (error.code === 11000) {
+            return res.redirect('/admin/register?error=duplicate');
+        }
+        res.redirect('/admin/register?error=server_error');
+    }
+});
+
+// Страница профиля
+router.get('/admin/profile', isAdmin, async (req, res) => {
+    try {
+        const admin = await Admin.findById(req.session.adminId).select('-password');
+        res.render('admin/profile', {
+            layout: 'admin',
+            title: 'Мой профиль',
+            admin: admin
+        });
+    } catch (error) {
+        console.error('Ошибка загрузки профиля:', error);
+        res.status(500).send('Ошибка загрузки профиля');
+    }
+});
+
+// Обновление профиля
+router.post('/admin/profile', isAdmin, async (req, res) => {
+    try {
+        const { email, currentPassword, newPassword, confirmPassword } = req.body;
+        const admin = await Admin.findById(req.session.adminId);
+        
+        // Обновляем email
+        if (email && email !== admin.email) {
+            admin.email = email;
+        }
+        
+        // Обновляем пароль, если указан
+        if (newPassword) {
+            if (!currentPassword) {
+                return res.redirect('/admin/profile?error=current_password_required');
+            }
+            
+            const isMatch = await admin.comparePassword(currentPassword);
+            if (!isMatch) {
+                return res.redirect('/admin/profile?error=invalid_current_password');
+            }
+            
+            if (newPassword !== confirmPassword) {
+                return res.redirect('/admin/profile?error=passwords_mismatch');
+            }
+            
+            admin.password = newPassword;
+        }
+        
+        await admin.save();
+        res.redirect('/admin/profile?success=updated');
+        
+    } catch (error) {
+        console.error('Ошибка обновления профиля:', error);
+        res.redirect('/admin/profile?error=update_failed');
+    }
+});
+
+// ============================================
+// ЗАЩИЩЕННЫЕ МАРШРУТЫ АДМИНКИ
+// ============================================
+
+// ГЛАВНАЯ СТРАНИЦА АДМИНКИ (защищена)
+router.get('/admin', isAdmin, async (req, res) => {
     try {
         const persons = await Person.find({ hallId: 1 })
             .sort({ order: 1 })
@@ -14,7 +194,8 @@ router.get('/admin', async (req, res) => {
         res.render('admin/index', {
             layout: 'admin',
             title: 'Админ-панель - Литературное краеведение',
-            persons: persons
+            persons: persons,
+            admin: req.admin
         });
     } catch (error) {
         console.error('Ошибка загрузки админки:', error);
@@ -22,19 +203,18 @@ router.get('/admin', async (req, res) => {
     }
 });
 
-// ============================================
-// ДОБАВЛЕНИЕ ПЕРСОНАЛИИ
-// ============================================
-router.get('/admin/person/add', (req, res) => {
+// ДОБАВЛЕНИЕ ПЕРСОНАЛИИ (защищено)
+router.get('/admin/person/add', isAdmin, (req, res) => {
     res.render('admin/person-form', {
         layout: 'admin',
         title: 'Добавить персоналию',
         person: null,
-        isEdit: false
+        isEdit: false,
+        admin: req.admin
     });
 });
 
-router.post('/admin/person/add', async (req, res) => {
+router.post('/admin/person/add', isAdmin, async (req, res) => {
     try {
         console.log('Добавление персоналии, данные:', req.body);
         
@@ -79,10 +259,8 @@ router.post('/admin/person/add', async (req, res) => {
     }
 });
 
-// ============================================
-// РЕДАКТИРОВАНИЕ ПЕРСОНАЛИИ
-// ============================================
-router.get('/admin/person/edit/:id', async (req, res) => {
+// РЕДАКТИРОВАНИЕ ПЕРСОНАЛИИ (защищено)
+router.get('/admin/person/edit/:id', isAdmin, async (req, res) => {
     try {
         console.log('Загрузка персоналии для редактирования:', req.params.id);
         const person = await Person.findById(req.params.id).lean();
@@ -93,7 +271,8 @@ router.get('/admin/person/edit/:id', async (req, res) => {
             layout: 'admin',
             title: 'Редактировать персоналию',
             person: person,
-            isEdit: true
+            isEdit: true,
+            admin: req.admin
         });
     } catch (error) {
         console.error('Ошибка загрузки персоналии:', error);
@@ -101,7 +280,7 @@ router.get('/admin/person/edit/:id', async (req, res) => {
     }
 });
 
-router.post('/admin/person/edit/:id', async (req, res) => {
+router.post('/admin/person/edit/:id', isAdmin, async (req, res) => {
     try {
         console.log('Обновление персоналии:', req.params.id);
         console.log('Данные:', req.body);
@@ -156,10 +335,8 @@ router.post('/admin/person/edit/:id', async (req, res) => {
     }
 });
 
-// ============================================
-// УДАЛЕНИЕ ПЕРСОНАЛИИ
-// ============================================
-router.post('/admin/person/delete/:id', async (req, res) => {
+// УДАЛЕНИЕ ПЕРСОНАЛИИ (защищено)
+router.post('/admin/person/delete/:id', isAdmin, async (req, res) => {
     try {
         console.log('Удаление персоналии:', req.params.id);
         await Person.findByIdAndDelete(req.params.id);
@@ -170,12 +347,10 @@ router.post('/admin/person/delete/:id', async (req, res) => {
     }
 });
 
-// ============================================
-// УПРАВЛЕНИЕ АРТЕФАКТАМИ
-// ============================================
+// УПРАВЛЕНИЕ АРТЕФАКТАМИ (защищено)
 
 // Добавление артефакта
-router.get('/admin/person/:id/artifact/add', async (req, res) => {
+router.get('/admin/person/:id/artifact/add', isAdmin, async (req, res) => {
     try {
         const person = await Person.findById(req.params.id).lean();
         if (!person) {
@@ -186,7 +361,8 @@ router.get('/admin/person/:id/artifact/add', async (req, res) => {
             title: 'Добавить артефакт',
             person: person,
             artifact: null,
-            isEdit: false
+            isEdit: false,
+            admin: req.admin
         });
     } catch (error) {
         console.error('Ошибка загрузки формы артефакта:', error);
@@ -194,7 +370,7 @@ router.get('/admin/person/:id/artifact/add', async (req, res) => {
     }
 });
 
-router.post('/admin/person/:id/artifact/add', async (req, res) => {
+router.post('/admin/person/:id/artifact/add', isAdmin, async (req, res) => {
     try {
         console.log('Добавление артефакта для персоналии:', req.params.id);
         const person = await Person.findById(req.params.id);
@@ -234,7 +410,7 @@ router.post('/admin/person/:id/artifact/add', async (req, res) => {
 });
 
 // Редактирование артефакта
-router.get('/admin/person/:id/artifact/edit/:artifactIndex', async (req, res) => {
+router.get('/admin/person/:id/artifact/edit/:artifactIndex', isAdmin, async (req, res) => {
     try {
         const person = await Person.findById(req.params.id).lean();
         if (!person) {
@@ -253,7 +429,8 @@ router.get('/admin/person/:id/artifact/edit/:artifactIndex', async (req, res) =>
             person: person,
             artifact: artifact,
             artifactIndex: artifactIndex,
-            isEdit: true
+            isEdit: true,
+            admin: req.admin
         });
     } catch (error) {
         console.error('Ошибка загрузки артефакта:', error);
@@ -261,7 +438,7 @@ router.get('/admin/person/:id/artifact/edit/:artifactIndex', async (req, res) =>
     }
 });
 
-router.post('/admin/person/:id/artifact/edit/:artifactIndex', async (req, res) => {
+router.post('/admin/person/:id/artifact/edit/:artifactIndex', isAdmin, async (req, res) => {
     try {
         console.log('Обновление артефакта для персоналии:', req.params.id);
         const person = await Person.findById(req.params.id);
@@ -305,7 +482,7 @@ router.post('/admin/person/:id/artifact/edit/:artifactIndex', async (req, res) =
 });
 
 // Удаление артефакта
-router.post('/admin/person/:id/artifact/delete/:artifactIndex', async (req, res) => {
+router.post('/admin/person/:id/artifact/delete/:artifactIndex', isAdmin, async (req, res) => {
     try {
         console.log('Удаление артефакта для персоналии:', req.params.id);
         const person = await Person.findById(req.params.id);
