@@ -2,9 +2,6 @@ const express = require('express');
 const router = express.Router();
 const Person = require('../models/Person');
 
-// Middleware для проверки админа (можно добавить позже)
-// const isAdmin = require('../middleware/isAdmin');
-
 // ============================================
 // ГЛАВНАЯ СТРАНИЦА АДМИНКИ
 // ============================================
@@ -39,6 +36,8 @@ router.get('/admin/person/add', (req, res) => {
 
 router.post('/admin/person/add', async (req, res) => {
     try {
+        console.log('Добавление персоналии, данные:', req.body);
+        
         const {
             fullName,
             lastName,
@@ -55,27 +54,28 @@ router.post('/admin/person/add', async (req, res) => {
         } = req.body;
 
         const person = new Person({
-            fullName,
-            lastName,
-            firstName,
-            patronymic: patronymic || null,
+            fullName: fullName.trim(),
+            lastName: lastName.trim(),
+            firstName: firstName.trim(),
+            patronymic: patronymic ? patronymic.trim() : null,
             birthYear: parseInt(birthYear),
             deathYear: deathYear ? parseInt(deathYear) : null,
             photoPath: photoPath || '/images/persons/placeholder.jpg',
             buttonImagePath: buttonImagePath || '/images/literary-hall/person-placeholder.png',
             titleImagePath: titleImagePath || '/images/literary-hall/person-title.png',
-            biography,
-            shortBio,
+            biography: biography.trim(),
+            shortBio: shortBio.trim(),
             hallId: 1,
             order: parseInt(order) || 0,
             isActive: true
         });
 
         await person.save();
+        console.log('Персоналия добавлена:', person._id);
         res.redirect('/admin');
     } catch (error) {
         console.error('Ошибка добавления персоналии:', error);
-        res.status(500).send('Ошибка добавления персоналии');
+        res.status(500).send('Ошибка добавления персоналии: ' + error.message);
     }
 });
 
@@ -84,6 +84,7 @@ router.post('/admin/person/add', async (req, res) => {
 // ============================================
 router.get('/admin/person/edit/:id', async (req, res) => {
     try {
+        console.log('Загрузка персоналии для редактирования:', req.params.id);
         const person = await Person.findById(req.params.id).lean();
         if (!person) {
             return res.status(404).send('Персоналия не найдена');
@@ -102,6 +103,9 @@ router.get('/admin/person/edit/:id', async (req, res) => {
 
 router.post('/admin/person/edit/:id', async (req, res) => {
     try {
+        console.log('Обновление персоналии:', req.params.id);
+        console.log('Данные:', req.body);
+        
         const {
             fullName,
             lastName,
@@ -118,26 +122,37 @@ router.post('/admin/person/edit/:id', async (req, res) => {
             isActive
         } = req.body;
 
-        await Person.findByIdAndUpdate(req.params.id, {
-            fullName,
-            lastName,
-            firstName,
-            patronymic: patronymic || null,
+        const updateData = {
+            fullName: fullName.trim(),
+            lastName: lastName.trim(),
+            firstName: firstName.trim(),
+            patronymic: patronymic ? patronymic.trim() : null,
             birthYear: parseInt(birthYear),
             deathYear: deathYear ? parseInt(deathYear) : null,
             photoPath: photoPath || '/images/persons/placeholder.jpg',
             buttonImagePath: buttonImagePath || '/images/literary-hall/person-placeholder.png',
             titleImagePath: titleImagePath || '/images/literary-hall/person-title.png',
-            biography,
-            shortBio,
+            biography: biography.trim(),
+            shortBio: shortBio.trim(),
             order: parseInt(order) || 0,
             isActive: isActive === 'on' ? true : false
-        });
+        };
 
+        const result = await Person.findByIdAndUpdate(
+            req.params.id, 
+            updateData,
+            { new: true, runValidators: true }
+        );
+        
+        if (!result) {
+            return res.status(404).send('Персоналия не найдена');
+        }
+        
+        console.log('Персоналия обновлена:', result._id);
         res.redirect('/admin');
     } catch (error) {
         console.error('Ошибка обновления персоналии:', error);
-        res.status(500).send('Ошибка обновления персоналии');
+        res.status(500).send('Ошибка обновления персоналии: ' + error.message);
     }
 });
 
@@ -146,6 +161,7 @@ router.post('/admin/person/edit/:id', async (req, res) => {
 // ============================================
 router.post('/admin/person/delete/:id', async (req, res) => {
     try {
+        console.log('Удаление персоналии:', req.params.id);
         await Person.findByIdAndDelete(req.params.id);
         res.redirect('/admin');
     } catch (error) {
@@ -180,6 +196,7 @@ router.get('/admin/person/:id/artifact/add', async (req, res) => {
 
 router.post('/admin/person/:id/artifact/add', async (req, res) => {
     try {
+        console.log('Добавление артефакта для персоналии:', req.params.id);
         const person = await Person.findById(req.params.id);
         if (!person) {
             return res.status(404).send('Персоналия не найдена');
@@ -197,8 +214,8 @@ router.post('/admin/person/:id/artifact/add', async (req, res) => {
         } = req.body;
 
         person.artifacts.push({
-            name,
-            description,
+            name: name.trim(),
+            description: description.trim(),
             imagePath: imagePath || '/images/artifacts/artifact1.png',
             videoUrl: videoUrl || null,
             videoId: videoId || null,
@@ -208,6 +225,7 @@ router.post('/admin/person/:id/artifact/add', async (req, res) => {
         });
 
         await person.save();
+        console.log('Артефакт добавлен');
         res.redirect(`/admin/person/edit/${person._id}`);
     } catch (error) {
         console.error('Ошибка добавления артефакта:', error);
@@ -245,6 +263,7 @@ router.get('/admin/person/:id/artifact/edit/:artifactIndex', async (req, res) =>
 
 router.post('/admin/person/:id/artifact/edit/:artifactIndex', async (req, res) => {
     try {
+        console.log('Обновление артефакта для персоналии:', req.params.id);
         const person = await Person.findById(req.params.id);
         if (!person) {
             return res.status(404).send('Персоналия не найдена');
@@ -266,19 +285,18 @@ router.post('/admin/person/:id/artifact/edit/:artifactIndex', async (req, res) =
             dimensions
         } = req.body;
 
-        person.artifacts[artifactIndex] = {
-            ...person.artifacts[artifactIndex].toObject(),
-            name,
-            description,
-            imagePath: imagePath || '/images/artifacts/artifact1.png',
-            videoUrl: videoUrl || null,
-            videoId: videoId || null,
-            year: year ? parseInt(year) : null,
-            material: material || null,
-            dimensions: dimensions || null
-        };
+        const artifact = person.artifacts[artifactIndex];
+        artifact.name = name.trim();
+        artifact.description = description.trim();
+        artifact.imagePath = imagePath || '/images/artifacts/artifact1.png';
+        artifact.videoUrl = videoUrl || null;
+        artifact.videoId = videoId || null;
+        artifact.year = year ? parseInt(year) : null;
+        artifact.material = material || null;
+        artifact.dimensions = dimensions || null;
 
         await person.save();
+        console.log('Артефакт обновлен');
         res.redirect(`/admin/person/edit/${person._id}`);
     } catch (error) {
         console.error('Ошибка обновления артефакта:', error);
@@ -289,6 +307,7 @@ router.post('/admin/person/:id/artifact/edit/:artifactIndex', async (req, res) =
 // Удаление артефакта
 router.post('/admin/person/:id/artifact/delete/:artifactIndex', async (req, res) => {
     try {
+        console.log('Удаление артефакта для персоналии:', req.params.id);
         const person = await Person.findById(req.params.id);
         if (!person) {
             return res.status(404).send('Персоналия не найдена');
