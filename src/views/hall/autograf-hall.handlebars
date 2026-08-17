@@ -5,7 +5,7 @@
     <!-- Логотип зала в левом верхнем углу -->
     <img class="hall-logo" src="/images/autograf-hall/hall-logo.png" alt="Зал автографов">
     
-    <!-- Плашка в левом верхнем углу (как в других залах) -->
+    <!-- Плашка в левом верхнем углу -->
     <div class="top-left-plate">
         <div class="plate-wrapper">
             <div class="plate-bg" style="background-image: url('/images/autograf-hall/autograf-plate.png');"></div>
@@ -14,7 +14,7 @@
     
     <!-- Контент страницы -->
     <div class="autograf-content">
-        <!-- Первый текст - цитата (центрирован по центру страницы) -->
+        <!-- Первый текст - цитата -->
         <div class="quote-container">
             <p class="quote">
                 Книга с автографом – это не просто текст, написанный на её страницах, 
@@ -24,14 +24,39 @@
 
         <!-- Алфавитный указатель (два ряда по 12 изображений) -->
         <div class="alphabet-container">
-            {{#each alphabet}}
-            <div class="alphabet-letter">
-                <img src="{{imagePath}}" alt="Буква {{letter}}" class="letter-image">
+            <!-- Ряд 1: А-Л -->
+            <div class="alphabet-row">
+                <img src="/images/autograf-hall/alphabet/А.png" alt="А" class="letter-image">
+                <img src="/images/autograf-hall/alphabet/Б.png" alt="Б" class="letter-image">
+                <img src="/images/autograf-hall/alphabet/В.png" alt="В" class="letter-image">
+                <img src="/images/autograf-hall/alphabet/Г.png" alt="Г" class="letter-image">
+                <img src="/images/autograf-hall/alphabet/Д.png" alt="Д" class="letter-image">
+                <img src="/images/autograf-hall/alphabet/Е.png" alt="Е" class="letter-image">
+                <img src="/images/autograf-hall/alphabet/З.png" alt="З" class="letter-image">
+                <img src="/images/autograf-hall/alphabet/И.png" alt="И" class="letter-image">
+                <img src="/images/autograf-hall/alphabet/К.png" alt="К" class="letter-image">
+                <img src="/images/autograf-hall/alphabet/Л.png" alt="Л" class="letter-image">
+                <img src="/images/autograf-hall/alphabet/М.png" alt="М" class="letter-image">
+                <img src="/images/autograf-hall/alphabet/Н.png" alt="Н" class="letter-image">
             </div>
-            {{/each}}
+            <!-- Ряд 2: Л-Я -->
+            <div class="alphabet-row">
+                <img src="/images/autograf-hall/alphabet/О.png" alt="О" class="letter-image">
+                <img src="/images/autograf-hall/alphabet/П.png" alt="П" class="letter-image">
+                <img src="/images/autograf-hall/alphabet/Р.png" alt="Р" class="letter-image">
+                <img src="/images/autograf-hall/alphabet/С.png" alt="С" class="letter-image">
+                <img src="/images/autograf-hall/alphabet/Т.png" alt="Т" class="letter-image">
+                <img src="/images/autograf-hall/alphabet/У.png" alt="У" class="letter-image">
+                <img src="/images/autograf-hall/alphabet/Х.png" alt="Х" class="letter-image">
+                <img src="/images/autograf-hall/alphabet/Ч.png" alt="Ч" class="letter-image">
+                <img src="/images/autograf-hall/alphabet/Ш.png" alt="Ш" class="letter-image">
+                <img src="/images/autograf-hall/alphabet/Э.png" alt="Э" class="letter-image">
+                <img src="/images/autograf-hall/alphabet/Ю.png" alt="Ю" class="letter-image">
+                <img src="/images/autograf-hall/alphabet/Я.png" alt="Я" class="letter-image">
+            </div>
         </div>
 
-        <!-- Второй текст - сообщение о разработке (центрирован по центру страницы) -->
+        <!-- Второй текст - сообщение о разработке -->
         <div class="development-container">
             <p class="apology">Приносим свои извинения.</p>
             <p class="status">Страница находится в стадии разработки.</p>
@@ -172,15 +197,14 @@
         align-items: center;
         justify-content: center;
         padding: 100px 80px 100px 80px;
-        gap: 20px;
+        gap: 25px;
     }
 
-    /* ===== ПЕРВЫЙ ТЕКСТ - ЦИТАТА (ЦЕНТРИРОВАН) ===== */
+    /* ===== ПЕРВЫЙ ТЕКСТ - ЦИТАТА ===== */
     .quote-container {
         width: 100%;
         max-width: 1000px;
         text-align: center;
-        padding: 0 20px;
     }
 
     .quote {
@@ -188,64 +212,39 @@
         font-weight: 600;
         color: #2c3e50;
         line-height: 1.6;
-        font-style: italic;
-        padding: 0 20px;
-        border-left: 4px solid #667eea;
-        border-right: 4px solid #667eea;
-        padding: 10px 30px;
-        display: inline-block;
-        background: rgba(255, 255, 255, 0.85);
-        border-radius: 15px;
-        backdrop-filter: blur(10px);
-        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
         margin: 0;
-        letter-spacing: 0.5px;
         text-align: center;
-        max-width: 900px;
+        font-style: italic;
+        letter-spacing: 0.5px;
     }
 
     /* ===== АЛФАВИТНЫЙ УКАЗАТЕЛЬ ===== */
     .alphabet-container {
-        display: grid;
-        grid-template-columns: repeat(12, 1fr);
-        gap: 6px 10px;
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
         max-width: 1100px;
         width: 100%;
         padding: 10px 20px;
-        background: rgba(255, 255, 255, 0.85);
-        border-radius: 15px;
-        backdrop-filter: blur(10px);
-        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
-        justify-items: center;
-        align-items: center;
     }
 
-    .alphabet-letter {
-        width: 100%;
-        aspect-ratio: 1 / 1;
+    .alphabet-row {
         display: flex;
-        align-items: center;
         justify-content: center;
-        transition: transform 0.3s ease;
-        cursor: pointer;
-        max-width: 75px;
-    }
-
-    .alphabet-letter:hover {
-        transform: scale(1.1);
+        gap: 10px;
+        flex-wrap: wrap;
     }
 
     .letter-image {
-        width: 100%;
-        height: 100%;
+        width: 60px;
+        height: 60px;
         object-fit: contain;
-        display: block;
-        filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1));
-        transition: filter 0.3s ease;
+        cursor: pointer;
+        transition: transform 0.2s ease;
     }
 
-    .alphabet-letter:hover .letter-image {
-        filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.2));
+    .letter-image:hover {
+        transform: scale(1.1);
     }
 
     /* ===== ВТОРОЙ ТЕКСТ - СООБЩЕНИЕ О РАЗРАБОТКЕ ===== */
@@ -253,19 +252,13 @@
         width: 100%;
         max-width: 900px;
         text-align: center;
-        padding: 0 20px;
-        background: rgba(255, 255, 255, 0.85);
-        border-radius: 15px;
-        backdrop-filter: blur(10px);
-        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
-        padding: 25px 30px;
-        border: 2px solid rgba(255, 255, 255, 0.3);
+        padding: 10px 20px;
     }
 
     .apology {
         font-size: clamp(16px, 1.8vw, 24px);
         font-weight: 700;
-        color: #e74c3c;
+        color: #2c3e50;
         margin-bottom: 8px;
     }
 
@@ -340,17 +333,10 @@
         z-index: 10;
         width: 180px;
         height: auto;
-        cursor: not-allowed;
-        transition: transform 0.3s ease;
         display: block;
         border: none;
         background: transparent;
         padding: 0;
-        opacity: 0.4;
-        pointer-events: none;
-    }
-
-    .next-button-autograf.disabled {
         opacity: 0.4;
         pointer-events: none;
         cursor: not-allowed;
@@ -379,26 +365,29 @@
         
         .autograf-content {
             padding: 80px 40px 80px 40px;
-            gap: 15px;
+            gap: 20px;
         }
         
         .quote {
             font-size: clamp(16px, 2.2vw, 26px);
-            padding: 8px 25px;
         }
         
         .alphabet-container {
-            gap: 5px 8px;
             padding: 8px 15px;
             max-width: 800px;
         }
 
-        .alphabet-letter {
-            max-width: 55px;
+        .alphabet-row {
+            gap: 8px;
+        }
+
+        .letter-image {
+            width: 50px;
+            height: 50px;
         }
 
         .development-container {
-            padding: 20px 25px;
+            padding: 8px 15px;
             max-width: 700px;
         }
         
@@ -430,29 +419,29 @@
         
         .autograf-content {
             padding: 70px 20px 70px 20px;
-            gap: 12px;
+            gap: 15px;
         }
         
         .quote {
             font-size: clamp(14px, 2vw, 20px);
-            padding: 8px 20px;
-            border-left-width: 3px;
-            border-right-width: 3px;
         }
         
         .alphabet-container {
-            gap: 4px 6px;
-            padding: 6px 10px;
+            padding: 5px 10px;
             max-width: 600px;
-            grid-template-columns: repeat(12, 1fr);
         }
 
-        .alphabet-letter {
-            max-width: 40px;
+        .alphabet-row {
+            gap: 6px;
+        }
+
+        .letter-image {
+            width: 40px;
+            height: 40px;
         }
 
         .development-container {
-            padding: 15px 20px;
+            padding: 5px 15px;
             max-width: 550px;
         }
 
@@ -501,29 +490,29 @@
         
         .autograf-content {
             padding: 60px 10px 60px 10px;
-            gap: 10px;
+            gap: 12px;
         }
         
         .quote {
             font-size: clamp(12px, 1.8vw, 16px);
-            padding: 6px 15px;
-            border-left-width: 2px;
-            border-right-width: 2px;
         }
         
         .alphabet-container {
-            gap: 3px 4px;
             padding: 4px 8px;
             max-width: 400px;
-            grid-template-columns: repeat(12, 1fr);
         }
 
-        .alphabet-letter {
-            max-width: 28px;
+        .alphabet-row {
+            gap: 4px;
+        }
+
+        .letter-image {
+            width: 30px;
+            height: 30px;
         }
 
         .development-container {
-            padding: 12px 15px;
+            padding: 4px 10px;
             max-width: 400px;
         }
 
@@ -560,25 +549,28 @@
     @media (max-height: 700px) {
         .autograf-content {
             padding: 50px 40px 50px 40px;
-            gap: 10px;
+            gap: 12px;
         }
 
         .quote {
             font-size: clamp(12px, 1.6vw, 18px);
-            padding: 5px 15px;
         }
 
         .alphabet-container {
-            gap: 3px 5px;
             padding: 5px 10px;
         }
 
-        .alphabet-letter {
-            max-width: 35px;
+        .alphabet-row {
+            gap: 5px;
+        }
+
+        .letter-image {
+            width: 35px;
+            height: 35px;
         }
 
         .development-container {
-            padding: 12px 20px;
+            padding: 5px 15px;
         }
 
         .back-button-autograf,
@@ -608,20 +600,23 @@
 
         .quote {
             font-size: clamp(11px, 1.4vw, 15px);
-            padding: 4px 12px;
         }
 
         .alphabet-container {
-            gap: 2px 4px;
             padding: 4px 8px;
         }
 
-        .alphabet-letter {
-            max-width: 28px;
+        .alphabet-row {
+            gap: 4px;
+        }
+
+        .letter-image {
+            width: 28px;
+            height: 28px;
         }
 
         .development-container {
-            padding: 8px 15px;
+            padding: 4px 10px;
         }
 
         .apology {
@@ -650,39 +645,4 @@
             bottom: 8px;
         }
     }
-
-    /* Анимации */
-    @keyframes fadeInUp {
-        from {
-            opacity: 0;
-            transform: translateY(30px);
-        }
-        to {
-            opacity: 1;
-            transform: translateY(0);
-        }
-    }
-
-    .quote-container {
-        animation: fadeInUp 0.6s ease-out forwards;
-    }
-
-    .alphabet-container {
-        animation: fadeInUp 0.6s ease-out 0.2s both;
-    }
-
-    .development-container {
-        animation: fadeInUp 0.6s ease-out 0.4s both;
-    }
-
-    .alphabet-letter {
-        animation: fadeInUp 0.4s ease-out both;
-    }
-
-    /* Задержки для букв */
-    {{#each alphabet}}
-    .alphabet-letter:nth-child({{add @index 1}}) {
-        animation-delay: {{multiply @index 0.05}}s;
-    }
-    {{/each}}
 </style>
