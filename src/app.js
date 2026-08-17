@@ -3,7 +3,6 @@ const { engine } = require('express-handlebars');
 const path = require('path');
 const mongoose = require('mongoose');
 const session = require('express-session');
-const MongoStore = require('connect-mongo'); // <-- ПРОСТО ТАК
 const methodOverride = require('method-override');
 const fs = require('fs');
 require('dotenv').config();
@@ -65,16 +64,12 @@ app.set('views', path.join(__dirname, 'views'));
 app.use(methodOverride('_method'));
 
 // ============================================
-// НАСТРОЙКА СЕССИЙ С ХРАНЕНИЕМ В MONGODB
+// ПРОСТАЯ НАСТРОЙКА СЕССИЙ (БЕЗ MONGOSTORE)
 // ============================================
 app.use(session({
   secret: process.env.SESSION_SECRET || 'your-secret-key-change-this-in-production',
   resave: false,
   saveUninitialized: false,
-  store: MongoStore.create({
-    mongoUrl: process.env.MONGODB_URI || 'mongodb://localhost:27017/museum',
-    ttl: 14 * 24 * 60 * 60 // 14 дней
-  }),
   cookie: {
     maxAge: 1000 * 60 * 60 * 24 * 7, // 7 дней
     httpOnly: true,
